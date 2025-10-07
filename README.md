@@ -1,94 +1,103 @@
-# 10x Astro Starter
+# Generator Fiszek AI
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+## Table of Contents
+
+- [Project Name](#project-name)
+- [Project Description](#project-description)
+- [Tech Stack](#tech-stack)
+- [Getting Started Locally](#getting-started-locally)
+- [Available Scripts](#available-scripts)
+- [Project Scope](#project-scope)
+- [Project Status](#project-status)
+- [License](#license)
+
+## Project Name
+
+**Generator Fiszek AI**
+
+The project repository is named **10xdevs-cards**, and it contains a web application for automatically generating educational flashcards using AI.
+
+## Project Description
+
+Generator Fiszek AI is a web application designed to automate the creation of educational flashcards. It allows users to input text (ranging from 1000 to 10000 characters) and leverages AI models (such as GPT-4o or Claude 3.5 Sonnet) to generate candidate flashcards. Users can review, edit, or accept the generated flashcards, ensuring high quality while saving time in the content creation process.
+
+Key features include:
+
+- Automated generation of flashcards from a given text input.
+- Real-time character count validation on the client and server sides.
+- Three-tier candidate review process: accept, edit, or reject generated content.
+- Flashcard formatting constraints (front: max 200 characters; back: max 500 characters).
+- Error handling with timeout management and retry capabilities.
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
-- [React](https://react.dev/) v19.0.0 - UI library for building interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
+The project is built using the following technologies:
 
-## Prerequisites
+- **Astro 5**: A modern web framework used for creating fast, content-focused websites with SSR capabilities.
+- **React 19**: For dynamic and interactive UI components.
+- **TypeScript 5**: Provides static typing to improve code quality and maintainability.
+- **Tailwind CSS 4**: Used for styling the application with utility-first CSS.
+- **Shadcn/ui**: Integrated for pre-built UI components.
+- **Node.js v22.14.0**: Runtime environment (as specified in `.nvmrc`).
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+Additional considerations:
 
-## Getting Started
+- The backend is planned to use Supabase for authentication, database management, and API endpoints.
+- AI functionalities will be powered by models such as GPT-4o or Claude 3.5 Sonnet via OpenRouter.
+
+## Getting Started Locally
+
+### Prerequisites
+
+- Node.js version as specified in `.nvmrc` (v22.14.0 recommended)
+- npm package manager
+
+### Installation
 
 1. Clone the repository:
-
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
-
+   ```bash
+   git clone https://github.com/bswiatek/10xdevs-cards.git
+   cd 10xdevs-cards
+   ```
 2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-```bash
-npm install
-```
-
-3. Run the development server:
-
-```bash
-npm run dev
-```
-
-4. Build for production:
-
-```bash
-npm run build
-```
+The application should now be running on [http://localhost:3000](http://localhost:3000) (default Astro port).
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
+In the project directory, you can run:
 
-## Project Structure
+- `npm run dev`: Starts the Astro development server.
+- `npm run build`: Builds the project for production.
+- `npm run preview`: Serves the production build locally.
+- `npm run astro`: Runs Astro CLI commands.
+- `npm run lint`: Runs ESLint to check code quality.
+- `npm run lint:fix`: Fixes ESLint errors automatically.
+- `npm run format`: Formats the code using Prettier.
 
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
+## Project Scope
 
-## AI Development Support
+The application aims to streamline the process of generating educational flashcards by automating candidate creation using AI, while allowing for user review and edits. It covers the following functional areas:
 
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
+- **Flashcard Generation**: Importing text, processing it using AI, and generating flashcard candidates.
+- **Candidate Review Interface**: Allowing users to accept, reject, or modify generated flashcards.
+- **Manual Flashcard Creation**: Providing tools for users to manually create and edit flashcards.
+- **Learning Module**: Integrating the FSRS algorithm for scheduling flashcard reviews.
+- **User Account Management**: Supporting registration, login, and session management (with plans to integrate more security features).
 
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
+## Project Status
 
-### Cursor IDE
+Current version: **0.0.1**
 
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
-
-### GitHub Copilot
-
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
-
-### Windsurf
-
-The `.windsurfrules` file contains AI configuration for Windsurf.
-
-## Contributing
-
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
+This project is in the early MVP phase. Core functionalities for flashcard generation and review are implemented, with plans to enhance the backend integration and security features in future updates.
 
 ## License
 
-MIT
+This project is licensed under the MIT License.
