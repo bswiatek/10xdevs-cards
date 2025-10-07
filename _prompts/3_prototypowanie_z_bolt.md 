@@ -1,0 +1,163 @@
+## Cel PoC
+
+Zweryfikować podstawową funkcjonalność aplikacji: **generowanie fiszek edukacyjnych z tekstu za pomocą AI**. PoC ma udowodnić, że wybrany stack technologiczny i model AI są w stanie wygenerować użyteczne fiszki w akceptowalnym czasie (<60s).
+
+## Zakres PoC - TYLKO kluczowa funkcjonalność
+
+### Co MUSI być w PoC:
+
+1. **Prosty interfejs wejściowy**
+    - Jedno pole tekstowe do wklejania tekstu (1000-10000 znaków)
+    - Licznik znaków w czasie rzeczywistym
+    - Walidacja długości tekstu
+    - Przycisk "Generuj fiszki"
+2. **Integracja z AI**
+    - OpenRouter API z modelem GPT-4o lub Claude 3.5 Sonnet
+    - Wysyłka tekstu do API
+    - Parsowanie odpowiedzi JSON z wygenerowanymi fiszkami
+    - Timeout po 60 sekundach
+3. **Wyświetlanie wyników**
+    - Lista wygenerowanych kandydatów na fiszki
+    - Każdy kandydat: przód (max 200 znaków) + tył (max 500 znaków)
+    - Prosty widok typu karta/lista
+4. **Podstawowe metryki**
+    - Czas generowania (w sekundach)
+    - Liczba wygenerowanych fiszek
+    - Długość tekstu wejściowego (w znakach)
+    - Wyświetlenie metryk pod wynikami
+
+### Co NIE MOŻE być w PoC (wykluczamy z weryfikacji):
+
+- ❌ Autentykacja i zarządzanie użytkownikami
+- ❌ Baza danych i zapisywanie fiszek
+- ❌ System recenzji (akceptuj/odrzuć/edytuj)
+- ❌ Algorytm FSRS i system nauki
+- ❌ Zarządzanie zestawami
+- ❌ Wyszukiwanie i filtrowanie
+- ❌ Panel administracyjny
+- ❌ Responsywność mobilna (wystarczy desktop)
+- ❌ Obsługa błędów poza timeoutem AI
+- ❌ Zaawansowane stylowanie (prosty, funkcjonalny UI)
+
+
+## Stack technologiczny dla PoC
+
+**Opcja 1 (preferowana - prostsze dla PoC):**
+
+- Frontend: **Next.js 15** + React 19 + TypeScript
+- Styling: **Tailwind CSS 4** (bez Shadcn/ui)
+- AI: **OpenRouter API**
+- Hosting: Lokalny development server (Vercel opcjonalnie)
+
+**Opcja 2 (zgodna z PRD, bardziej złożona):**
+
+- Frontend: **Astro 5** + React 19 + TypeScript
+- Styling: **Tailwind CSS 4**
+- AI: **OpenRouter API**
+- Hosting: Lokalny development server
+
+**Wybierz Opcję 1, chyba że masz specyficzne powody do testowania Astro już na etapie PoC.**
+
+## Wymagania techniczne
+
+### Prompt dla AI (uniwersalny, z PRD):
+
+```
+Przeanalizuj poniższy tekst i wygeneruj fiszki edukacyjne w formacie JSON.
+
+Każda fiszka powinna mieć:
+- front: pytanie lub pojęcie (max 200 znaków)
+- back: odpowiedź lub wyjaśnienie (max 500 znaków)
+
+Automatycznie określ optymalną liczbę fiszek na podstawie objętości i złożoności materiału.
+
+Tekst do analizy:
+{TEXT}
+
+Zwróć wynik w formacie JSON:
+{
+  "flashcards": [
+    {"front": "...", "back": "..."},
+    {"front": "...", "back": "..."}
+  ]
+}
+```
+
+
+### Struktura odpowiedzi API:
+
+```typescript
+interface FlashcardCandidate {
+  front: string; // max 200 znaków
+  back: string;  // max 500 znaków
+}
+
+interface GenerationResult {
+  flashcards: FlashcardCandidate[];
+  metadata: {
+    inputLength: number;
+    generationTime: number; // w sekundach
+    flashcardCount: number;
+  }
+}
+```
+
+
+### Walidacja:
+
+- Długość tekstu wejściowego: 1000-10000 znaków
+- Timeout generowania: 60 sekund (wyświetl błąd)
+- Przód fiszki: max 200 znaków (obetnij jeśli AI przekroczy)
+- Tył fiszki: max 500 znaków (obetnij jeśli AI przekroczy)
+
+
+## Kryteria sukcesu PoC
+
+PoC zostanie uznany za **udany**, jeśli:
+
+1. ✅ Aplikacja poprawnie wysyła tekst do OpenRouter API
+2. ✅ Otrzymuje i parsuje odpowiedź JSON z fiszkami
+3. ✅ Generowanie trwa **< 60 sekund** dla tekstów 1000-10000 znaków
+4. ✅ Wygenerowane fiszki są **merytorycznie poprawne** (sprawdzić ręcznie na 3-5 przykładach)
+5. ✅ Fiszki mieszczą się w limitach (200/500 znaków)
+6. ✅ Interfejs działa płynnie (nie zawiesza się podczas generowania)
+7. ✅ Metryki są wyświetlane poprawnie
+
+## WAŻNE: Proces przed rozpoczęciem implementacji
+
+**ZATRZYMAJ SIĘ I UZYSKAJ MOJĄ AKCEPTACJĘ, ZANIM ZACZNIESZ TWORZYĆ KOD!**
+
+Przed rozpoczęciem implementacji przedstaw mi:
+
+### Plan realizacji PoC:
+
+1. **Wybór technologii:**
+    - Którą opcję stosu wybierasz i dlaczego?
+    - Jakie biblioteki/pakiety będą potrzebne?
+2. **Struktura projektu:**
+    - Jakie pliki/komponenty utworzysz?
+    - Jaka będzie architektura folderu?
+3. **Kluczowe decyzje implementacyjne:**
+    - Jak będzie działać komunikacja z OpenRouter API?
+    - Gdzie umieścisz klucz API (zmienne środowiskowe)?
+    - Jak obsłużysz timeout i błędy?
+4. **Harmonogram:**
+    - W jakiej kolejności zaimplementujesz funkcjonalności?
+    - Ile czasu zajmie każdy krok?
+5. **Pytania i niejasności:**
+    - Czy cokolwiek w specyfikacji wymaga wyjaśnienia?
+    - Czy są jakieś założenia, które chcesz potwierdzić?
+
+**Dopiero po mojej akceptacji planu przejdź do implementacji.**
+
+## Dodatkowe uwagi
+
+- **Priorytet: szybkość i prostota** - to PoC, nie produkcja
+- **Cel: weryfikacja, nie perfekcja** - kod może być nieoptymalne, ważne żeby działał
+- **Testy manualne:** Przygotuj 2-3 przykładowe teksty różnej długości do testów
+- **Dokumentacja:** Krótki README z instrukcją uruchomienia i testowania
+- **Następne kroki po PoC:** Jeśli PoC będzie udany, dostaniesz pełny PRD i przejdziemy do implementacji MVP
+
+***
+
+**Czy plan jest jasny? Przedstaw teraz propozycję realizacji PoC według powyższych wytycznych i poczekaj na moją akceptację przed rozpoczęciem kodowania.**
