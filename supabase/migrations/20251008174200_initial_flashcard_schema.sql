@@ -230,8 +230,9 @@ create index idx_system_logs_user_id on system_logs(user_id);
 -- composite index for sorted user flashcard sets
 create index idx_flashcard_sets_user_created on flashcard_sets(user_id, created_at desc);
 
--- partial index for due flashcards (only index cards that are due)
-create index idx_flashcard_progress_due on flashcard_progress(due) where due <= now();
+-- simple index on due column for filtering due flashcards
+-- note: partial index with now() is not possible as now() is not immutable
+create index idx_flashcard_progress_due on flashcard_progress(due);
 
 -- gin index for jsonb queries in system logs
 create index idx_system_logs_metadata on system_logs using gin(metadata);
