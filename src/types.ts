@@ -65,7 +65,15 @@ export interface GenerationSessionDTO {
  * Flashcard set summary for list views
  * Derived from flashcard_sets_with_due_count view
  */
-export type FlashcardSetListDTO = Required<Tables<"flashcard_sets_with_due_count">>;
+export interface FlashcardSetListDTO {
+  id: number;
+  user_id: string;
+  title: string;
+  cards_count: number;
+  due_cards_count: number; // Coalesced to 0 in queries if null
+  created_at: string;
+  updated_at: string;
+}
 
 /**
  * Response for listing flashcard sets
@@ -105,11 +113,17 @@ export type FlashcardSetDetailDTO = FlashcardSetListDTO & {
 };
 
 /**
- * Flashcard candidate with action taken during set creation
+ * Flashcard candidate with user action taken during set creation
+ * Used when submitting final decisions to backend after AI generation
  */
-export type CreateFlashcardFromCandidateDTO = CandidateFlashcardDTO & {
+export interface FlashcardCandidateWithActionDTO {
+  temp_id: string;
+  front: string;
+  back: string;
   action: FlashcardActionType;
-};
+  /** True if user edited the original AI proposal */
+  was_edited?: boolean;
+}
 
 /**
  * Metadata about AI generation session outcomes
@@ -129,7 +143,7 @@ export interface GenerationMetadataDTO {
 export interface CreateFlashcardSetCommand {
   title: string;
   generation_session_id?: number;
-  flashcards?: CreateFlashcardFromCandidateDTO[];
+  flashcards?: FlashcardCandidateWithActionDTO[];
 }
 
 /**
@@ -202,7 +216,6 @@ export type StartStudySessionCommand = Pick<TablesInsert<"study_sessions">, "fla
  * POST /study-sessions - Response 201
  */
 export type StudySessionDTO = Tables<"study_sessions"> & {
-  cards_reviewed: number;
   average_rating: number | null;
   duration_seconds: number | null;
   due_flashcards: FlashcardDueDTO[];
@@ -212,9 +225,7 @@ export type StudySessionDTO = Tables<"study_sessions"> & {
  * Command to submit a flashcard review during study session
  * POST /study-sessions/:id/reviews
  */
-export type SubmitReviewCommand = Pick<TablesInsert<"study_reviews">, "flashcard_id" | "rating"> & {
-  response_time_ms?: number;
-};
+export type SubmitReviewCommand = Pick<TablesInsert<"study_reviews">, "flashcard_id" | "rating">;
 
 /**
  * Updated flashcard progress after review
@@ -229,7 +240,6 @@ export type UpdatedProgressDTO = Pick<
  * POST /study-sessions/:id/reviews - Response 201
  */
 export type SubmitReviewResponseDTO = Tables<"study_reviews"> & {
-  response_time_ms: number;
   updated_progress: UpdatedProgressDTO;
 };
 
@@ -244,7 +254,6 @@ export type CompleteStudySessionCommand = Pick<TablesUpdate<"study_sessions">, "
  * PATCH /study-sessions/:id - Response 200
  */
 export type StudySessionSummaryDTO = Tables<"study_sessions"> & {
-  cards_reviewed: number;
   average_rating: number;
   duration_seconds: number;
 };
@@ -254,7 +263,6 @@ export type StudySessionSummaryDTO = Tables<"study_sessions"> & {
  */
 export type StudyReviewItemDTO = Tables<"study_reviews"> & {
   flashcard_front: string;
-  response_time_ms: number;
 };
 
 /**
@@ -366,12 +374,10 @@ export interface GenerationMetricsDTO {
 }
 
 /**
- * System log entry with event type
+ * System log entry for admin monitoring
  * GET /admin/logs
  */
-export type SystemLogDTO = Tables<"system_logs"> & {
-  event_type: string;
-};
+export type SystemLogDTO = Tables<"system_logs">;
 
 /**
  * Response for listing system logs (admin only)
