@@ -20,7 +20,6 @@ Osoby uczące się, studenci, profesjonaliści i wszyscy, którzy chcą efektywn
 - Frontend: Astro + React + TypeScript + Tailwind CSS
 - Język interfejsu: Polski z przygotowaną architekturą i18n
 - AI: GPT-4o lub Claude 3.5 Sonnet
-- Algorytm powtórek: FSRS (Free Spaced Repetition Scheduler)
 - Baza danych: Relacyjna (do przechowywania kont, fiszek, postępów i logów)
 
 ### 1.6 Model biznesowy
@@ -40,7 +39,6 @@ Proces ten może zajmować kilka godzin dla standardowego artykułu czy rozdzia�
 ### 2.2 Istniejące rozwiązania i ich ograniczenia
 - Anki, SuperMemo: wymagają manualnego tworzenia wszystkich fiszek
 - Quizlet: brak zaawansowanego algorytmu spaced repetition
-- Brak rozwiązań oferujących połączenie automatycznego generowania AI z algorytmem FSRS
 
 ### 2.3 Nasza propozycja wartości
 Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej kontroli użytkownika nad jakością końcową. System prezentuje kandydatów na fiszki do akceptacji, edycji lub odrzucenia, co zapewnia wysoką jakość przy minimalnym nakładzie czasu.
@@ -558,7 +556,6 @@ Kryteria akceptacji:
   - 4: Łatwo
   - 5: Bardzo łatwo
 - Po kliknięciu oceny system zapisuje wynik
-- Algorytm FSRS oblicza następną datę powtórki
 - System automatycznie przechodzi do kolejnej fiszki
 - Jeśli to była ostatnia fiszka, system pokazuje podsumowanie sesji
 
@@ -593,8 +590,6 @@ Opis: Jako użytkownik chcę widzieć, ile fiszek mam do powtórzenia dzisiaj, a
 
 Kryteria akceptacji:
 - Na liście zestawów każdy zestaw pokazuje liczbę fiszek do powtórzenia dzisiaj
-- Liczba jest obliczana na podstawie algorytmu FSRS i dat następnych powtórek
-- Liczba jest aktualizowana w czasie rzeczywistym
 - Jeśli liczba wynosi 0, system wyświetla "Brak fiszek do powtórzenia"
 
 ### 5.8 Metryki i analityka (administrator)
