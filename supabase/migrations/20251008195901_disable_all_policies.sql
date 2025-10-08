@@ -15,8 +15,6 @@
 -- ----------------------------------------------------------------------------
 drop policy if exists users_select_policy_anon on users;
 drop policy if exists users_select_policy_authenticated on users;
-drop policy if exists users_insert_policy_anon on users;
-drop policy if exists users_insert_policy_authenticated on users;
 drop policy if exists users_update_policy_anon on users;
 drop policy if exists users_update_policy_authenticated on users;
 drop policy if exists users_delete_policy_anon on users;
@@ -65,10 +63,6 @@ drop policy if exists generation_sessions_select_policy_anon on generation_sessi
 drop policy if exists generation_sessions_select_policy_authenticated on generation_sessions;
 drop policy if exists generation_sessions_insert_policy_anon on generation_sessions;
 drop policy if exists generation_sessions_insert_policy_authenticated on generation_sessions;
-drop policy if exists generation_sessions_update_policy_anon on generation_sessions;
-drop policy if exists generation_sessions_update_policy_authenticated on generation_sessions;
-drop policy if exists generation_sessions_delete_policy_anon on generation_sessions;
-drop policy if exists generation_sessions_delete_policy_authenticated on generation_sessions;
 
 -- ----------------------------------------------------------------------------
 -- study_sessions table policies
