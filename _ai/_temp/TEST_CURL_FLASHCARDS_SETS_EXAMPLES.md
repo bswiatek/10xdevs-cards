@@ -2,7 +2,7 @@
 
 ## Wymagania wstępne
 1. Uruchom dev server: `npm run dev`
-2. Server powinien działać na `http://localhost:4321` (domyślny port Astro)
+2. Server powinien działać na `http://localhost:3000` (domyślny port Astro)
 3. Upewnij się, że połączenie z Supabase jest skonfigurowane
 4. Dla testów z generacją AI, najpierw utwórz sesję generacji przez endpoint `/api/generations`
 
@@ -13,7 +13,7 @@
 ### 1. Test poprawnego żądania - pusty zestaw (201 Created)
 
 ```bash
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d '{
     "title": "My First Flashcard Set"
@@ -38,7 +38,7 @@ curl -X POST http://localhost:4321/api/flashcard-sets \
 ### 2. Test walidacji - brak tytułu (400 Bad Request)
 
 ```bash
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d '{}' | jq '.'
 ```
@@ -64,7 +64,7 @@ curl -X POST http://localhost:4321/api/flashcard-sets \
 ### 3. Test walidacji - tytuł za długi (400 Bad Request)
 
 ```bash
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d "{
     \"title\": \"$(python3 -c 'print("A" * 201)')\"
@@ -96,7 +96,7 @@ curl -X POST http://localhost:4321/api/flashcard-sets \
 **Krok 1: Utwórz sesję generacji**
 
 ```bash
-GENERATION_RESPONSE=$(curl -s -X POST http://localhost:4321/api/generations \
+GENERATION_RESPONSE=$(curl -s -X POST http://localhost:3000/api/generations \
   -H "Content-Type: application/json" \
   -d '{
     "source_text": "React is a JavaScript library for building user interfaces. It was developed by Facebook and is now maintained by Meta and a community of individual developers and companies. React allows developers to create large web applications that can update and render efficiently in response to data changes. The main concept behind React is the component-based architecture, where the UI is divided into independent, reusable pieces called components. Each component manages its own state and can be composed together to build complex user interfaces. React uses a virtual DOM to optimize rendering performance by minimizing direct manipulation of the actual DOM. This approach makes React applications fast and responsive. React also introduced JSX, a syntax extension that allows you to write HTML-like code within JavaScript, making the code more readable and easier to write. React also introduced JSX, a syntax extension that allows you to write HTML-like code within JavaScript, making the code more readable and easier to write."
@@ -113,12 +113,12 @@ echo "Generation Session ID: $GENERATION_ID"
 **Krok 2: Utwórz zestaw fiszek z wygenerowanych kandydatów**
 
 ```bash
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d @- << EOF | jq '.'
 {
   "title": "React Fundamentals",
-  "generation_session_id": $GENERATION_ID,
+  "generation_session_id": 9,
   "flashcards": [
     {
       "temp_id": "uuid-1",
@@ -175,7 +175,7 @@ EOF
 ### 5. Test z generation_session_id który nie istnieje (404 Not Found)
 
 ```bash
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Test Set",
@@ -205,7 +205,7 @@ curl -X POST http://localhost:4321/api/flashcard-sets \
 
 ```bash
 # Użyj tego samego GENERATION_ID co wcześniej
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d "{
     \"title\": \"Trying to use same session again\",
@@ -234,7 +234,7 @@ curl -X POST http://localhost:4321/api/flashcard-sets \
 ### 7. Test walidacji - generation_session_id bez flashcards (400 Bad Request)
 
 ```bash
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Invalid Set",
@@ -263,7 +263,7 @@ curl -X POST http://localhost:4321/api/flashcard-sets \
 ### 8. Test walidacji - flashcards bez generation_session_id (400 Bad Request)
 
 ```bash
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Invalid Set",
@@ -299,7 +299,7 @@ curl -X POST http://localhost:4321/api/flashcard-sets \
 ### 9. Test walidacji - wszystkie fiszki odrzucone (400 Bad Request)
 
 ```bash
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d '{
     "title": "All Rejected",
@@ -342,7 +342,7 @@ curl -X POST http://localhost:4321/api/flashcard-sets \
 ### 10. Test walidacji - front fiszki za długi (400 Bad Request)
 
 ```bash
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d "{
     \"title\": \"Invalid Flashcard\",
@@ -383,7 +383,7 @@ curl -X POST http://localhost:4321/api/flashcard-sets \
 ### 11. Test walidacji - nieprawidłowa akcja (400 Bad Request)
 
 ```bash
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Invalid Action",
@@ -424,7 +424,7 @@ curl -X POST http://localhost:4321/api/flashcard-sets \
 ### 12. Test nieprawidłowego JSON (400 Bad Request)
 
 ```bash
-curl -X POST http://localhost:4321/api/flashcard-sets \
+curl -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d 'invalid json here' | jq '.'
 ```
@@ -447,7 +447,7 @@ curl -X POST http://localhost:4321/api/flashcard-sets \
 #!/bin/bash
 
 echo "=== KROK 1: Generacja fiszek z AI ==="
-GENERATION_RESPONSE=$(curl -s -X POST http://localhost:4321/api/generations \
+GENERATION_RESPONSE=$(curl -s -X POST http://localhost:3000/api/generations \
   -H "Content-Type: application/json" \
   -d '{
     "source_text": "The SOLID principles are five design principles intended to make software designs more understandable, flexible, and maintainable. These principles were introduced by Robert C. Martin and have become fundamental concepts in object-oriented programming. The first principle is Single Responsibility Principle (SRP), which states that a class should have only one reason to change, meaning it should have only one job or responsibility. This makes the code easier to understand and maintain. The second principle is Open/Closed Principle (OCP), which suggests that software entities should be open for extension but closed for modification. This means you should be able to add new functionality without changing existing code. The third principle is Liskov Substitution Principle (LSP), named after Barbara Liskov, which states that objects of a superclass should be replaceable with objects of a subclass without breaking the application. The fourth principle is Interface Segregation Principle (ISP), which states that clients should not be forced to depend on interfaces they do not use. This principle encourages creating smaller, more specific interfaces rather than large, general-purpose ones."
@@ -466,7 +466,7 @@ FLASHCARD_2=$(echo $CANDIDATES | jq '.[1] | . + {"action": "edited", "was_edited
 FLASHCARD_3=$(echo $CANDIDATES | jq '.[2] | . + {"action": "accepted"}')
 FLASHCARD_4=$(echo $CANDIDATES | jq '.[3] | . + {"action": "rejected"}')
 
-CREATE_RESPONSE=$(curl -s -X POST http://localhost:4321/api/flashcard-sets \
+CREATE_RESPONSE=$(curl -s -X POST http://localhost:3000/api/flashcard-sets \
   -H "Content-Type: application/json" \
   -d "{
     \"title\": \"SOLID Principles Study Set\",
