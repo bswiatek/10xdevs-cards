@@ -3,32 +3,40 @@
 ## 1. Przegląd produktu
 
 ### 1.1 Nazwa produktu
+
 Generator Fiszek AI
 
 ### 1.2 Cel produktu
+
 Aplikacja webowa umożliwiająca automatyczne generowanie fiszek edukacyjnych z wykorzystaniem sztucznej inteligencji.
 
 ### 1.3 Grupa docelowa
+
 Osoby uczące się, studenci, profesjonaliści i wszyscy, którzy chcą efektywnie zapamiętywać wiedzę z artykułów, notatek i innych materiałów tekstowych.
 
 ### 1.4 Kluczowe korzyści
+
 - Automatyzacja czasochłonnego procesu tworzenia fiszek
 - Redukcja czasu przygotowania materiałów edukacyjnych z godzin do minut
 - Możliwość pełnej kontroli nad wygenerowanymi fiszkami przed ich zapisem
 
 ### 1.5 Stack technologiczny
+
 - Frontend: Astro + React + TypeScript + Tailwind CSS
 - Język interfejsu: Polski z przygotowaną architekturą i18n
 - AI: GPT-4o lub Claude 3.5 Sonnet
 - Baza danych: Relacyjna (do przechowywania kont, fiszek, postępów i logów)
 
 ### 1.6 Model biznesowy
+
 Aplikacja bezpłatna bez limitów użytkowania
 
 ## 2. Problem użytkownika
 
 ### 2.1 Opis problemu
+
 Manualne tworzenie wysokiej jakości fiszek edukacyjnych jest procesem niezwykle czasochłonnym, co stanowi główną barierę w adopcji spaced repetition - metody nauki potwierdzonej naukowo jako jedna z najbardziej efektywnych. Użytkownicy muszą:
+
 - Przeczytać i zrozumieć materiał
 - Zidentyfikować kluczowe koncepcje
 - Sformułować pytania i odpowiedzi
@@ -37,10 +45,12 @@ Manualne tworzenie wysokiej jakości fiszek edukacyjnych jest procesem niezwykle
 Proces ten może zajmować kilka godzin dla standardowego artykułu czy rozdziału książki, co skutkuje zniechęceniem i rezygnacją z metody.
 
 ### 2.2 Istniejące rozwiązania i ich ograniczenia
+
 - Anki, SuperMemo: wymagają manualnego tworzenia wszystkich fiszek
 - Quizlet: brak zaawansowanego algorytmu spaced repetition
 
 ### 2.3 Nasza propozycja wartości
+
 Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej kontroli użytkownika nad jakością końcową. System prezentuje kandydatów na fiszki do akceptacji, edycji lub odrzucenia, co zapewnia wysoką jakość przy minimalnym nakładzie czasu.
 
 ## 3. Wymagania funkcjonalne
@@ -48,12 +58,14 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 ### 3.1 Generowanie fiszek AI
 
 #### 3.1.1 Import tekstu
+
 - Użytkownik wkleja tekst przez mechanizm kopiuj-wklej
 - Akceptowany zakres długości: 1000-10000 znaków
 - Walidacja długości po stronie klienta i serwera
 - Informacja zwrotna o liczbie znaków w czasie rzeczywistym
 
 #### 3.1.2 Proces generowania
+
 - Wykorzystanie GPT-4o lub Claude 3.5 Sonnet
 - Automatyczne określenie optymalnej liczby fiszek
 - Automatyczna kategoryzacja bez ingerencji użytkownika
@@ -61,11 +73,13 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 - Maksymalny czas generowania: 60 sekund
 
 #### 3.1.3 Formaty fiszek
+
 - Przód fiszki: maksymalnie 200 znaków
 - Tył fiszki: maksymalnie 500 znaków
 - Format tekstowy (bez obrazów, formatowania)
 
 #### 3.1.4 Obsługa błędów
+
 - Komunikat o błędzie przy timeout (>60s)
 - Możliwość ponowienia próby
 - Logowanie błędów w bazie danych
@@ -74,6 +88,7 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 ### 3.2 System recenzji kandydatów
 
 #### 3.2.1 Interfejs recenzji
+
 - Prezentacja wszystkich kandydatów w formie listy
 - Wyświetlanie przodu i tyłu każdego kandydata
 - Trzystopniowy system akcji dla każdego kandydata:
@@ -82,11 +97,13 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
   - Odrzuć: usuwa kandydata z listy
 
 #### 3.2.2 Edycja kandydatów
+
 - Możliwość edycji przodu i tyłu fiszki
 - Walidacja długości podczas edycji
 - Podgląd zmian przed zatwierdzeniem
 
 #### 3.2.3 Zapisywanie zestawu
+
 - Zapis tylko zaakceptowanych i zaedytowanych fiszek
 - Brak możliwości powrotu do porzuconej sesji recenzji
 - Wymagane nadanie tytułu zestawowi przed zapisem
@@ -94,6 +111,7 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 ### 3.3 Manualne tworzenie fiszek
 
 #### 3.3.1 Edytor fiszek
+
 - Formularz z polami: przód, tył
 - Walidacja długości (200/500 znaków)
 - Podgląd fiszki przed zapisem
@@ -102,6 +120,7 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 ### 3.4 Zarządzanie fiszkami
 
 #### 3.4.1 Lista zestawów
+
 - Wyświetlanie wszystkich zestawów użytkownika
 - Paginacja (domyślnie 20 zestawów na stronę)
 - Informacje o zestawie:
@@ -111,12 +130,14 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
   - Postęp nauki
 
 #### 3.4.2 Wyszukiwanie
+
 - Wyszukiwanie pełnotekstowe
 - Zakres: tytuły zestawów i treść fiszek (przód + tył)
 - Podświetlanie wyników
 - Filtrowanie w czasie rzeczywistym
 
 #### 3.4.3 Operacje CRUD
+
 - Przeglądanie szczegółów zestawu
 - Edycja fiszek (przód, tył)
 - Usuwanie pojedynczych fiszek
@@ -126,12 +147,14 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 ### 3.5 System nauki
 
 #### 3.5.1 Algorytm FSRS
+
 - Integracja z Free Spaced Repetition Scheduler
 - Brak możliwości wyboru innego algorytmu przez użytkownika
 - Automatyczne obliczanie następnej daty powtórki
 - Uwzględnianie jakości odpowiedzi (1-5)
 
 #### 3.5.2 Interfejs nauki
+
 - Prezentacja fiszki (najpierw przód)
 - Przycisk "Pokaż odpowiedź" odkrywa tył
 - Ocena jakości odpowiedzi (1-5):
@@ -143,6 +166,7 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 - Automatyczne przejście do kolejnej fiszki
 
 #### 3.5.3 Śledzenie postępów
+
 - Zapisywanie wszystkich sesji nauki w bazie danych
 - Statystyki:
   - Liczba przejrzanych fiszek
@@ -151,23 +175,27 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
   - Liczba fiszek do powtórzenia dzisiaj
 
 #### 3.5.4 Przypomnienia
+
 - Wyświetlanie liczby fiszek do powtórzenia w aplikacji
 - Brak powiadomień email/push
 
 ### 3.6 Zarządzanie kontami
 
 #### 3.6.1 Rejestracja
+
 - Wymagane pola: email, hasło
 - Walidacja formatu email
 - Potwierdzenie hasła
 - Brak weryfikacji email
 
 #### 3.6.2 Logowanie
+
 - Email + hasło
 - Sesja utrzymywana przez token
 - Brak opcji "Zapamiętaj mnie"
 
 #### 3.6.3 Role użytkowników
+
 - Zwykły użytkownik: pełny dostęp do własnych zasobów
 - Administrator:
   - Wszystkie uprawnienia użytkownika
@@ -177,6 +205,7 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 ### 3.7 Metryki i analityka
 
 #### 3.7.1 Zbierane dane
+
 - Długość tekstu wejściowego (w znakach)
 - Liczba wygenerowanych kandydatów na fiszki
 - Czas generowania
@@ -185,6 +214,7 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 - Podstawowe logi błędów
 
 #### 3.7.2 Przechowywanie
+
 - Dane zapisywane w bazie danych
 - Brak zewnętrznych narzędzi analitycznych
 - Dostęp tylko dla administratorów
@@ -194,6 +224,7 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 ### 4.1 Co NIE jest w zakresie MVP
 
 #### 4.1.1 Funkcjonalności
+
 - Własny, zaawansowany algorytm powtórek (jak SuperMemo, Anki)
 - Import plików (PDF, DOCX, itp.)
 - Współdzielenie zestawów fiszek między użytkownikami
@@ -210,6 +241,7 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 - Logowanie przez media społecznościowe
 
 #### 4.1.2 Ograniczenia techniczne
+
 - Brak wsparcia dla materiałów multimedialnych (obrazy, audio, wideo)
 - Brak formatowania tekstu (bold, italic, kod)
 - Tylko język polski w MVP
@@ -217,6 +249,7 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 - Brak trybu ciemnego (można dodać w przyszłości)
 
 #### 4.1.3 Ograniczenia biznesowe
+
 - Brak płatnych planów i limitów
 - Brak modelu freemium
 - Bez systemu subskrypcji
@@ -224,15 +257,18 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 ### 4.2 Założenia
 
 #### 4.2.1 Założenia użytkownika
+
 - Użytkownicy mają stałe połączenie internetowe
 - Użytkownicy posiadają podstawową znajomość obsługi aplikacji webowych
 - Użytkownicy rozumieją zasady spaced repetition
 
 #### 4.2.2 Założenia techniczne
+
 - Hosting zapewnia 99% uptime
 - Baza danych skaluje się wraz z liczbą użytkowników
 
 #### 4.2.3 Założenia biznesowe
+
 - Projekt realizowany przez jedną osobę
 - Brak ograniczeń czasowych
 - Brak budżetu marketingowego w MVP
@@ -246,6 +282,7 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 Opis: Jako nowy użytkownik chcę utworzyć konto, aby móc korzystać z aplikacji i zapisywać swoje fiszki.
 
 Kryteria akceptacji:
+
 - Formularz rejestracji zawiera pola: email, hasło, potwierdzenie hasła
 - System waliduje format email (RFC 5322)
 - System sprawdza, czy hasło i jego potwierdzenie są identyczne
@@ -259,6 +296,7 @@ Kryteria akceptacji:
 Opis: Jako zarejestrowany użytkownik chcę się zalogować, aby uzyskać dostęp do moich fiszek.
 
 Kryteria akceptacji:
+
 - Formularz logowania zawiera pola: email, hasło
 - System waliduje poprawność danych logowania
 - Po poprawnym logowaniu użytkownik jest przekierowywany na główny widok aplikacji
@@ -271,6 +309,7 @@ Kryteria akceptacji:
 Opis: Jako zalogowany użytkownik chcę się wylogować, aby zabezpieczyć swoje konto na współdzielonym urządzeniu.
 
 Kryteria akceptacji:
+
 - Przycisk wylogowania jest widoczny w każdym widoku aplikacji
 - Po kliknięciu wylogowania sesja użytkownika jest usuwana
 - Użytkownik jest przekierowywany na stronę logowania
@@ -282,6 +321,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę zmienić swoje hasło, aby zwiększyć bezpieczeństwo konta.
 
 Kryteria akceptacji:
+
 - Formularz zmiany hasła zawiera pola: stare hasło, nowe hasło, potwierdzenie nowego hasła
 - System waliduje poprawność starego hasła
 - System wymaga nowego hasła o minimalnej długości 8 znaków
@@ -296,6 +336,7 @@ Kryteria akceptacji:
 Opis: Jako administrator chcę zresetować hasło użytkownika, aby pomóc w przypadku jego utraty.
 
 Kryteria akceptacji:
+
 - Administrator ma dostęp do listy wszystkich użytkowników
 - Administrator może wybrać użytkownika i kliknąć "Resetuj hasło"
 - System generuje nowe tymczasowe hasło
@@ -308,6 +349,7 @@ Kryteria akceptacji:
 Opis: Jako administrator chcę usunąć konto użytkownika, aby zarządzać bazą użytkowników (np. spam, naruszenia).
 
 Kryteria akceptacji:
+
 - Administrator ma dostęp do listy wszystkich użytkowników
 - Administrator może wybrać użytkownika i kliknąć "Usuń konto"
 - System wyświetla dialog potwierdzenia z ostrzeżeniem o nieodwracalności
@@ -320,6 +362,7 @@ Kryteria akceptacji:
 Opis: Jako administrator chcę przeglądać logi systemowe, aby monitorować błędy i aktywność.
 
 Kryteria akceptacji:
+
 - Administrator ma dostęp do widoku logów systemowych
 - Logi zawierają: timestamp, typ zdarzenia, opis, ID użytkownika (jeśli dotyczy)
 - Możliwość filtrowania logów według typu (błąd, info, ostrzeżenie)
@@ -333,6 +376,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę wkleić tekst i wygenerować z niego fiszki, aby zaoszczędzić czas na manualnym tworzeniu.
 
 Kryteria akceptacji:
+
 - Użytkownik klika "Nowy zestaw fiszek"
 - System wyświetla formularz z polem tekstowym na tekst źródłowy
 - System wyświetla licznik znaków w czasie rzeczywistym
@@ -345,6 +389,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę, aby AI wygenerowało kandydatów na fiszki z mojego tekstu, aby uzyskać propozycje do recenzji.
 
 Kryteria akceptacji:
+
 - Po kliknięciu "Generuj fiszki" system wyświetla wskaźnik postępu
 - System wysyła tekst do API AI (GPT-4o lub Claude 3.5 Sonnet)
 - System analizuje cały tekst jednocześnie
@@ -358,6 +403,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę otrzymać jasny komunikat o błędzie, jeśli generowanie nie powiedzie się, i móc spróbować ponownie.
 
 Kryteria akceptacji:
+
 - Jeśli generowanie przekroczy 60 sekund, system wyświetla komunikat o timeout
 - Jeśli API AI jest niedostępne, system wyświetla odpowiedni komunikat
 - System oferuje przycisk "Spróbuj ponownie"
@@ -371,6 +417,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę zobaczyć wszystkich wygenerowanych kandydatów na fiszki, aby móc je ocenić.
 
 Kryteria akceptacji:
+
 - System wyświetla listę wszystkich kandydatów po generowaniu
 - Każdy kandydat pokazuje przód i tył fiszki
 - Każdy kandydat ma trzy przyciski: Akceptuj, Edytuj, Odrzuć
@@ -382,6 +429,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę zaakceptować dobrego kandydata, aby został zapisany jako fiszka bez zmian.
 
 Kryteria akceptacji:
+
 - Po kliknięciu "Akceptuj" kandydat jest oznaczony jako zaakceptowany
 - Zaakceptowany kandydat jest wizualnie wyróżniony (np. zielona ramka)
 - Licznik zaakceptowanych zwiększa się o 1
@@ -392,6 +440,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę odrzucić słabego kandydata, aby nie został zapisany jako fiszka.
 
 Kryteria akceptacji:
+
 - Po kliknięciu "Odrzuć" kandydat jest oznaczony jako odrzucony
 - Odrzucony kandydat jest wizualnie wyróżniony (np. czerwona ramka) lub ukryty
 - Licznik odrzuconych zwiększa się o 1
@@ -402,6 +451,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę edytować kandydata, który jest prawie dobry, ale wymaga poprawek.
 
 Kryteria akceptacji:
+
 - Po kliknięciu "Edytuj" system wyświetla formularz edycji
 - Formularz zawiera pola: przód fiszki, tył fiszki
 - System waliduje długość (200/500 znaków) w czasie rzeczywistym
@@ -414,6 +464,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę zapisać zestaw fiszek po zakończeniu recenzji, aby móc z nich korzystać w nauce.
 
 Kryteria akceptacji:
+
 - System wymaga nadania tytułu zestawowi przed zapisem
 - Przycisk "Zapisz zestaw" jest aktywny tylko gdy zaakceptowano co najmniej jedną fiszkę
 - Po kliknięciu zapisania system tworzy nowy zestaw w bazie danych
@@ -429,6 +480,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę utworzyć fiszkę ręcznie, aby dodać własną wiedzę niezależnie od AI.
 
 Kryteria akceptacji:
+
 - Użytkownik klika "Dodaj fiszkę ręcznie"
 - System wyświetla formularz z polami: przód, tył
 - System waliduje długość (200/500 znaków) w czasie rzeczywistym
@@ -442,6 +494,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę utworzyć nowy zestaw podczas dodawania ręcznej fiszki, aby uporządkować wiedzę.
 
 Kryteria akceptacji:
+
 - W formularzu dodawania fiszki jest opcja "Utwórz nowy zestaw"
 - Po wybraniu opcji pojawia się pole na tytuł zestawu
 - System waliduje, czy tytuł nie jest pusty
@@ -455,6 +508,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę zobaczyć wszystkie moje zestawy fiszek, aby móc wybrać, czego chcę się uczyć.
 
 Kryteria akceptacji:
+
 - System wyświetla listę wszystkich zestawów użytkownika
 - Każdy zestaw pokazuje: tytuł, datę utworzenia, liczbę fiszek, postęp nauki
 - Lista jest paginowana (20 zestawów na stronę)
@@ -466,6 +520,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę wyszukać konkretny zestaw lub fiszkę, aby szybko znaleźć potrzebną informację.
 
 Kryteria akceptacji:
+
 - System udostępnia pole wyszukiwania w widoku listy zestawów
 - Wyszukiwanie działa w czasie rzeczywistym (po wpisaniu 3+ znaków)
 - System przeszukuje: tytuły zestawów, przód i tył fiszek
@@ -478,6 +533,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę zobaczyć wszystkie fiszki w zestawie, aby móc je przeglądać i zarządzać nimi.
 
 Kryteria akceptacji:
+
 - Po kliknięciu zestawu system wyświetla jego szczegóły
 - Widok zawiera: tytuł, datę utworzenia, liczbę fiszek
 - System wyświetla listę wszystkich fiszek (przód + tył)
@@ -489,6 +545,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę edytować fiszkę, aby poprawić błędy lub zaktualizować treść.
 
 Kryteria akceptacji:
+
 - Po kliknięciu "Edytuj" system wyświetla formularz edycji
 - Formularz zawiera aktualne wartości przodu i tyłu fiszki
 - System waliduje długość (200/500 znaków) w czasie rzeczywistym
@@ -501,6 +558,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę usunąć fiszkę, aby pozbyć się niepotrzebnych lub błędnych informacji.
 
 Kryteria akceptacji:
+
 - Po kliknięciu "Usuń" system wyświetla dialog potwierdzenia
 - Dialog zawiera treść fiszki do potwierdzenia
 - Po potwierdzeniu fiszka jest trwale usuwana
@@ -513,6 +571,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę usunąć cały zestaw, aby oczyścić nieużywane materiały.
 
 Kryteria akceptacji:
+
 - W widoku szczegółów zestawu jest przycisk "Usuń zestaw"
 - Po kliknięciu system wyświetla dialog potwierdzenia
 - Dialog informuje o liczbie fiszek, które zostaną usunięte
@@ -528,6 +587,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę rozpocząć naukę z zestawu, aby przejrzeć fiszki według algorytmu powtórek.
 
 Kryteria akceptacji:
+
 - W widoku szczegółów zestawu użytkownik klika "Rozpocznij naukę"
 - System sprawdza, czy są fiszki do powtórzenia dzisiaj
 - Jeśli są, system rozpoczyna sesję nauki
@@ -539,6 +599,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę zobaczyć pytanie, pomyśleć o odpowiedzi, a następnie ją sprawdzić.
 
 Kryteria akceptacji:
+
 - System prezentuje przód fiszki na całym ekranie
 - Przycisk "Pokaż odpowiedź" jest widoczny
 - Po kliknięciu system pokazuje tył fiszki
@@ -549,6 +610,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę ocenić, jak dobrze pamiętam odpowiedź, aby algorytm dostosował harmonogram powtórek.
 
 Kryteria akceptacji:
+
 - System wyświetla 5 przycisków oceny:
   - 1: Kompletnie nie pamiętam
   - 2: Trudno przypomnieć
@@ -564,6 +626,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę zobaczyć podsumowanie po zakończeniu sesji, aby poznać swój postęp.
 
 Kryteria akceptacji:
+
 - Po przejrzeniu wszystkich fiszek system wyświetla podsumowanie
 - Podsumowanie zawiera:
   - Liczba przejrzanych fiszek
@@ -578,6 +641,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę móc przerwać sesję nauki i zachować postęp dotychczasowych odpowiedzi.
 
 Kryteria akceptacji:
+
 - W każdym momencie sesji widoczny jest przycisk "Przerwij sesję"
 - Po kliknięciu system wyświetla dialog potwierdzenia
 - Po potwierdzeniu dotychczasowe oceny są zapisywane
@@ -589,6 +653,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę widzieć, ile fiszek mam do powtórzenia dzisiaj, aby zaplanować naukę.
 
 Kryteria akceptacji:
+
 - Na liście zestawów każdy zestaw pokazuje liczbę fiszek do powtórzenia dzisiaj
 - Jeśli liczba wynosi 0, system wyświetla "Brak fiszek do powtórzenia"
 
@@ -599,6 +664,7 @@ Kryteria akceptacji:
 Opis: Jako administrator chcę zobaczyć statystyki generowania fiszek, aby ocenić jakość AI.
 
 Kryteria akceptacji:
+
 - Administrator ma dostęp do widoku metryk
 - Widok zawiera:
   - Średnia długość tekstu wejściowego
@@ -615,6 +681,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę być poinformowany o utracie połączenia i móc spróbować ponownie.
 
 Kryteria akceptacji:
+
 - System wykrywa utratę połączenia internetowego
 - System wyświetla komunikat "Utracono połączenie. Sprawdź internet i spróbuj ponownie"
 - Tekst źródłowy jest zachowany
@@ -625,6 +692,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę być od razu poinformowany, jeśli mój tekst jest za krótki lub za długi.
 
 Kryteria akceptacji:
+
 - Licznik znaków jest widoczny w czasie rzeczywistym
 - Jeśli tekst < 1000 znaków, system wyświetla: "Tekst za krótki. Minimum 1000 znaków"
 - Jeśli tekst > 10000 znaków, system wyświetla: "Tekst za długi. Maksimum 10000 znaków"
@@ -636,6 +704,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę być poinformowany, że nie mogę zapisać zestawu bez żadnych zaakceptowanych fiszek.
 
 Kryteria akceptacji:
+
 - Jeśli użytkownik odrzuci wszystkich kandydatów, przycisk "Zapisz zestaw" jest nieaktywny
 - System wyświetla komunikat: "Musisz zaakceptować co najmniej jedną fiszkę"
 - Po zaakceptowaniu minimum jednej fiszki przycisk staje się aktywny
@@ -645,6 +714,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę być poinformowany, że podany email jest już w użyciu.
 
 Kryteria akceptacji:
+
 - System sprawdza unikalność emaila podczas rejestracji
 - Jeśli email już istnieje, system wyświetla: "Ten adres email jest już zarejestrowany"
 - Użytkownik może spróbować innego emaila lub przejść do logowania
@@ -654,6 +724,7 @@ Kryteria akceptacji:
 Opis: Jako użytkownik chcę być poinformowany o wygaśnięciu sesji i móc się ponownie zalogować.
 
 Kryteria akceptacji:
+
 - System wykrywa wygaśnięcie sesji przy każdym żądaniu
 - System wyświetla komunikat: "Twoja sesja wygasła. Zaloguj się ponownie"
 - Użytkownik jest przekierowywany na stronę logowania

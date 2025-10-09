@@ -29,7 +29,7 @@ CREATE TABLE users (
 - Primary Key: `id`
 - Unique: `email`
 
-***
+---
 
 ### 1.2 flashcard_sets
 
@@ -61,7 +61,7 @@ CREATE TABLE flashcard_sets (
 - Foreign Key: `user_id` REFERENCES `users(id)` ON DELETE CASCADE
 - NOT NULL: `user_id`, `title`, `cards_count`, `created_at`, `updated_at`
 
-***
+---
 
 ### 1.3 flashcards
 
@@ -95,7 +95,7 @@ CREATE TABLE flashcards (
 - CHECK: `char_length(back) <= 500`
 - NOT NULL: `flashcard_set_id`, `front`, `back`, `created_at`, `updated_at`
 
-***
+---
 
 ### 1.4 flashcard_progress
 
@@ -140,7 +140,7 @@ CREATE TABLE flashcard_progress (
 - UNIQUE: `flashcard_id`
 - NOT NULL: `flashcard_id`, `reps`, `lapses`, `state`, `due`
 
-***
+---
 
 ### 1.5 generation_sessions
 
@@ -180,7 +180,7 @@ CREATE TABLE generation_sessions (
 - Foreign Key: `user_id` REFERENCES `users(id)` ON DELETE CASCADE
 - NOT NULL: `user_id`, `input_length`, `candidates_generated`, `generation_time_ms`, `created_at`
 
-***
+---
 
 ### 1.6 study_sessions
 
@@ -217,7 +217,7 @@ CREATE TABLE study_sessions (
 - Foreign Key: `flashcard_set_id` REFERENCES `flashcard_sets(id)` ON DELETE CASCADE
 - NOT NULL: `user_id`, `flashcard_set_id`, `cards_reviewed`, `started_at`
 
-***
+---
 
 ### 1.7 study_reviews
 
@@ -251,7 +251,7 @@ CREATE TABLE study_reviews (
 - CHECK: `rating >= 1 AND rating <= 5`
 - NOT NULL: `study_session_id`, `flashcard_id`, `rating`, `reviewed_at`
 
-***
+---
 
 ### 1.8 system_logs
 
@@ -287,7 +287,7 @@ CREATE TABLE system_logs (
 - Foreign Key: `user_id` REFERENCES `users(id)` ON DELETE SET NULL
 - NOT NULL: `log_level`, `event_type`, `message`, `created_at`
 
-***
+---
 
 ## 2. Relacje między tabelami
 
@@ -341,7 +341,6 @@ CREATE TABLE system_logs (
 - ON DELETE SET NULL: usunięcie użytkownika zachowuje logi ale nulluje user_id
 - FK: `system_logs.user_id` → `users.id`
 
-
 ### 2.2 Relacje jeden-do-jednego (1:1)
 
 **flashcards → flashcard_progress**
@@ -350,7 +349,7 @@ CREATE TABLE system_logs (
 - Kaskadowe usuwanie: usunięcie fiszki usuwa jej postęp
 - FK: `flashcard_progress.flashcard_id` → `flashcards.id` (UNIQUE)
 
-***
+---
 
 ## 3. Indeksy
 
@@ -368,7 +367,6 @@ CREATE TABLE system_logs (
 -- system_logs: id (PK)
 ```
 
-
 ### 3.2 Indeksy Foreign Keys
 
 ```sql
@@ -384,7 +382,6 @@ CREATE INDEX idx_study_reviews_flashcard_id ON study_reviews(flashcard_id);
 CREATE INDEX idx_system_logs_user_id ON system_logs(user_id);
 ```
 
-
 ### 3.3 Indeksy kompozytowe
 
 ```sql
@@ -395,15 +392,13 @@ CREATE INDEX idx_flashcard_sets_user_created ON flashcard_sets(user_id, created_
 CREATE INDEX idx_flashcard_progress_flashcard_due ON flashcard_progress(flashcard_id, due);
 ```
 
-
 ### 3.4 Indeksy częściowe (Partial Indexes)
 
 ```sql
 -- Optymalizacja zapytań o fiszki do powtórzenia dzisiaj
-CREATE INDEX idx_flashcard_progress_due_today ON flashcard_progress(due) 
+CREATE INDEX idx_flashcard_progress_due_today ON flashcard_progress(due)
   WHERE due <= NOW();
 ```
-
 
 ### 3.5 Indeksy analityczne
 
@@ -420,8 +415,7 @@ CREATE INDEX idx_system_logs_created_at ON system_logs(created_at);
 CREATE INDEX idx_system_logs_metadata ON system_logs USING GIN(metadata);
 ```
 
-
-***
+---
 
 ## 4. Funkcje i Triggery
 
@@ -431,12 +425,11 @@ CREATE INDEX idx_system_logs_metadata ON system_logs USING GIN(metadata);
 -- Sprawdzanie czy aktualny użytkownik jest administratorem
 CREATE FUNCTION is_admin() RETURNS BOOLEAN AS $$
   SELECT EXISTS (
-    SELECT 1 FROM users 
+    SELECT 1 FROM users
     WHERE id = auth.uid() AND role = 'admin'
   );
 $$ LANGUAGE SQL SECURITY DEFINER;
 ```
-
 
 ### 4.2 Funkcja automatycznej aktualizacji updated_at
 
@@ -449,7 +442,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ```
-
 
 ### 4.3 Triggery dla updated_at
 
@@ -465,7 +457,6 @@ CREATE TRIGGER update_flashcards_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 ```
-
 
 ### 4.4 Funkcja i trigger dla cards_count
 
@@ -494,13 +485,12 @@ CREATE TRIGGER trigger_flashcards_cards_count
   EXECUTE FUNCTION update_flashcard_set_cards_count();
 ```
 
-
 ### 4.5 Widok/funkcja dla due_cards_count
 
 ```sql
 -- Widok obliczający liczbę fiszek do powtórzenia dla każdego zestawu
 CREATE VIEW flashcard_sets_with_due_count AS
-SELECT 
+SELECT
   fs.id,
   fs.user_id,
   fs.title,
@@ -514,8 +504,7 @@ LEFT JOIN flashcard_progress fp ON fp.flashcard_id = f.id
 GROUP BY fs.id;
 ```
 
-
-***
+---
 
 ## 5. Row Level Security (RLS) Policies
 
@@ -530,7 +519,6 @@ ALTER TABLE study_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE study_reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE system_logs ENABLE ROW LEVEL SECURITY;
 ```
-
 
 ### 5.2 Policies dla flashcard_sets
 
@@ -557,7 +545,6 @@ CREATE POLICY flashcard_sets_delete_policy ON flashcard_sets
   USING (user_id = auth.uid() OR is_admin());
 ```
 
-
 ### 5.3 Policies dla flashcards
 
 ```sql
@@ -567,7 +554,7 @@ CREATE POLICY flashcards_select_policy ON flashcards
   USING (
     EXISTS (
       SELECT 1 FROM flashcard_sets
-      WHERE id = flashcard_set_id 
+      WHERE id = flashcard_set_id
         AND (user_id = auth.uid() OR is_admin())
     )
   );
@@ -588,7 +575,7 @@ CREATE POLICY flashcards_update_policy ON flashcards
   USING (
     EXISTS (
       SELECT 1 FROM flashcard_sets
-      WHERE id = flashcard_set_id 
+      WHERE id = flashcard_set_id
         AND (user_id = auth.uid() OR is_admin())
     )
   );
@@ -599,12 +586,11 @@ CREATE POLICY flashcards_delete_policy ON flashcards
   USING (
     EXISTS (
       SELECT 1 FROM flashcard_sets
-      WHERE id = flashcard_set_id 
+      WHERE id = flashcard_set_id
         AND (user_id = auth.uid() OR is_admin())
     )
   );
 ```
-
 
 ### 5.4 Policies dla flashcard_progress
 
@@ -616,7 +602,7 @@ CREATE POLICY flashcard_progress_select_policy ON flashcard_progress
     EXISTS (
       SELECT 1 FROM flashcards f
       JOIN flashcard_sets fs ON fs.id = f.flashcard_set_id
-      WHERE f.id = flashcard_id 
+      WHERE f.id = flashcard_id
         AND (fs.user_id = auth.uid() OR is_admin())
     )
   );
@@ -637,7 +623,7 @@ CREATE POLICY flashcard_progress_update_policy ON flashcard_progress
     EXISTS (
       SELECT 1 FROM flashcards f
       JOIN flashcard_sets fs ON fs.id = f.flashcard_set_id
-      WHERE f.id = flashcard_id 
+      WHERE f.id = flashcard_id
         AND (fs.user_id = auth.uid() OR is_admin())
     )
   );
@@ -648,12 +634,11 @@ CREATE POLICY flashcard_progress_delete_policy ON flashcard_progress
     EXISTS (
       SELECT 1 FROM flashcards f
       JOIN flashcard_sets fs ON fs.id = f.flashcard_set_id
-      WHERE f.id = flashcard_id 
+      WHERE f.id = flashcard_id
         AND (fs.user_id = auth.uid() OR is_admin())
     )
   );
 ```
-
 
 ### 5.5 Policies dla generation_sessions (immutable dla użytkowników)
 
@@ -671,7 +656,6 @@ CREATE POLICY generation_sessions_insert_policy ON generation_sessions
 -- Brak UPDATE i DELETE dla użytkowników (dane immutable)
 -- Administratorzy mają dostęp tylko do odczytu
 ```
-
 
 ### 5.6 Policies dla study_sessions
 
@@ -695,7 +679,6 @@ CREATE POLICY study_sessions_update_policy ON study_sessions
 -- Brak DELETE dla użytkowników (historia nauki chroniona)
 ```
 
-
 ### 5.7 Policies dla study_reviews
 
 ```sql
@@ -705,7 +688,7 @@ CREATE POLICY study_reviews_select_policy ON study_reviews
   USING (
     EXISTS (
       SELECT 1 FROM study_sessions
-      WHERE id = study_session_id 
+      WHERE id = study_session_id
         AND (user_id = auth.uid() OR is_admin())
     )
   );
@@ -716,15 +699,14 @@ CREATE POLICY study_reviews_insert_policy ON study_reviews
   WITH CHECK (
     EXISTS (
       SELECT 1 FROM study_sessions
-      WHERE id = study_session_id 
-        AND user_id = auth.uid() 
+      WHERE id = study_session_id
+        AND user_id = auth.uid()
         AND completed_at IS NULL
     )
   );
 
 -- Brak UPDATE i DELETE (odpowiedzi są immutable)
 ```
-
 
 ### 5.8 Policies dla system_logs (tylko administratorzy)
 
@@ -742,8 +724,7 @@ CREATE POLICY system_logs_insert_policy ON system_logs
 -- Brak UPDATE i DELETE (logi są immutable)
 ```
 
-
-***
+---
 
 ## 6. Uwagi dotyczące implementacji
 
@@ -776,7 +757,6 @@ CREATE POLICY system_logs_insert_policy ON system_logs
 - PostgreSQL radzi sobie z milionami rekordów bez partycjonowania
 - Rozważyć w przyszłości dla `study_reviews` i `system_logs` po osiągnięciu skali
 
-
 ### 6.2 Wydajność i optymalizacja
 
 **Indeksowanie:**
@@ -795,7 +775,6 @@ CREATE POLICY system_logs_insert_policy ON system_logs
 
 - `cards_count` w `flashcard_sets` aktualizowany przez trigger (denormalizacja)
 - `due_cards_count` obliczany przez widok (brak denormalizacji)
-
 
 ### 6.3 Bezpieczeństwo
 
@@ -819,7 +798,6 @@ CREATE POLICY system_logs_insert_policy ON system_logs
 - Metadata w JSONB dla elastycznego przechowywania kontekstu
 - Timestampy ze strefą czasową (`TIMESTAMPTZ`) dla śledzenia zdarzeń
 
-
 ### 6.4 Kompatybilność z Supabase
 
 **Autentykacja:**
@@ -837,7 +815,6 @@ CREATE POLICY system_logs_insert_policy ON system_logs
 - Logika FSRS może być zaimplementowana w Supabase Edge Functions
 - Schemat wspiera wywołania funkcji przez kolumny JSONB (`metadata`)
 
-
 ### 6.5 Migracje i wersjonowanie
 
 **Kolejność tworzenia obiektów:**
@@ -854,4 +831,3 @@ CREATE POLICY system_logs_insert_policy ON system_logs
 
 - Wszystkie DROP CASCADE dla bezpiecznego cofania migracji
 - Backup danych przed migracjami produkcyjnymi
-

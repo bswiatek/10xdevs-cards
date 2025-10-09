@@ -10,11 +10,13 @@
 ## Tech Stack
 
 ### Core Framework
+
 - **Astro 5.13.7** - główny framework (SSR mode, adapter: Node.js standalone)
 - **TypeScript 5** - język programowania
 - **Node.js v22.14.0** - środowisko uruchomieniowe (patrz: `.nvmrc`)
 
 ### Frontend
+
 - **React 19.1.1** - biblioteka UI dla interaktywnych komponentów
 - **Tailwind CSS 4.1.13** - framework CSS (Vite plugin)
 - **Shadcn/ui** - komponenty UI (gotowe do integracji)
@@ -23,6 +25,7 @@
 - **clsx + tailwind-merge** - zarządzanie klasami CSS
 
 ### Development Tools
+
 - **ESLint 9.23.0** - linter (z pluginami dla Astro, React, TypeScript)
 - **Prettier** - formatowanie kodu (z pluginem dla Astro)
 - **Husky 9.1.7** - Git hooks
@@ -71,11 +74,13 @@
 ## Konwencje kodowania
 
 ### Architektura komponentów
+
 - **Komponenty Astro (.astro)** - dla statycznej treści i layoutów
 - **Komponenty React (.tsx)** - tylko gdy potrzebna interaktywność
 - **NIE używaj** dyrektyw Next.js (`"use client"`, itp.)
 
 ### Struktura plików
+
 - **API Endpoints:** `src/pages/api/` - używaj `export const prerender = false`
 - **Serwisy:** `src/lib/services/` - logika biznesowa
 - **Custom Hooks:** `src/components/hooks/` - logika React
@@ -83,6 +88,7 @@
 - **Klienty DB:** `src/db/` - klienty Supabase (gdy będą dodane)
 
 ### Styling (Tailwind CSS)
+
 - Używaj utility classes bezpośrednio w komponentach
 - Arbitrary values: `w-[123px]` dla precyzyjnych wartości
 - Responsive: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
@@ -91,6 +97,7 @@
 - Organizuj style przez `@layer` (base, components, utilities)
 
 ### Obsługa błędów
+
 - **Guard clauses** na początku funkcji
 - **Early returns** dla warunków błędów
 - Unikaj głęboko zagnieżdżonych `if` statements
@@ -99,6 +106,7 @@
 - User-friendly komunikaty błędów
 
 ### Accessibility (A11y)
+
 - Semantyczny HTML jako priorytet
 - ARIA tylko gdy brak natywnych alternatyw
 - `aria-label` / `aria-labelledby` dla elementów bez widocznych etykiet
@@ -108,6 +116,7 @@
 - Testuj z czytnikiem ekranu
 
 ### React Best Practices
+
 - Functional components + hooks
 - `React.memo()` dla często renderowanych komponentów
 - `useCallback` dla event handlerów przekazywanych do dzieci
@@ -116,6 +125,7 @@
 - `useId()` dla unikalnych ID w accessibility
 
 ### TypeScript
+
 - Zawsze definiuj typy dla props
 - Unikaj `any` - użyj `unknown` gdy typ nieznany
 - Używaj `interface` dla object shapes
@@ -136,10 +146,12 @@ npm run format       # Formatuj kod Prettier
 ## Linting & Pre-commit
 
 ### Pre-commit hooks (lint-staged)
+
 - **TypeScript/TSX/Astro:** ESLint --fix
 - **JSON/CSS/MD:** Prettier --write
 
 ### ESLint plugins aktywne
+
 - `eslint-plugin-astro` - reguły dla Astro
 - `eslint-plugin-react` - reguły dla React
 - `eslint-plugin-react-hooks` - hooks rules
@@ -151,6 +163,7 @@ npm run format       # Formatuj kod Prettier
 ## Backend & Database (Planowane)
 
 ### Supabase (gdy zostanie dodany)
+
 - Używaj `supabase` z `context.locals` w Astro routes
 - NIE importuj `supabaseClient` bezpośrednio
 - Typ `SupabaseClient` z `src/db/supabase.client.ts`
@@ -158,6 +171,7 @@ npm run format       # Formatuj kod Prettier
 - Middleware w `src/middleware/index.ts`
 
 ### API Endpoints
+
 - Uppercase handlers: `GET`, `POST`, `PUT`, `DELETE`
 - `export const prerender = false` dla dynamic routes
 - Walidacja input przez Zod
@@ -179,6 +193,7 @@ npm run format       # Formatuj kod Prettier
 ## Notatki dla AI Agentów
 
 ### Podczas modyfikacji kodu
+
 1. ✅ Sprawdź istniejące konwencje w podobnych plikach
 2. ✅ Użyj lintera przed commitem: `npm run lint:fix`
 3. ✅ Minimalne zmiany - chirurgiczna precyzja
@@ -186,6 +201,7 @@ npm run format       # Formatuj kod Prettier
 5. ✅ Aktualizuj dokumentację gdy zmieniasz strukturę
 
 ### Podczas dodawania nowych feature'ów
+
 1. ✅ Użyj odpowiednich narzędzi ekosystemu (npm, scaffolding tools)
 2. ✅ Dodaj typy TypeScript dla nowych modułów
 3. ✅ Testuj zmiany przez `npm run dev`
@@ -193,12 +209,14 @@ npm run format       # Formatuj kod Prettier
 5. ✅ Dokumentuj API endpoints w komentarzach
 
 ### Podczas debugowania
+
 1. ✅ Uruchom `npm run lint` aby znaleźć problemy
 2. ✅ Sprawdź console w devtools przeglądarki
 3. ✅ Użyj TypeScript errors jako wskazówek
 4. ✅ Testuj w trybie dev przed buildem produkcyjnym
 
 ### Nie rób tego
+
 - ❌ Nie usuwaj działającego kodu bez wyraźnej potrzeby
 - ❌ Nie ignoruj niezwiązanych błędów testów/buildu
 - ❌ Nie dodawaj nowych narzędzi linting/testing bez potrzeby
@@ -209,6 +227,7 @@ npm run format       # Formatuj kod Prettier
 ## Stan projektu
 
 ### ✅ Skonfigurowane
+
 - Astro 5 z SSR
 - React 19 integration
 - Tailwind CSS 4
@@ -219,6 +238,7 @@ npm run format       # Formatuj kod Prettier
 - AI development support (Cursor, Copilot, Windsurf)
 
 ### 📋 Do dodania (gdy potrzebne)
+
 - Supabase integration
 - Autentykacja
 - Middleware

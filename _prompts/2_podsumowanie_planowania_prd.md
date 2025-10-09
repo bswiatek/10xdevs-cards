@@ -47,6 +47,7 @@
 ### Główne wymagania funkcjonalne
 
 **Generowanie fiszek AI**:
+
 - Import tekstu 1000-10000 znaków przez kopiuj-wklej
 - Automatyczne generowanie kandydatów na fiszki (maks 200/500 znaków)
 - Wykorzystanie GPT-4o lub Claude 3.5 Sonnet
@@ -54,24 +55,28 @@
 - Czas generowania <60 sekund
 
 **System recenzji**:
+
 - Prezentacja kandydatów w formie listy
 - Opcje: akceptuj/edytuj/odrzuć dla każdego kandydata
 - Zapis tylko zaakceptowanych fiszek do bazy
 - Brak możliwości powrotu do porzuconej sesji
 
 **Zarządzanie fiszkami**:
+
 - Lista zestawów fiszek z paginacją
 - Wyszukiwanie pełnotekstowe (tytuły + treść)
 - Operacje CRUD na fiszkach
 - Format tekstowy bez tagowania/kategoryzacji
 
 **System nauki**:
+
 - Integracja z algorytmem FSRS
 - Śledzenie postępów w bazie danych
 - Przypomnienia tylko w aplikacji
 - Wymagane stałe połączenie internetowe
 
 **Zarządzanie kontami**:
+
 - Rejestracja: email + hasło
 - Role: użytkownik + admin
 - Admin: edycja haseł, usuwanie kont
@@ -79,6 +84,7 @@
 ### Kluczowe historie użytkownika
 
 **Historia 1: Tworzenie fiszek z AI**
+
 - Użytkownik loguje się i klika "Nowy zestaw fiszek"
 - Wkleja tekst (1000-10000 znaków)
 - Klika "Generuj fiszki" i czeka <60s
@@ -87,12 +93,14 @@
 - Zapisuje zestaw po zakończeniu recenzji
 
 **Historia 2: Nauka z fiszkami**
+
 - Użytkownik wybiera zestaw z listy
 - Klika "Rozpocznij naukę"
 - System prezentuje fiszki według algorytmu FSRS
 - Aplikacja zapisuje postęp i wyniki
 
 **Historia 3: Zarządzanie kolekcją**
+
 - Użytkownik przegląda listę zestawów z paginacją
 - Używa wyszukiwarki do znajdowania konkretnych fiszek
 - Edytuje lub usuwa wybrane fiszki/zestawy
@@ -100,15 +108,18 @@
 ### Kryteria sukcesu i pomiar
 
 **Główne metryki biznesowe**:
+
 - 75% fiszek wygenerowanych przez AI akceptowanych przez użytkowników
 - 75% użytkowników tworzy fiszki z wykorzystaniem AI (vs ręcznie)
 
 **Metryki techniczne**:
+
 - Czas generowania fiszek <60 sekund
-- Czas odpowiedzi interfejsu <5 sekund  
+- Czas odpowiedzi interfejsu <5 sekund
 - Dostępność systemu 99%
 
 **Dane analityczne**:
+
 - Długość tekstu wejściowego
 - Liczba wygenerowanych fiszek na sesję
 - Czas generowania

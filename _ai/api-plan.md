@@ -12,7 +12,6 @@
 - **study-reviews** - Individual card review responses (db: study_reviews)
 - **admin** - Administrative operations (metrics, logs, user management)
 
-
 ## 2. Endpoints
 
 ### 2.1 AI Flashcard Generation
@@ -64,7 +63,7 @@
 - `500 Internal Server Error`: OpenRouter API failure
 - `503 Service Unavailable`: AI service temporarily unavailable
 
-***
+---
 
 ### 2.3 Flashcard Sets
 
@@ -120,7 +119,7 @@
 - `401 Unauthorized`: Invalid or missing token
 - `422 Unprocessable Entity`: Invalid query parameters
 
-***
+---
 
 #### GET /flashcard-sets/:id
 
@@ -164,7 +163,7 @@
 - `403 Forbidden`: User does not own this set
 - `404 Not Found`: Flashcard set does not exist
 
-***
+---
 
 #### POST /flashcard-sets
 
@@ -231,7 +230,7 @@
 - `404 Not Found`: Generation session not found
 - `422 Unprocessable Entity`: Validation errors (flashcard length, format)
 
-***
+---
 
 #### PATCH /flashcard-sets/:id
 
@@ -268,7 +267,7 @@
 - `403 Forbidden`: User does not own this set
 - `404 Not Found`: Flashcard set does not exist
 
-***
+---
 
 #### DELETE /flashcard-sets/:id
 
@@ -284,7 +283,7 @@
 - `403 Forbidden`: User does not own this set
 - `404 Not Found`: Flashcard set does not exist
 
-***
+---
 
 #### GET /flashcard-sets/:id/due
 
@@ -322,7 +321,7 @@
 - `403 Forbidden`: User does not own this set
 - `404 Not Found`: Flashcard set does not exist
 
-***
+---
 
 ### 2.4 Flashcards
 
@@ -370,7 +369,7 @@
 - `404 Not Found`: Flashcard set does not exist
 - `422 Unprocessable Entity`: Validation errors
 
-***
+---
 
 #### PATCH /flashcards/:id
 
@@ -408,7 +407,7 @@
 - `404 Not Found`: Flashcard does not exist
 - `422 Unprocessable Entity`: Validation errors
 
-***
+---
 
 #### DELETE /flashcards/:id
 
@@ -424,7 +423,7 @@
 - `403 Forbidden`: User does not own this flashcard's set
 - `404 Not Found`: Flashcard does not exist
 
-***
+---
 
 ### 2.5 Study Sessions
 
@@ -475,7 +474,7 @@
 - `403 Forbidden`: User does not own this set
 - `404 Not Found`: Flashcard set does not exist
 
-***
+---
 
 #### POST /study-sessions/:id/reviews
 
@@ -523,7 +522,7 @@
 - `404 Not Found`: Study session or flashcard does not exist
 - `422 Unprocessable Entity`: Validation errors
 
-***
+---
 
 #### PATCH /study-sessions/:id
 
@@ -561,7 +560,7 @@
 - `403 Forbidden`: User does not own this session
 - `404 Not Found`: Study session does not exist
 
-***
+---
 
 #### GET /study-sessions/:id
 
@@ -601,7 +600,7 @@
 - `403 Forbidden`: User does not own this session
 - `404 Not Found`: Study session does not exist
 
-***
+---
 
 #### GET /study-sessions
 
@@ -646,7 +645,7 @@
 - `401 Unauthorized`: Invalid or missing token
 - `422 Unprocessable Entity`: Invalid query parameters
 
-***
+---
 
 ### 2.6 Admin Operations
 
@@ -691,7 +690,7 @@
 - `401 Unauthorized`: Invalid or missing token
 - `403 Forbidden`: User is not admin
 
-***
+---
 
 #### PATCH /admin/users/:id/password
 
@@ -724,7 +723,7 @@
 - `403 Forbidden`: User is not admin
 - `404 Not Found`: User does not exist
 
-***
+---
 
 #### DELETE /admin/users/:id
 
@@ -753,7 +752,7 @@
 - `403 Forbidden`: User is not admin or attempting to delete own account
 - `404 Not Found`: User does not exist
 
-***
+---
 
 #### GET /admin/metrics/generation-sessions
 
@@ -801,7 +800,7 @@
 - `403 Forbidden`: User is not admin
 - `422 Unprocessable Entity`: Invalid date range
 
-***
+---
 
 #### GET /admin/logs
 
@@ -854,7 +853,7 @@
 - `403 Forbidden`: User is not admin
 - `422 Unprocessable Entity`: Invalid query parameters
 
-***
+---
 
 ## 3. Authentication and Authorization
 
@@ -868,27 +867,25 @@ The API uses **JWT (JSON Web Token)** authentication provided by **Supabase Auth
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
-
 ### Token Lifecycle
 
 - **Access Token Expiration**: 3600 seconds (1 hour)
 - **Refresh Token**: Provided by Supabase Auth (handled client-side)
 - **Session Management**: Tokens are stateless; sessions invalidated on logout
 
-
 ### Authorization Levels
 
 1. **Unauthenticated**: Access to `/auth/register` and `/auth/login` only
 2. **Authenticated User** (role: "user"):
-    - Full CRUD on own flashcard_sets, flashcards, study_sessions
-    - Read-only access to own generation_sessions
-    - Can update own password via `/auth/password`
+   - Full CRUD on own flashcard_sets, flashcards, study_sessions
+   - Read-only access to own generation_sessions
+   - Can update own password via `/auth/password`
 3. **Administrator** (role: "admin"):
-    - All user permissions
-    - Access to `/admin/*` endpoints
-    - Can view all users' data (filtered by RLS policies)
-    - Can reset passwords and delete user accounts
-    - Read-only access to system_logs
+   - All user permissions
+   - Access to `/admin/*` endpoints
+   - Can view all users' data (filtered by RLS policies)
+   - Can reset passwords and delete user accounts
+   - Read-only access to system_logs
 
 ### Row Level Security (RLS)
 
@@ -897,7 +894,6 @@ All database operations are automatically filtered by **Supabase RLS policies**:
 - Users can only access resources where `user_id = auth.uid()`
 - Administrators bypass restrictions via `is_admin()` function
 - Cascading deletes ensure data integrity (deleting set removes flashcards, progress, etc.)
-
 
 ### Security Headers
 
@@ -910,8 +906,7 @@ Content-Security-Policy: default-src 'self'
 Strict-Transport-Security: max-age=31536000; includeSubDomains
 ```
 
-
-***
+---
 
 ## 4. Validation and Business Logic
 
@@ -923,7 +918,6 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains
 - **back**: Required, max 500 characters (enforced by DB CHECK constraint)
 - Validated on: `POST /generations`, `POST /flashcard-sets`, `POST /flashcard-sets/:id/flashcards`, `PATCH /flashcards/:id`
 
-
 #### AI Generation Input
 
 - **source_text**: Required, 1000-10000 characters
@@ -931,13 +925,11 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains
 - **Timeout**: API calls to OpenRouter must return within 60 seconds or fail with 408
 - Validated on: `POST /generations`
 
-
 #### Study Session Ratings
 
 - **rating**: Required integer, 1-5 inclusive (enforced by DB CHECK constraint)
 - **response_time_ms**: Optional positive integer
 - Validated on: `POST /study-sessions/:id/reviews`
-
 
 #### User Registration
 
@@ -945,7 +937,6 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains
 - **password**: Required, minimum 8 characters (Supabase Auth default)
 - **password_confirmation**: Must match password
 - Validated on: `POST /auth/register`
-
 
 #### Pagination
 

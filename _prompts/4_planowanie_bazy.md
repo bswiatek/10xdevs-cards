@@ -53,7 +53,6 @@ Baza danych PostgreSQL dla aplikacji Generator Fiszek AI obsługuje system nauki
 - **Administracja i monitoring**: Logi systemowe z metadanymi w formacie JSONB, dostępne tylko dla administratorów.
 - **Wyszukiwanie**: Operator ILIKE na tytułach zestawów i treści fiszek bez zaawansowanego full-text search.
 
-
 ### Kluczowe encje i ich relacje
 
 **1. users** (zarządzane przez Supabase Auth)
@@ -99,7 +98,6 @@ Baza danych PostgreSQL dla aplikacji Generator Fiszek AI obsługuje system nauki
 - Kolumny: `id` (BIGSERIAL, PK), `log_level` (enum: INFO/WARNING/ERROR DEFAULT 'INFO'), `event_type`, `message`, `user_id` (FK nullable→users.id), `metadata` (JSONB), `created_at`
 - Indeksy: `log_level`, `event_type`, `created_at`, GIN na `metadata`
 
-
 ### Kwestie bezpieczeństwa
 
 **Row Level Security (RLS)**:
@@ -123,7 +121,6 @@ Baza danych PostgreSQL dla aplikacji Generator Fiszek AI obsługuje system nauki
 - Wszystkie operacje administracyjne (resetowanie haseł, usuwanie kont) logowane w `system_logs`
 - Metadata w JSONB dla elastycznego przechowywania kontekstu błędów
 - Timestampy ze strefą czasową dla śledzenia zdarzeń w czasie
-
 
 ### Kwestie skalowalności
 
@@ -152,7 +149,6 @@ Baza danych PostgreSQL dla aplikacji Generator Fiszek AI obsługuje system nauki
 - Supabase oferuje tier darmowy dla MVP, produkcja wymaga płatnego planu (\$25-599/miesiąc)
 - Wymaganie 99% uptime wymaga monitorowania i zarządzania planami Supabase
 - Brak mechanizmów kontroli kosztów AI w schemacie (do implementacji w logice aplikacji)
-
 
 ### Funkcje PostgreSQL wykorzystane w projekcie
 

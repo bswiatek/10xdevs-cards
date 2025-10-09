@@ -1,9 +1,11 @@
 # API Endpoint Implementation Plan: POST /generations
 
 ## 1. Przegląd punktu końcowego
+
 Ten punkt końcowy inicjuje proces generowania kandydatów na fiszki przy użyciu AI. Uwierzytelniony użytkownik wysyła fragment tekstu, który jest następnie przesyłany do zewnętrznego dostawcy AI (OpenRouter) w celu analizy i ekstrakcji par pytanie-odpowiedź. Wynik jest zwracany jako sesja generowania, zawierająca listę kandydatów na fiszki do dalszej weryfikacji przez użytkownika.
 
 ## 2. Szczegóły żądania
+
 - **Metoda HTTP:** `POST`
 - **Struktura URL:** `/api/generations`
 - **Nagłówki:**
@@ -17,6 +19,7 @@ Ten punkt końcowy inicjuje proces generowania kandydatów na fiszki przy użyci
   ```
 
 ## 3. Wykorzystywane typy
+
 - **Command (Request):** `GenerateFlashcardsCommand`
   ```typescript
   export interface GenerateFlashcardsCommand {
@@ -41,6 +44,7 @@ Ten punkt końcowy inicjuje proces generowania kandydatów na fiszki przy użyci
   ```
 
 ## 4. Szczegóły odpowiedzi
+
 - **Odpowiedź sukcesu (201 Created):**
   ```json
   {
@@ -58,6 +62,7 @@ Ten punkt końcowy inicjuje proces generowania kandydatów na fiszki przy użyci
 - **Odpowiedzi błędów:** Zobacz sekcję 7. Obsługa błędów.
 
 ## 5. Przepływ danych
+
 1.  Użytkownik wysyła żądanie `POST` na `/api/generations` z `source_text` w ciele.
 2.  Middleware Astro weryfikuje token JWT i dołącza sesję użytkownika do `context.locals`.
 3.  Handler API w `src/pages/api/generations/index.ts` odbiera żądanie.
@@ -72,6 +77,7 @@ Ten punkt końcowy inicjuje proces generowania kandydatów na fiszki przy użyci
 12. Handler API serializuje DTO i wysyła odpowiedź `201 Created` do klienta.
 
 ## 6. Względy bezpieczeństwa
+
 - **Uwierzytelnianie:** Dostęp do punktu końcowego musi być chroniony i wymagać ważnego tokenu JWT od Supabase. Każde żądanie musi być powiązane z konkretnym użytkownikiem.
 - **Autoryzacja:** Każdy uwierzytelniony użytkownik ma prawo do korzystania z tego punktu końcowego. Nie ma dodatkowych ról (np. admin).
 - **Walidacja danych wejściowych:** Wszystkie dane wejściowe (`source_text`) muszą być rygorystycznie walidowane za pomocą Zod, aby zapobiec błędom przetwarzania i potencjalnym atakom (np. nadmiernie długi tekst).
@@ -79,6 +85,7 @@ Ten punkt końcowy inicjuje proces generowania kandydatów na fiszki przy użyci
 - **Zarządzanie kluczami API:** Klucz do API OpenRouter musi być przechowywany jako zmienna środowiskowa po stronie serwera (`OPENROUTER_API_KEY`) i nigdy nie może być eksponowany po stronie klienta.
 
 ## 7. Obsługa błędów
+
 - **`400 Bad Request`**:
   - `source_text` jest pusty, nie jest stringiem, jest za krótki (<1000 znaków) lub za długi (>10000 znaków).
 - **`401 Unauthorized`**:
@@ -96,11 +103,13 @@ Ten punkt końcowy inicjuje proces generowania kandydatów na fiszki przy użyci
 Wszystkie krytyczne błędy po stronie serwera (5xx) będą rejestrowane w tabeli `system_logs` z poziomem `ERROR`.
 
 ## 8. Rozważania dotyczące wydajności
+
 - **Czas odpowiedzi AI:** Głównym wąskim gardłem jest czas odpowiedzi od zewnętrznego API. Należy zaimplementować rozsądny timeout (np. 60 sekund) i poinformować użytkownika o trwającym procesie za pomocą wskaźnika ładowania na froncie.
 - **Asynchroniczność:** Operacja jest z natury asynchroniczna. Cały przepływ po stronie serwera musi być zaimplementowany bez blokowania pętli zdarzeń Node.js.
 - **Rozmiar payloadu:** Ograniczenie długości `source_text` do 10000 znaków zapobiega przesyłaniu zbyt dużych payloadów. Odpowiedź również powinna być monitorowana pod kątem rozmiaru.
 
 ## 9. Etapy wdrożenia
+
 1.  **Konfiguracja środowiska:** Dodać `OPENROUTER_API_KEY` do zmiennych środowiskowych (`.env`).
 2.  **Struktura plików:**
     - Utworzyć plik handlera API: `src/pages/api/generations/index.ts`.
