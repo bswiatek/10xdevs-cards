@@ -61,7 +61,7 @@ export async function generateFlashcardsFromText(
     const { data: sessionData, error: dbError } = await supabase
       .from("generation_sessions")
       .insert({
-        user_id: "00000000-0000-0000-0000-000000000000", // Mock user ID for MVP
+        user_id: "06f9f64c-fd4a-4466-9954-0e35ce6dfd15", // Mock user ID for MVP
         input_text: sourceText,
         input_length: sourceText.length,
         generated_count: candidates.length,

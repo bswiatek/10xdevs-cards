@@ -10,10 +10,10 @@
 ## 1. Test poprawnego żądania (201 Created)
 
 ```bash
-curl -X POST http://localhost:4321/api/generations \
+curl -X POST http://localhost:3000/api/generations \
   -H "Content-Type: application/json" \
   -d '{
-    "source_text": "React is a JavaScript library for building user interfaces. It was developed by Facebook and is now maintained by Meta and a community of individual developers and companies. React allows developers to create large web applications that can update and render efficiently in response to data changes. The main concept behind React is the component-based architecture, where the UI is divided into independent, reusable pieces called components. Each component manages its own state and can be composed together to build complex user interfaces. React uses a virtual DOM to optimize rendering performance by minimizing direct manipulation of the actual DOM. This approach makes React applications fast and responsive. React also introduced JSX, a syntax extension that allows you to write HTML-like code within JavaScript, making the code more readable and easier to write."
+    "source_text": "React is a JavaScript library for building user interfaces. It was developed by Facebook and is now maintained by Meta and a community of individual developers and companies. React allows developers to create large web applications that can update and render efficiently in response to data changes. The main concept behind React is the component-based architecture, where the UI is divided into independent, reusable pieces called components. Each component manages its own state and can be composed together to build complex user interfaces. React uses a virtual DOM to optimize rendering performance by minimizing direct manipulation of the actual DOM. This approach makes React applications fast and responsive. React also introduced JSX, a syntax extension that allows you to write HTML-like code within JavaScript, making the code more readable and easier to write. React also introduced JSX, a syntax extension that allows you to write HTML-like code within JavaScript, making the code more readable and easier to write."
   }'
 ```
 
@@ -40,7 +40,7 @@ curl -X POST http://localhost:4321/api/generations \
 ## 2. Test z ładnie sformatowanym outputem (użyj jq)
 
 ```bash
-curl -X POST http://localhost:4321/api/generations \
+curl -X POST http://localhost:3000/api/generations \
   -H "Content-Type: application/json" \
   -d '{
     "source_text": "TypeScript is a strongly typed programming language that builds on JavaScript. It adds optional static typing to JavaScript, which helps catch errors early during development. TypeScript code is transpiled to JavaScript, allowing it to run anywhere JavaScript runs. The type system in TypeScript is structural, meaning that types are compatible based on their structure rather than explicit declarations. TypeScript supports modern JavaScript features and adds additional capabilities like interfaces, enums, and generics. Many popular frameworks and libraries, including Angular and React, have excellent TypeScript support. The TypeScript compiler can catch many common programming errors before runtime, improving code quality and developer productivity. TypeScript also provides excellent tooling support with features like autocompletion, refactoring, and inline documentation in modern IDEs."
@@ -52,7 +52,7 @@ curl -X POST http://localhost:4321/api/generations \
 ## 3. Test walidacji - tekst za krótki (400 Bad Request)
 
 ```bash
-curl -X POST http://localhost:4321/api/generations \
+curl -X POST http://localhost:3000/api/generations \
   -H "Content-Type: application/json" \
   -d '{
     "source_text": "This text is way too short to generate flashcards."
@@ -82,7 +82,7 @@ curl -X POST http://localhost:4321/api/generations \
 Wygeneruj tekst powyżej 10000 znaków:
 
 ```bash
-curl -X POST http://localhost:4321/api/generations \
+curl -X POST http://localhost:3000/api/generations \
   -H "Content-Type: application/json" \
   -d "{
     \"source_text\": \"$(python3 -c 'print("A" * 10001)')\"
@@ -110,7 +110,7 @@ curl -X POST http://localhost:4321/api/generations \
 ## 5. Test nieprawidłowego JSON (400 Bad Request)
 
 ```bash
-curl -X POST http://localhost:4321/api/generations \
+curl -X POST http://localhost:3000/api/generations \
   -H "Content-Type: application/json" \
   -d 'invalid json here' | jq '.'
 ```
@@ -128,7 +128,7 @@ curl -X POST http://localhost:4321/api/generations \
 ## 6. Test braku pola source_text (400 Bad Request)
 
 ```bash
-curl -X POST http://localhost:4321/api/generations \
+curl -X POST http://localhost:3000/api/generations \
   -H "Content-Type: application/json" \
   -d '{}' | jq '.'
 ```
@@ -154,7 +154,7 @@ curl -X POST http://localhost:4321/api/generations \
 ## 7. Test z długim tekstem (granica dolna - 1000 znaków)
 
 ```bash
-curl -X POST http://localhost:4321/api/generations \
+curl -X POST http://localhost:3000/api/generations \
   -H "Content-Type: application/json" \
   -d "{
     \"source_text\": \"$(python3 -c 'print("A" * 1000)')\"
@@ -168,7 +168,7 @@ Powinno zwrócić **201 Created** z wygenerowanymi fiszkami.
 ## 8. Test z pełnym przykładowym tekstem edukacyjnym
 
 ```bash
-curl -X POST http://localhost:4321/api/generations \
+curl -X POST http://localhost:3000/api/generations \
   -H "Content-Type: application/json" \
   -d @- << 'EOF' | jq '.'
 {
