@@ -632,7 +632,6 @@ Kryteria akceptacji:
   - Liczba przejrzanych fiszek
   - Średnia ocena
   - Czas trwania sesji
-  - Data następnej sesji
 - Przycisk "Powrót do zestawów" przekierowuje na listę
 - Sesja jest zapisana w bazie danych
 

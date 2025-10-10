@@ -16,18 +16,12 @@ Astro z SSG/SSR świetnie skaluje się dla treści statycznych, ale aplikacja za
 
 **Bezpłatny model biznesowy** bez limitów (z PRD) może szybko wygenerować nieakceptowalne koszty API AI przy większej liczbie użytkowników. **Krytyczny problem**: brak mechanizmów kontroli kosztów w PRD może doprowadzić do nieprzewidywalnych wydatków.
 
-## Złożoność rozwiązania
-
-Stack jest **zbyt złożony** dla obecnych wymagań MVP. Astro 5 + React 19 to podwójna warstwa frameworków, która ma sens dla content-heavy websites z wyspami interaktywności, ale aplikacja to klasyczny SPA z autentykacją i CRUD. TypeScript 5 i Tailwind 4 to uzasadnione wybory, ale Shadcn/ui dodaje kolejną warstwę abstrakcji tam, gdzie prosty Tailwind wystarczyłby.
-
-**Prostsze alternatywy** mogłyby przyspieszyć rozwój. Dla MVP wystarczyłby **Next.js 15 + Supabase + Tailwind**, eliminując złożoność Astro Islands i konieczność integracji dwóch frameworków. Albo **SvelteKit + Supabase**, który oferuje prostszą architekturę i mniejsze bundle size niż React.
-
 ## Prostsze podejście spełniające wymagania
 
 **Rekomendowane uproszczenie stosu**:
 
 - Frontend: Next.js 15 App Router (eliminuje potrzebę Astro+React, lepsze dla aplikacji SPA z autentykacją)
-- UI: Tailwind 4 + podstawowe komponenty (bez Shadcn/ui w MVP)
+- UI: Tailwind 4 + podstawowe komponenty
 - Backend: Supabase (pozostaje)
 - AI: OpenRouter (pozostaje, ale z rate limitingiem)
 - Hosting: Vercel (bezpłatny tier wystarczy na start, lepiej zintegrowany z Next.js niż DigitalOcean)
