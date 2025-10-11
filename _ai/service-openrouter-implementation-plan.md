@@ -167,8 +167,9 @@ async chat(opts: ChatOptions) {
 - Implementacja serwisu: w ./src/lib/openrouter.ts zaimplementować klasę OpenRouterService z konstruktorem, metodą chat, oraz prywatnymi pomocnikami buildRequestBody, sanitizeAndMapError, validateStructuredOutputIfNeeded.
 - Endpoint API: w ./src/pages/api/openrouter/chat.ts utworzyć handler POST, który waliduje wejście, instancjuje serwis z kluczem API i zwraca wynik lub kontrolowane błędy, stosując wczesne zwroty i guard clauses.
 - Konfiguracja środowiskowa: OPENROUTER_API_KEY jest dostępny w pliku .env, stamtąd można go odczytywać
-- Wybór modelu: zdefiniować białą listę modeli obsługiwanych przez usługę, przechowywaną po stronie serwera, z walidacją nazwy i ewentualnym fallbackiem, aby uniknąć błędów provider-specific.
+- Wybór modelu: zdefiniować białą listę modeli obsługiwanych przez usługę, przechowywaną po stronie serwera, z walidacją nazwy i ewentualnym fallbackiem, aby uniknąć błędów provider-specific. 
 - Structured outputs: wdrożyć response_format typu json_schema, ustawiając structured_outputs: true oraz schema z nazwą i strict: true, a także dopisać krótką instrukcję w system/user o zwracaniu wyłącznie JSON.
+- Aplikacja domyślnie będzie używać modelu "google/gemini-2.0-flash-exp:free"
 
 
 ### Elementy OpenRouter i przykłady użycia
