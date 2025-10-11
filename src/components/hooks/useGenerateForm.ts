@@ -144,9 +144,15 @@ export function useGenerateForm({ minChars, maxChars }: UseGenerateFormOptions):
         // Ignore
       }
 
+      // Store session data in sessionStorage for the review page
+      try {
+        sessionStorage.setItem(`generation_session_${data.generation_session_id}`, JSON.stringify(data));
+      } catch {
+        // Ignore sessionStorage errors
+      }
+
       // Przekierowanie do widoku recenzji z danymi sesji
-      // Używamy URLSearchParams do przekazania ID sesji
-      window.location.href = `/review?session=${data.generation_session_id}`;
+      window.location.href = `/review/${data.generation_session_id}`;
     } catch (err) {
       clearTimeout(timeoutId);
 

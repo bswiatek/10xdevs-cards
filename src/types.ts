@@ -387,3 +387,52 @@ export interface SystemLogListResponseDTO {
   logs: SystemLogDTO[];
   pagination: PaginationDTO;
 }
+
+// ============================================================================
+// Review View UI Types
+// ============================================================================
+
+/**
+ * View model for a candidate flashcard in the review UI
+ * Extends CandidateFlashcardDTO with UI-specific state
+ */
+export interface ReviewCandidateVM {
+  id: string;
+  front: string;
+  back: string;
+  action: "pending" | FlashcardActionType;
+  wasEdited: boolean;
+  errors?: {
+    front?: string;
+    back?: string;
+  };
+}
+
+/**
+ * Counters for tracking review progress
+ */
+export interface ReviewCounters {
+  accepted: number;
+  rejected: number;
+  remaining: number;
+}
+
+/**
+ * State for the edit modal
+ */
+export interface EditModalState {
+  open: boolean;
+  candidateId?: string;
+}
+
+/**
+ * Complete state for the review view
+ */
+export interface ReviewState {
+  sessionId: number;
+  candidates: ReviewCandidateVM[];
+  counters: ReviewCounters;
+  isSaving: boolean;
+  titleModalOpen: boolean;
+  editModal: EditModalState;
+}

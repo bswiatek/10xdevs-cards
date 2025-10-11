@@ -1,0 +1,24 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { ReviewView } from "@/components/ReviewView";
+import { Toaster } from "@/components/ui/sonner";
+
+// Get generation session ID from URL params
+const { sessionId } = Astro.params;
+
+// Validate sessionId
+const generationSessionId = sessionId ? parseInt(sessionId, 10) : null;
+
+if (!generationSessionId || isNaN(generationSessionId)) {
+  return Astro.redirect("/generate?error=invalid_session");
+}
+
+// Try to get initial session data from session storage (passed via navigation state)
+// In a real implementation, this would come from navigation state or query params
+// For now, we'll let the component handle the case where initialSession is undefined
+---
+
+<Layout title="Recenzja kandydatów - 10xdevs Cards">
+  <ReviewView client:load generationSessionId={generationSessionId} />
+  <Toaster client:load />
+</Layout>
