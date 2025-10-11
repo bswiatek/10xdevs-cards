@@ -1,6 +1,97 @@
 import type { Tables, TablesInsert, TablesUpdate } from "./db/database.types";
 
 // ============================================================================
+// OpenRouter AI Integration
+// ============================================================================
+
+/**
+ * Message role in a chat conversation
+ */
+export type MessageRole = "system" | "user" | "assistant";
+
+/**
+ * Chat message for OpenRouter API
+ */
+export interface Message {
+  role: MessageRole;
+  content: string;
+}
+
+/**
+ * JSON Schema format for structured outputs
+ */
+export interface JsonSchemaFormat {
+  type: "json_schema";
+  json_schema: {
+    name: string;
+    strict?: boolean;
+    schema: Record<string, unknown>;
+  };
+}
+
+/**
+ * Response format options for OpenRouter
+ */
+export type ResponseFormat = { type: "json_object" } | JsonSchemaFormat;
+
+/**
+ * OpenRouter model parameters for generation
+ */
+export interface OpenRouterParams {
+  temperature?: number;
+  top_p?: number;
+  top_k?: number;
+  frequency_penalty?: number;
+  presence_penalty?: number;
+  repetition_penalty?: number;
+  min_p?: number;
+  top_a?: number;
+  seed?: number;
+  max_tokens?: number;
+  stop?: string | string[];
+  response_format?: ResponseFormat;
+  structured_outputs?: boolean;
+}
+
+/**
+ * OpenRouter service configuration
+ */
+export interface OpenRouterConfig {
+  apiKey: string;
+  baseUrl?: string;
+  defaultModel?: string;
+  defaultParams?: Partial<OpenRouterParams>;
+}
+
+/**
+ * Options for chat completion request
+ */
+export interface ChatOptions {
+  messages: Message[];
+  model?: string;
+  params?: OpenRouterParams;
+}
+
+/**
+ * Token usage information from OpenRouter
+ */
+export interface TokenUsage {
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
+}
+
+/**
+ * Chat completion response from OpenRouter
+ */
+export interface ChatResponse {
+  content: string;
+  usage?: TokenUsage;
+  model: string;
+  raw: unknown;
+}
+
+// ============================================================================
 // Base Types & Enums
 // ============================================================================
 
