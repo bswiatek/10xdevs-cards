@@ -26,3 +26,5 @@ pnpm-debug.log*
 #supabase
 supabase/.branches
 supabase/.temp
+
+_ai/documents/to_do

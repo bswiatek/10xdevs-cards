@@ -1,4 +1,4 @@
-# Plan implementacji widoku Logowanie[1]
+# Plan implementacji widoku Logowanie
 
 ## 1. Przegląd
 

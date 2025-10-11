@@ -410,7 +410,6 @@ Kryteria akceptacji:
 - Każdy kandydat pokazuje przód i tył fiszki
 - Każdy kandydat ma trzy przyciski: Akceptuj, Edytuj, Odrzuć
 - System wyświetla licznik: ile kandydatów zostało, ile zaakceptowano, ile odrzucono
-- Lista jest przewijalna
 
 #### US-012: Akceptowanie kandydata
 
