@@ -169,7 +169,7 @@ async chat(opts: ChatOptions) {
 - Konfiguracja środowiskowa: OPENROUTER_API_KEY jest dostępny w pliku .env, stamtąd można go odczytywać
 - Wybór modelu: zdefiniować białą listę modeli obsługiwanych przez usługę, przechowywaną po stronie serwera, z walidacją nazwy i ewentualnym fallbackiem, aby uniknąć błędów provider-specific. 
 - Structured outputs: wdrożyć response_format typu json_schema, ustawiając structured_outputs: true oraz schema z nazwą i strict: true, a także dopisać krótką instrukcję w system/user o zwracaniu wyłącznie JSON.
-- Aplikacja domyślnie będzie używać modelu "google/gemini-2.0-flash-exp:free"
+- Aplikacja domyślnie będzie używać modelu "openai/gpt-4o-mini"
 
 
 ### Elementy OpenRouter i przykłady użycia

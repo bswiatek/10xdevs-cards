@@ -65,7 +65,7 @@ export class OpenRouterService {
   /**
    * Default model to use for chat completions
    */
-  private static readonly DEFAULT_MODEL = "google/gemini-2.0-flash-exp:free";
+  private static readonly DEFAULT_MODEL = "openai/gpt-4o-mini";
 
   constructor(config: OpenRouterConfig) {
     // Guard clause: validate API key

@@ -161,7 +161,7 @@ export async function generateFlashcardsFromText(
 
     await logInfo(supabase, "Starting AI flashcard generation", {
       inputLength: sourceText.length,
-      model: "google/gemini-2.0-flash-exp:free",
+      model: "openai/gpt-4o-mini",
     });
 
     // Step 2: Build messages and call AI
@@ -205,7 +205,7 @@ export async function generateFlashcardsFromText(
         input_text: sourceText,
         input_length: sourceText.length,
         generated_count: candidates.length,
-        model_name: "google/gemini-2.0-flash-exp:free",
+        model_name: "openai/gpt-4o-mini",
       })
       .select("id, started_at")
       .single();

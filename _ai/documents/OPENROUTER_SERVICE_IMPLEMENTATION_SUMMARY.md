@@ -26,7 +26,7 @@ Successfully implemented the OpenRouter service for AI-powered flashcard generat
 #### Constructor
 - API key validation (guard clause)
 - Configurable base URL (default: `https://openrouter.ai/api/v1`)
-- Default model: `google/gemini-2.0-flash-exp:free`
+- Default model: `openai/gpt-4o-mini`
 - Customizable default parameters
 
 #### Public Methods
@@ -118,7 +118,7 @@ New error codes added:
 - `AI_RESPONSE_NO_CANDIDATES` - No candidates generated
 
 #### Configuration
-- Model: `google/gemini-2.0-flash-exp:free`
+- Model: `openai/gpt-4o-mini`
 - Temperature: 0.3 (lower for consistency)
 - Max tokens: 2000
 - Structured outputs: enabled
@@ -145,7 +145,7 @@ X-Title: 10xDevs Cards
 ### Request Body Structure
 ```json
 {
-  "model": "google/gemini-2.0-flash-exp:free",
+  "model": "openai/gpt-4o-mini",
   "messages": [
     {
       "role": "system",
@@ -184,7 +184,7 @@ X-Title: 10xDevs Cards
     "completion_tokens": 456,
     "total_tokens": 579
   },
-  "model": "google/gemini-2.0-flash-exp:free"
+  "model": "openai/gpt-4o-mini"
 }
 ```
 
