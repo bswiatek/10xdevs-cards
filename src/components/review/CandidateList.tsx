@@ -22,7 +22,7 @@ export function CandidateList({ candidates, onAccept, onReject, onEditStart, onU
   }
 
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {candidates.map((candidate) => (
         <CandidateCard
           key={candidate.id}

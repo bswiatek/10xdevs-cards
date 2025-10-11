@@ -155,7 +155,11 @@ export function ReviewView({ generationSessionId, initialSession, onSaveSuccess 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <ReviewHeader counters={state.counters} onRequestSave={actions.openTitleModal} />
+      <ReviewHeader
+        counters={state.counters}
+        onRequestSave={actions.openTitleModal}
+        onAcceptAll={actions.acceptAllCandidates}
+      />
 
       {/* Main content */}
       <div className="container mx-auto px-4 py-8">

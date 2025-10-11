@@ -1,14 +1,16 @@
 import { Button } from "@/components/ui/button";
 import type { ReviewCounters } from "@/types";
-import { Check, X, Clock, Save } from "lucide-react";
+import { Check, X, Clock, Save, CheckCheck } from "lucide-react";
 
 interface ReviewHeaderProps {
   counters: ReviewCounters;
   onRequestSave: () => void;
+  onAcceptAll: () => void;
 }
 
-export function ReviewHeader({ counters, onRequestSave }: ReviewHeaderProps) {
+export function ReviewHeader({ counters, onRequestSave, onAcceptAll }: ReviewHeaderProps) {
   const canSave = counters.accepted > 0;
+  const hasRemaining = counters.remaining > 0;
 
   return (
     <div className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -44,11 +46,20 @@ export function ReviewHeader({ counters, onRequestSave }: ReviewHeaderProps) {
               </div>
             </div>
 
-            {/* Save button */}
-            <Button onClick={onRequestSave} disabled={!canSave} size="lg">
-              <Save className="mr-2 h-4 w-4" />
-              Zapisz zestaw
-            </Button>
+            {/* Action buttons */}
+            <div className="flex gap-2">
+              {/* Accept all button */}
+              <Button onClick={onAcceptAll} disabled={!hasRemaining} variant="outline" size="lg">
+                <CheckCheck className="mr-2 h-4 w-4" />
+                Zaakceptuj wszystkie
+              </Button>
+
+              {/* Save button */}
+              <Button onClick={onRequestSave} disabled={!canSave} size="lg">
+                <Save className="mr-2 h-4 w-4" />
+                Zapisz zestaw
+              </Button>
+            </div>
           </div>
         </div>
 

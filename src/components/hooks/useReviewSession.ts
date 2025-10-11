@@ -125,6 +125,20 @@ export function useReviewSession(sessionId: number, initialSession?: GenerationS
     [recalculateCounters]
   );
 
+  // Accept all pending candidates
+  const acceptAllCandidates = useCallback(() => {
+    setState((prev) => {
+      const updatedCandidates = prev.candidates.map((c) =>
+        c.action === "pending" ? { ...c, action: "accepted" as FlashcardActionType } : c
+      );
+      return {
+        ...prev,
+        candidates: updatedCandidates,
+        counters: recalculateCounters(updatedCandidates),
+      };
+    });
+  }, [recalculateCounters]);
+
   // Edit a candidate (update content and mark as edited)
   const editCandidate = useCallback(
     (candidateId: string, front: string, back: string) => {
@@ -208,6 +222,7 @@ export function useReviewSession(sessionId: number, initialSession?: GenerationS
       acceptCandidate,
       rejectCandidate,
       undoCandidate,
+      acceptAllCandidates,
       editCandidate,
       openEditModal,
       closeEditModal,
