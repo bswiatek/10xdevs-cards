@@ -357,18 +357,6 @@ Kryteria akceptacji:
 - Wszystkie fiszki, zestawy i dane użytkownika są kasowane
 - System loguje operację usunięcia konta
 
-#### US-007: Dostęp do logów systemowych
-
-Opis: Jako administrator chcę przeglądać logi systemowe, aby monitorować błędy i aktywność.
-
-Kryteria akceptacji:
-
-- Administrator ma dostęp do widoku logów systemowych
-- Logi zawierają: timestamp, typ zdarzenia, opis, ID użytkownika (jeśli dotyczy)
-- Możliwość filtrowania logów według typu (błąd, info, ostrzeżenie)
-- Możliwość wyszukiwania w logach
-- Paginacja logów (50 wpisów na stronę)
-
 ### 5.3 Generowanie fiszek AI
 
 #### US-008: Tworzenie nowego zestawu przez wklejenie tekstu
@@ -390,7 +378,7 @@ Opis: Jako użytkownik chcę, aby AI wygenerowało kandydatów na fiszki z mojeg
 
 Kryteria akceptacji:
 
-- Po kliknięciu "Generuj fiszki" system wyświetla wskaźnik postępu
+- Po kliknięciu "Generuj fiszki" system wyświetla loader (spinner)
 - System wysyła tekst do API AI (GPT-4o lub Claude 3.5 Sonnet)
 - System analizuje cały tekst jednocześnie
 - Maksymalny czas oczekiwania to 60 sekund
@@ -685,46 +673,3 @@ Kryteria akceptacji:
 - System wyświetla komunikat "Utracono połączenie. Sprawdź internet i spróbuj ponownie"
 - Tekst źródłowy jest zachowany
 - Po przywróceniu połączenia użytkownik może kliknąć "Spróbuj ponownie"
-
-#### US-034: Walidacja długości tekstu podczas wklejania
-
-Opis: Jako użytkownik chcę być od razu poinformowany, jeśli mój tekst jest za krótki lub za długi.
-
-Kryteria akceptacji:
-
-- Licznik znaków jest widoczny w czasie rzeczywistym
-- Jeśli tekst < 1000 znaków, system wyświetla: "Tekst za krótki. Minimum 1000 znaków"
-- Jeśli tekst > 10000 znaków, system wyświetla: "Tekst za długi. Maksimum 10000 znaków"
-- Przycisk "Generuj fiszki" jest nieaktywny przy niepoprawnej długości
-- Komunikaty są wyświetlane pod polem tekstowym
-
-#### US-035: Próba zapisu pustego zestawu
-
-Opis: Jako użytkownik chcę być poinformowany, że nie mogę zapisać zestawu bez żadnych zaakceptowanych fiszek.
-
-Kryteria akceptacji:
-
-- Jeśli użytkownik odrzuci wszystkich kandydatów, przycisk "Zapisz zestaw" jest nieaktywny
-- System wyświetla komunikat: "Musisz zaakceptować co najmniej jedną fiszkę"
-- Po zaakceptowaniu minimum jednej fiszki przycisk staje się aktywny
-
-#### US-036: Duplikacja emaila przy rejestracji
-
-Opis: Jako użytkownik chcę być poinformowany, że podany email jest już w użyciu.
-
-Kryteria akceptacji:
-
-- System sprawdza unikalność emaila podczas rejestracji
-- Jeśli email już istnieje, system wyświetla: "Ten adres email jest już zarejestrowany"
-- Użytkownik może spróbować innego emaila lub przejść do logowania
-
-#### US-037: Sesja wygasła podczas pracy
-
-Opis: Jako użytkownik chcę być poinformowany o wygaśnięciu sesji i móc się ponownie zalogować.
-
-Kryteria akceptacji:
-
-- System wykrywa wygaśnięcie sesji przy każdym żądaniu
-- System wyświetla komunikat: "Twoja sesja wygasła. Zaloguj się ponownie"
-- Użytkownik jest przekierowywany na stronę logowania
-- Po ponownym zalogowaniu użytkownik wraca do poprzedniego widoku (jeśli możliwe)
