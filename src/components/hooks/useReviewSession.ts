@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import type {
   GenerationSessionDTO,
   ReviewCandidateVM,
@@ -39,6 +39,21 @@ export function useReviewSession(sessionId: number, initialSession?: GenerationS
       open: false,
     },
   });
+
+  // Update candidates when initialSession changes (e.g., loaded from sessionStorage)
+  useEffect(() => {
+    if (initialSession && initialCandidates.length > 0 && state.candidates.length === 0) {
+      setState((prev) => ({
+        ...prev,
+        candidates: initialCandidates,
+        counters: {
+          accepted: 0,
+          rejected: 0,
+          remaining: initialCandidates.length,
+        },
+      }));
+    }
+  }, [initialSession, initialCandidates, state.candidates.length]);
 
   // Calculate counters from candidates (O(1) for updates, O(n) for validation)
   const recalculateCounters = useCallback((candidates: ReviewCandidateVM[]): ReviewCounters => {

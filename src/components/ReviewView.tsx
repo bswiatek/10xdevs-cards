@@ -15,21 +15,22 @@ interface ReviewViewProps {
 
 export function ReviewView({ generationSessionId, initialSession, onSaveSuccess }: ReviewViewProps) {
   // Try to load session from sessionStorage if not provided
-  const [sessionData, setSessionData] = useState<GenerationSessionDTO | undefined>(initialSession);
+  const sessionData = useState<GenerationSessionDTO | undefined>(() => {
+    // Try to load from initialSession first
+    if (initialSession) return initialSession;
 
-  useEffect(() => {
-    if (!sessionData) {
-      try {
-        const stored = sessionStorage.getItem(`generation_session_${generationSessionId}`);
-        if (stored) {
-          const parsed = JSON.parse(stored) as GenerationSessionDTO;
-          setSessionData(parsed);
-        }
-      } catch {
-        // Ignore errors
+    // Otherwise try to load from sessionStorage
+    try {
+      const stored = sessionStorage.getItem(`generation_session_${generationSessionId}`);
+      if (stored) {
+        return JSON.parse(stored) as GenerationSessionDTO;
       }
+    } catch {
+      // Ignore errors
     }
-  }, [generationSessionId, sessionData]);
+
+    return undefined;
+  })[0];
 
   const { state, actions } = useReviewSession(generationSessionId, sessionData);
 

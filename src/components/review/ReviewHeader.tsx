@@ -52,8 +52,8 @@ export function ReviewHeader({ counters, onRequestSave }: ReviewHeaderProps) {
           </div>
         </div>
 
-        {/* Warning when no accepted */}
-        {!canSave && counters.remaining === 0 && (
+        {/* Warning when no accepted but some were processed */}
+        {!canSave && counters.remaining === 0 && counters.accepted + counters.rejected > 0 && (
           <div className="mt-4 rounded-lg border border-orange-200 bg-orange-50 p-3 dark:border-orange-800 dark:bg-orange-950/20">
             <p className="text-sm text-orange-800 dark:text-orange-300">
               Musisz zaakceptować lub edytować co najmniej jedną fiszkę, aby zapisać zestaw.
