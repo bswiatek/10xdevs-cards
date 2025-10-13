@@ -27,10 +27,6 @@ Osoby uczące się, studenci, profesjonaliści i wszyscy, którzy chcą efektywn
 - AI: GPT-4o lub Claude 3.5 Sonnet
 - Baza danych: Relacyjna (do przechowywania kont, fiszek, postępów i logów)
 
-### 1.6 Model biznesowy
-
-Aplikacja bezpłatna bez limitów użytkowania
-
 ## 2. Problem użytkownika
 
 ### 2.1 Opis problemu
