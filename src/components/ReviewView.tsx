@@ -118,9 +118,9 @@ export function ReviewView({ generationSessionId, initialSession, onSaveSuccess 
       if (onSaveSuccess && result.id) {
         onSaveSuccess(result.id);
       } else if (result.id) {
-        // Default redirect to the sets list or detail page
+        // Default redirect to the set details page
         setTimeout(() => {
-          window.location.href = `/sets`;
+          window.location.href = `/sets/${result.id}`;
         }, 1000);
       }
     } catch (error) {
