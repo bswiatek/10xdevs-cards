@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { LogoutButton } from "@/components/auth/LogoutButton";
+import { Toaster } from "@/components/ui/sonner";
 
 interface Props {
   title?: string;
@@ -26,11 +27,11 @@ const { data: { session } } = await Astro.locals.supabase.auth.getSession();
       <header class="border-b bg-background">
         <div class="container mx-auto flex items-center justify-between px-4 py-3">
           <nav class="flex items-center gap-6">
+            <a href="/dashboard" class="text-sm font-medium hover:text-primary">
+              Dashboard
+            </a>
             <a href="/generate" class="text-sm font-medium hover:text-primary">
               Generuj
-            </a>
-            <a href="/flashcard-sets" class="text-sm font-medium hover:text-primary">
-              Moje zestawy
             </a>
           </nav>
           <LogoutButton client:load />
@@ -38,6 +39,7 @@ const { data: { session } } = await Astro.locals.supabase.auth.getSession();
       </header>
     )}
     <slot />
+    <Toaster client:load />
   </body>
 </html>
 
