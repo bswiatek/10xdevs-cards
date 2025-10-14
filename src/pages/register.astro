@@ -1,0 +1,27 @@
+---
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import { RegisterForm } from "@/components/auth/RegisterForm";
+---
+
+<AuthLayout title="Rejestracja - Generator Fiszek AI">
+  <div class="space-y-6">
+    <!-- Logo/Brand -->
+    <div class="text-center">
+      <h1 class="text-2xl font-bold">Generator Fiszek AI</h1>
+      <p class="mt-2 text-sm text-muted-foreground">Utwórz nowe konto</p>
+    </div>
+
+    <!-- Register Form -->
+    <div class="rounded-lg border bg-card p-6 shadow-sm">
+      <RegisterForm client:load />
+    </div>
+
+    <!-- Links -->
+    <div class="text-center text-sm">
+      <p class="text-muted-foreground">
+        Masz już konto?{" "}
+        <a href="/login" class="text-primary hover:underline">Zaloguj się</a>
+      </p>
+    </div>
+  </div>
+</AuthLayout>

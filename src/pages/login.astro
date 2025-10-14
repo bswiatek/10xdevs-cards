@@ -1,0 +1,30 @@
+---
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import { LoginForm } from "@/components/auth/LoginForm";
+---
+
+<AuthLayout title="Logowanie - Generator Fiszek AI">
+  <div class="space-y-6">
+    <!-- Logo/Brand -->
+    <div class="text-center">
+      <h1 class="text-2xl font-bold">Generator Fiszek AI</h1>
+      <p class="mt-2 text-sm text-muted-foreground">Zaloguj się do swojego konta</p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="rounded-lg border bg-card p-6 shadow-sm">
+      <LoginForm client:load />
+    </div>
+
+    <!-- Links -->
+    <div class="space-y-3 text-center text-sm">
+      <p>
+        <a href="/forgot-password" class="text-primary hover:underline">Zapomniałeś hasła?</a>
+      </p>
+      <p class="text-muted-foreground">
+        Nie masz konta?{" "}
+        <a href="/register" class="text-primary hover:underline">Zarejestruj się</a>
+      </p>
+    </div>
+  </div>
+</AuthLayout>
