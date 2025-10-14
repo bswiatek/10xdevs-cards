@@ -21,17 +21,35 @@ const GenerateFlashcardsSchema = z.object({
  * POST /api/generations
  * Initiates AI flashcard generation from source text
  *
- * NOTE: MVP version without authentication - will be added later
- *
  * @returns 201 Created with GenerationSessionDTO
  * @returns 400 Bad Request if validation fails
+ * @returns 401 Unauthorized if user is not authenticated
  * @returns 500 Internal Server Error on unexpected errors
  */
 export const POST: APIRoute = async ({ request, locals }) => {
   const supabase = locals.supabase;
 
   try {
-    // Step 1: Parse and validate request body
+    // Step 1: Check authentication
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "Authentication required",
+        }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Step 2: Parse and validate request body
     let body: unknown;
     try {
       body = await request.json();
@@ -66,10 +84,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const command: GenerateFlashcardsCommand = validation.data;
 
-    // Step 2: Call generation service (using mock AI for MVP)
+    // Step 3: Call generation service
     let result: GenerationSessionDTO;
     try {
-      result = await generateFlashcardsFromText(supabase, command.source_text);
+      result = await generateFlashcardsFromText(supabase, user.id, command.source_text);
     } catch (serviceError) {
       // Handle known service errors
       if (serviceError instanceof Error) {
@@ -91,7 +109,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       throw serviceError;
     }
 
-    // Step 3: Return success response
+    // Step 4: Return success response
     return new Response(JSON.stringify(result), {
       status: 201,
       headers: { "Content-Type": "application/json" },

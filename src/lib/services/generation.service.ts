@@ -132,12 +132,14 @@ function parseFlashcardCandidates(content: string): CandidateFlashcardDTO[] {
  * Generates flashcard candidates from source text using OpenRouter AI
  *
  * @param supabase - Supabase client instance
+ * @param userId - ID of the authenticated user
  * @param sourceText - Text to analyze (1000-10000 characters)
  * @returns GenerationSessionDTO with candidates
  * @throws Error if database operations or AI generation fail
  */
 export async function generateFlashcardsFromText(
   supabase: SupabaseClient<Database>,
+  userId: string,
   sourceText: string
 ): Promise<GenerationSessionDTO> {
   const startTime = Date.now();
@@ -201,7 +203,7 @@ export async function generateFlashcardsFromText(
     const { data: sessionData, error: dbError } = await supabase
       .from("generation_sessions")
       .insert({
-        user_id: "06f9f64c-fd4a-4466-9954-0e35ce6dfd15", // Mock user ID for MVP
+        user_id: userId,
         input_text: sourceText,
         input_length: sourceText.length,
         generated_count: candidates.length,

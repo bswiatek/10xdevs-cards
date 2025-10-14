@@ -8,20 +8,17 @@ import type {
 import { logError, logInfo } from "../logging";
 
 /**
- * Mock user ID for MVP (no authentication yet)
- */
-const MOCK_USER_ID = "06f9f64c-fd4a-4466-9954-0e35ce6dfd15";
-
-/**
  * Creates an empty flashcard set (manual creation mode)
  *
  * @param supabase - Supabase client instance
+ * @param userId - ID of the authenticated user
  * @param title - Title of the flashcard set
  * @returns CreateFlashcardSetResponseDTO with empty set details
  * @throws Error if database operations fail
  */
 export async function createEmptyFlashcardSet(
   supabase: SupabaseClient<Database>,
+  userId: string,
   title: string
 ): Promise<CreateFlashcardSetResponseDTO> {
   try {
@@ -29,7 +26,7 @@ export async function createEmptyFlashcardSet(
     const { data: setData, error: setError } = await supabase
       .from("flashcard_sets")
       .insert({
-        user_id: MOCK_USER_ID,
+        user_id: userId,
         title: title,
         cards_count: 0,
       })
@@ -81,6 +78,7 @@ export async function createEmptyFlashcardSet(
  * Performs transactional operations to ensure data consistency
  *
  * @param supabase - Supabase client instance
+ * @param userId - ID of the authenticated user
  * @param title - Title of the flashcard set
  * @param generationSessionId - ID of the generation session
  * @param flashcards - Array of flashcard candidates with user actions
@@ -89,6 +87,7 @@ export async function createEmptyFlashcardSet(
  */
 export async function createFlashcardSetFromGeneration(
   supabase: SupabaseClient<Database>,
+  userId: string,
   title: string,
   generationSessionId: number,
   flashcards: FlashcardCandidateWithActionDTO[]
@@ -127,7 +126,7 @@ export async function createFlashcardSetFromGeneration(
     const { data: setData, error: setError } = await supabase
       .from("flashcard_sets")
       .insert({
-        user_id: MOCK_USER_ID,
+        user_id: userId,
         title: title,
         cards_count: 0, // Will be updated by trigger
       })

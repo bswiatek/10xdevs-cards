@@ -183,10 +183,9 @@ export const GET: APIRoute = async ({ request, locals }) => {
  * POST /api/flashcard-sets
  * Creates a new flashcard set, either empty (manual) or from AI generation
  *
- * NOTE: MVP version without authentication - will be added later
- *
  * @returns 201 Created with CreateFlashcardSetResponseDTO
  * @returns 400 Bad Request if validation fails
+ * @returns 401 Unauthorized if user is not authenticated
  * @returns 404 Not Found if generation_session_id doesn't exist
  * @returns 422 Unprocessable Entity if business logic validation fails
  * @returns 500 Internal Server Error on unexpected errors
@@ -195,7 +194,26 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const supabase = locals.supabase;
 
   try {
-    // Step 1: Parse and validate request body
+    // Step 1: Check authentication
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "Authentication required",
+        }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Step 2: Parse and validate request body
     let body: unknown;
     try {
       body = await request.json();
@@ -230,7 +248,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const command: CreateFlashcardSetCommand = validation.data;
 
-    // Step 2: Determine mode and call appropriate service
+    // Step 3: Determine mode and call appropriate service
     let result: CreateFlashcardSetResponseDTO;
 
     try {
@@ -238,13 +256,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
         // AI generation mode
         result = await createFlashcardSetFromGeneration(
           supabase,
+          user.id,
           command.title,
           command.generation_session_id,
           command.flashcards
         );
       } else {
         // Manual creation mode
-        result = await createEmptyFlashcardSet(supabase, command.title);
+        result = await createEmptyFlashcardSet(supabase, user.id, command.title);
       }
     } catch (serviceError) {
       // Handle known service errors
@@ -293,7 +312,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       throw serviceError;
     }
 
-    // Step 3: Return success response
+    // Step 4: Return success response
     return new Response(JSON.stringify(result), {
       status: 201,
       headers: { "Content-Type": "application/json" },
