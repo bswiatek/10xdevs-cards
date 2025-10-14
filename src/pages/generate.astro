@@ -3,8 +3,16 @@ import Layout from "@/layouts/Layout.astro";
 import GenerateView from "@/components/GenerateView";
 
 // Protect route - require authentication
-const { data: { session } } = await Astro.locals.supabase.auth.getSession();
+// First, try to get current session
+let { data: { session } } = await Astro.locals.supabase.auth.getSession();
 
+// If no session found, try to refresh (might be race condition with cookie setting)
+if (!session) {
+  const { data } = await Astro.locals.supabase.auth.refreshSession();
+  session = data.session;
+}
+
+// If still no session, redirect to login
 if (!session) {
   return Astro.redirect("/login");
 }

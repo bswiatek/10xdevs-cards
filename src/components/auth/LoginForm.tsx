@@ -41,6 +41,9 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
       setStatus("success");
       onSuccess?.();
       
+      // Small delay to ensure cookies are set before redirect
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       // Redirect to /generate after successful login
       window.location.href = "/generate";
     } catch (error) {

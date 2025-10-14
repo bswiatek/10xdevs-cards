@@ -72,6 +72,9 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
       setStatus("success");
       onSuccess?.();
       
+      // Small delay to ensure cookies are set before redirect
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       // Auto-login successful, redirect to /generate
       window.location.href = "/generate";
     } catch (error) {

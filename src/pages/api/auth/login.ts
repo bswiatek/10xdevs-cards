@@ -55,6 +55,13 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       });
     }
 
+    // IMPORTANT: Explicitly set the session in Supabase client
+    // This ensures cookies are properly set through the SSR client
+    await locals.supabase.auth.setSession({
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+    });
+
     // Session is automatically saved in cookies by Supabase SSR client
     return new Response(
       JSON.stringify({

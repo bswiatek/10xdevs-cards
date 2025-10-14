@@ -61,6 +61,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    // IMPORTANT: After registration, explicitly set session if it exists
+    // This ensures cookies are properly set through the SSR client
+    if (data.session) {
+      await locals.supabase.auth.setSession({
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
+      });
+    }
+
     // Auto-login after registration (session is automatically saved)
     return new Response(
       JSON.stringify({
