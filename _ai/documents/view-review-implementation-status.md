@@ -66,7 +66,7 @@ The orchestrator component that:
 - Automatic redirect to sets list after successful save
 - Fallback UI when no session data available
 
-### 5. Astro Page (`src/pages/review/[sessionId].astro`)
+### 5. Astro Page (`src/pages/review/sessionId.astro`)
 - Dynamic route with sessionId parameter
 - Validates sessionId (must be valid number)
 - Loads ReviewView with client:load directive
@@ -78,7 +78,7 @@ The orchestrator component that:
 #### useGenerateForm hook (`src/components/hooks/useGenerateForm.ts`)
 Updated to:
 - Store GenerationSessionDTO in sessionStorage
-- Redirect to `/review/[sessionId]` after successful generation
+- Redirect to `/review/sessionId` after successful generation
 - Use route params instead of query params
 
 ## Features Implemented
@@ -138,7 +138,7 @@ Updated to:
 ## Navigation Flow
 
 1. User generates flashcards at `/generate`
-2. After successful generation → redirects to `/review/[sessionId]`
+2. After successful generation → redirects to `/review/sessionId`
 3. Session data stored in sessionStorage
 4. User reviews candidates (accept/edit/reject)
 5. User clicks "Save Set" → enters title
@@ -176,7 +176,7 @@ Installed Shadcn/ui components:
 6. `src/components/review/EditCandidateModal.tsx`
 7. `src/components/review/SaveSetTitleModal.tsx`
 8. `src/components/ReviewView.tsx`
-9. `src/pages/review/[sessionId].astro`
+9. `src/pages/review/sessionId.astro`
 10. `src/components/ui/card.tsx` (via shadcn)
 11. `src/components/ui/dialog.tsx` (via shadcn)
 12. `src/components/ui/textarea.tsx` (via shadcn)

@@ -105,7 +105,7 @@ Ten fix jest specyficzny dla Astro 5 i działa poprawnie z `@supabase/ssr`.
 - Dodano ochronę przed niezalogowanymi użytkownikami
 - Przekierowanie do `/login` jeśli brak sesji
 
-**Zaktualizowano: `src/pages/review/[sessionId].astro`**
+**Zaktualizowano: `src/pages/review/sessionId.astro`**
 - Dodano ochronę przed niezalogowanymi użytkownikami
 
 **Zaktualizowano: `src/pages/account/password.astro`**
@@ -176,7 +176,7 @@ src/
 │   ├── login.astro                # ✨ + redirect logic
 │   ├── register.astro             # ✨ + redirect logic
 │   ├── generate.astro             # ✨ + auth protection
-│   ├── review/[sessionId].astro   # ✨ + auth protection
+│   ├── review/sessionId.astro     # ✨ + auth protection
 │   ├── account/password.astro     # ✨ + auth protection
 │   └── index.astro                # ✨ + redirect logic
 ├── layouts/

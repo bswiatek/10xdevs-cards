@@ -85,9 +85,9 @@ Successfully implemented all CRUD endpoints for flashcard sets and flashcards ac
 
 ### API Routes
 - `src/pages/api/flashcard-sets/index.ts` - Updated with GET endpoint
-- `src/pages/api/flashcard-sets/[id].ts` - GET, PATCH, DELETE for specific set
-- `src/pages/api/flashcard-sets/[setId]/flashcards.ts` - POST to create flashcard
-- `src/pages/api/flashcards/[id].ts` - PATCH and DELETE for flashcards
+- `src/pages/api/flashcard-sets/id.ts` - GET, PATCH, DELETE for specific set
+- `src/pages/api/flashcard-sets/setId/flashcards.ts` - POST to create flashcard
+- `src/pages/api/flashcards/id.ts` - PATCH and DELETE for flashcards
 
 ## Key Features
 
