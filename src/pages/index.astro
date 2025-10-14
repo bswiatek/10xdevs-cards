@@ -1,6 +1,13 @@
 ---
 import Welcome from "../components/Welcome.astro";
 import Layout from "../layouts/Layout.astro";
+
+// Check if user is logged in and redirect to generate
+const { data: { session } } = await Astro.locals.supabase.auth.getSession();
+
+if (session) {
+  return Astro.redirect("/generate");
+}
 ---
 
 <Layout>

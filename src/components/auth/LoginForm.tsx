@@ -26,23 +26,23 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
     setErrorMessage("");
 
     try {
-      // TODO: Implement API call to /api/auth/login
-      // const response = await fetch("/api/auth/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ email, password }),
-      // });
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // if (!response.ok) {
-      //   const data = await response.json();
-      //   throw new Error(data.message || "Nieprawidłowe dane logowania");
-      // }
+      const data = await response.json();
 
-      // Placeholder for backend implementation
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!response.ok) {
+        throw new Error(data.error || "Nieprawidłowe dane logowania");
+      }
 
       setStatus("success");
       onSuccess?.();
+      
+      // Redirect to /generate after successful login
+      window.location.href = "/generate";
     } catch (error) {
       const message = error instanceof Error ? error.message : "Nieprawidłowe dane logowania";
       setErrorMessage(message);

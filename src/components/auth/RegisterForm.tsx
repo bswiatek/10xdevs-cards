@@ -57,23 +57,23 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
     setStatus("loading");
 
     try {
-      // TODO: Implement API call to /api/auth/register
-      // const response = await fetch("/api/auth/register", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ email, password, confirm: confirmPassword }),
-      // });
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, confirm: confirmPassword }),
+      });
 
-      // if (!response.ok) {
-      //   const data = await response.json();
-      //   throw new Error(data.message || "Błąd podczas rejestracji");
-      // }
+      const data = await response.json();
 
-      // Placeholder for backend implementation
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!response.ok) {
+        throw new Error(data.error || "Błąd podczas rejestracji");
+      }
 
       setStatus("success");
       onSuccess?.();
+      
+      // Auto-login successful, redirect to /generate
+      window.location.href = "/generate";
     } catch (error) {
       const message = error instanceof Error ? error.message : "Błąd podczas rejestracji";
       setErrorMessage(message);

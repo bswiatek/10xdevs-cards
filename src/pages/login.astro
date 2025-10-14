@@ -1,6 +1,13 @@
 ---
 import AuthLayout from "@/layouts/AuthLayout.astro";
 import { LoginForm } from "@/components/auth/LoginForm";
+
+// Check if user is already logged in
+const { data: { session } } = await Astro.locals.supabase.auth.getSession();
+
+if (session) {
+  return Astro.redirect("/generate");
+}
 ---
 
 <AuthLayout title="Logowanie - Generator Fiszek AI">

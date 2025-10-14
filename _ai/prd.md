@@ -186,11 +186,15 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 
 #### 3.6.2 Logowanie
 
+- Email użytkownika na który jest wysyłany reset hasła
+
+#### 3.6.2 Odzyskiwanie hasła
+
 - Email + hasło
 - Sesja utrzymywana przez token
 - Brak opcji "Zapamiętaj mnie"
 
-#### 3.6.3 Role użytkowników
+#### 3.6.4 Role użytkowników
 
 - Zwykły użytkownik: pełny dostęp do własnych zasobów
 - Administrator:

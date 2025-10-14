@@ -1,0 +1,73 @@
+feat: implement login/register integration with Supabase Auth
+
+Integrated authentication flow with Astro backend following auth-spec.md:
+
+Core Features:
+- User registration with auto-login
+- User login with session management
+- Logout functionality
+- Protected routes with SSR redirects
+- Role-based authentication (user_metadata.role)
+
+Backend (API Endpoints):
+- POST /api/auth/login - authenticate user
+- POST /api/auth/register - create new account
+- POST /api/auth/logout - end session
+
+Frontend Updates:
+- LoginForm: integrated with API, redirect to /generate
+- RegisterForm: integrated with API, auto-login
+- LogoutButton: new component in navigation
+- Layout: added navigation with logout button
+
+Infrastructure:
+- Supabase SSR client with cookie handling
+- Zod validation schemas (RFC 5322 email)
+- TypeScript types for SSR context
+- Middleware updated for SSR client
+
+Route Protection:
+- /generate - requires auth
+- /review/* - requires auth
+- /account/password - requires auth
+- /login, /register - redirect if logged in
+- / - redirect to /generate if logged in
+
+Security:
+- Generic error messages (no detail leaks)
+- Password minimum 8 characters
+- Email RFC 5322 validation
+- HTTP-only cookies for sessions
+- Default session TTL: 1h access + 7d refresh
+
+Bugfix (Astro 5):
+- Fixed: cookies.getAll is not a function
+- Solution: Manual iteration through Supabase cookie patterns
+- Astro 5 AstroCookies doesn't have getAll() method
+- Implemented project-ref extraction and pattern matching
+
+Dependencies:
+- Added: zod, @supabase/ssr
+
+Documentation:
+- Full implementation guide with bugfix notes
+- Testing guide with scenarios
+- Quickstart guide
+- Changelog
+
+Build Status: ✅ Success
+Type Check: ✅ Pass
+Dev Server: ✅ Tested (no errors)
+Spec Compliance: ✅ auth-spec.md, prd.md
+
+Files Changed:
+M: 15 files (core integration)
+A: 8 files (new components, endpoints, docs)
+
+Tested:
+- /login returns 200 OK
+- /generate redirects to /login (302)
+- No runtime errors
+
+See: _ai/documents/QUICKSTART_LOGIN.md for usage
+See: _ai/documents/LOGIN_CHANGELOG.md for version history

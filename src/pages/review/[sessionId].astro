@@ -3,6 +3,13 @@ import Layout from "@/layouts/Layout.astro";
 import { ReviewView } from "@/components/ReviewView";
 import { Toaster } from "@/components/ui/sonner";
 
+// Protect route - require authentication
+const { data: { session } } = await Astro.locals.supabase.auth.getSession();
+
+if (!session) {
+  return Astro.redirect("/login");
+}
+
 // Get generation session ID from URL params
 const { sessionId } = Astro.params;
 

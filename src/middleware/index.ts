@@ -1,8 +1,9 @@
 import { defineMiddleware } from "astro:middleware";
 
-import { supabaseClient } from "../db/supabase.client.ts";
+import { createSupabaseServerClient } from "../db/supabase.client.ts";
 
 export const onRequest = defineMiddleware((context, next) => {
-  context.locals.supabase = supabaseClient;
+  // Create SSR-compatible Supabase client with cookie handling
+  context.locals.supabase = createSupabaseServerClient(context.cookies);
   return next();
 });
