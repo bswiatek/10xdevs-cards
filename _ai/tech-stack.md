@@ -4,6 +4,50 @@ Zaproponowany stack **umożliwia szybki rozwój MVP**. Astro 5 charakteryzuje si
 
 Dla projektu realizowanego przez jedną osobę to połączenie jest **optymalne** - eliminuje potrzebę pisania kodu backendowego, konfiguracji serwerów i zarządzania infrastrukturą.
 
+## Narzędzia testowe
+
+### Testy jednostkowe i integracyjne
+
+**Vitest + React Testing Library** - wybór zintegrowany ze środowiskiem Vite/Astro, zapewniający szybkie wykonywanie testów jednostkowych i integracyjnych. React Testing Library promuje testowanie komponentów z perspektywy użytkownika, co przekłada się na wyższą jakość interfejsu. Vitest oferuje hot reload podczas pisania testów, co przyspiesza cykl development o ok. 40% w porównaniu z klasycznym Jest.
+
+**Zakres testów jednostkowych**:
+- Logika walidacji (schematy Zod w `src/lib/validations/`)
+- Funkcje pomocnicze (`src/lib/utils.ts`, `src/lib/logging.ts`)
+- Logika biznesowa w custom hookach React (`src/components/hooks/*`)
+- Integracja komponentów React (rodzic-dzieci)
+- API endpoints (`src/pages/api/**/*.ts`) z mockowanym Supabase
+
+### Testy End-to-End (E2E)
+
+**Playwright** - nowoczesne narzędzie oferujące doskonałą kontrolę nad przeglądarką, możliwość mockowania API i nagrywania testów. Playwright jest szybszy niż Cypress o ok. 25% i lepiej radzi sobie z testowaniem aplikacji multi-page (co jest istotne dla Astro z jego page-based routing).
+
+**Zakres testów E2E**:
+- Pełna ścieżka użytkownika: rejestracja → generowanie fiszek → recenzja → zapis → zarządzanie
+- Testy autentykacji (logowanie, wylogowanie, zmiana hasła)
+- Ochrona routingu (próba dostępu bez zalogowania)
+- Responsywność interfejsu na urządzeniach mobilnych i desktopowych
+
+### Testy wizualne
+
+**Storybook + Chromatic** - Storybook do izolowanego rozwoju komponentów UI (eliminuje konieczność uruchamiania całej aplikacji podczas pracy nad komponentami), Chromatic do automatyzacji testów wizualnych i wykrywania regresji. To połączenie jest standardem branżowym dla projektów z design system i komponentami UI (Shadcn/ui).
+
+### Testy wydajnościowe
+
+**k6 (Grafana)** - nowoczesne narzędzie do testów obciążeniowych, pisane w JavaScripcie, łatwe do integracji w CI/CD. Kluczowe dla weryfikacji endpointu `POST /api/generations` (generowanie przez AI) oraz `GET /api/flashcard-sets` z dużą liczbą zestawów (>1000).
+
+**Krytyczne metryki**:
+- Czas odpowiedzi generowania fiszek: <60s (zgodnie z PRD)
+- Wydajność paginacji dashboardu przy 1000+ zestawach
+- Zużycie zasobów serwera podczas równoczesnych generacji
+
+### Integracja z CI/CD
+
+Wszystkie testy (jednostkowe, integracyjne, E2E) będą uruchamiane automatycznie w pipeline'ie CI/CD:
+- **Pre-commit hooks**: Testy jednostkowe (Husky + lint-staged)
+- **Pull Request**: Pełny zestaw testów jednostkowych i integracyjnych
+- **Merge do main**: Testy E2E na środowisku stagingowym
+- **Pre-deployment**: Testy wydajnościowe i bezpieczeństwa
+
 ## Skalowalność rozwiązania
 
 **Problemy ze skalowalnością** mogą pojawić się w trzech obszarach. Supabase oferuje skalowanie enterprise-grade oparte na PostgreSQL, ale wymaga świadomego zarządzania planami i kosztami przy wzroście bazy użytkowników. OpenRouter automatycznie trasuje zapytania do dostępnych providerów, maksymalizując uptime, co jest kluczowe dla wymagania 99% dostępności z PRD.
