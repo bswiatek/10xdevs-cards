@@ -4,9 +4,12 @@ import type {
   CreateFlashcardSetCommand,
   CreateFlashcardSetResponseDTO,
   FlashcardCandidateWithActionDTO,
+  FlashcardSetListResponseDTO,
 } from "../../../types";
 import { logError } from "../../../lib/logging";
 import { createEmptyFlashcardSet, createFlashcardSetFromGeneration } from "../../../lib/services/flashcard-set.service";
+import { listFlashcardSets } from "../../../lib/services/flashcard.service";
+import { FlashcardSetsListQuerySchema } from "../../../lib/validations/flashcards";
 
 // Disable prerendering for this API endpoint
 export const prerender = false;
@@ -75,6 +78,106 @@ const CreateFlashcardSetSchema = z
       path: ["flashcards"],
     }
   ) satisfies z.ZodType<CreateFlashcardSetCommand>;
+
+/**
+ * GET /api/flashcard-sets
+ * Lists flashcard sets for the authenticated user with pagination and search
+ *
+ * @returns 200 OK with FlashcardSetListResponseDTO
+ * @returns 400 Bad Request if validation fails
+ * @returns 401 Unauthorized if not authenticated
+ * @returns 500 Internal Server Error on unexpected errors
+ */
+export const GET: APIRoute = async ({ request, locals }) => {
+  const supabase = locals.supabase;
+
+  try {
+    // Step 1: Check authentication
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "Authentication required",
+        }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Step 2: Parse and validate query parameters
+    const url = new URL(request.url);
+    const queryParams = {
+      page: url.searchParams.get("page"),
+      limit: url.searchParams.get("limit"),
+      search: url.searchParams.get("search"),
+      sort: url.searchParams.get("sort"),
+      order: url.searchParams.get("order"),
+    };
+
+    const validation = FlashcardSetsListQuerySchema.safeParse(queryParams);
+
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({
+          error: "Bad Request",
+          message: "Invalid query parameters",
+          details: validation.error.format(),
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Step 3: Call service to list flashcard sets
+    const result: FlashcardSetListResponseDTO = await listFlashcardSets(supabase, user.id, validation.data);
+
+    // Step 4: Return success response
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    // Handle service errors
+    if (error instanceof Error && error.message === "DATABASE_ERROR") {
+      return new Response(
+        JSON.stringify({
+          error: "Internal Server Error",
+          message: "Failed to retrieve flashcard sets",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Log unexpected errors
+    await logError(supabase, "Unexpected error in GET /api/flashcard-sets", {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
+    return new Response(
+      JSON.stringify({
+        error: "Internal Server Error",
+        message: "An unexpected error occurred",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+};
 
 /**
  * POST /api/flashcard-sets
