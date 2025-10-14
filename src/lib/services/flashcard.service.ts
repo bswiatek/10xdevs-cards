@@ -36,10 +36,8 @@ export async function listFlashcardSets(
 
     // Apply search filter if provided
     if (search && search.length > 0) {
-      // Search in title or in flashcard content
-      baseQuery = baseQuery.or(
-        `title.ilike.%${search}%,flashcards.front.ilike.%${search}%,flashcards.back.ilike.%${search}%`
-      );
+      // Search in title only (view doesn't have flashcard content)
+      baseQuery = baseQuery.ilike("title", `%${search}%`);
     }
 
     // Apply sorting

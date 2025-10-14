@@ -40,7 +40,7 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
     }
 
     // Step 2: Parse and validate setId parameter
-    const setId = parseInt(params.setId || "", 10);
+    const setId = parseInt(params.id || "", 10);
     if (isNaN(setId) || setId <= 0) {
       return new Response(
         JSON.stringify({
@@ -127,7 +127,7 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
     await logError(supabase, "Unexpected error in POST /api/flashcard-sets/:setId/flashcards", {
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
-      setId: params.setId,
+      setId: params.id,
     });
 
     return new Response(

@@ -114,11 +114,11 @@ export const GET: APIRoute = async ({ request, locals }) => {
     // Step 2: Parse and validate query parameters
     const url = new URL(request.url);
     const queryParams = {
-      page: url.searchParams.get("page"),
-      limit: url.searchParams.get("limit"),
-      search: url.searchParams.get("search"),
-      sort: url.searchParams.get("sort"),
-      order: url.searchParams.get("order"),
+      page: url.searchParams.get("page") || undefined,
+      limit: url.searchParams.get("limit") || undefined,
+      search: url.searchParams.get("search") || undefined,
+      sort: url.searchParams.get("sort") || undefined,
+      order: url.searchParams.get("order") || undefined,
     };
 
     const validation = FlashcardSetsListQuerySchema.safeParse(queryParams);
