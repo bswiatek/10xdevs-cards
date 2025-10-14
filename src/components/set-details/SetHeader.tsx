@@ -32,11 +32,7 @@ export function SetHeader({ setDetails, onStartStudy, onDeleteSet }: SetHeaderPr
               <Calendar className="h-4 w-4" aria-hidden="true" />
               <span>Utworzono {formattedDate}</span>
             </div>
-            {hasDueCards && (
-              <Badge variant="default">
-                {setDetails.due_cards_count} do nauki
-              </Badge>
-            )}
+            {hasDueCards && <Badge variant="default">{setDetails.due_cards_count} do nauki</Badge>}
           </div>
         </div>
         <div className="flex items-center gap-2">

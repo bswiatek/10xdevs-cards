@@ -10,7 +10,9 @@ interface Props {
 const { title = "10x Astro Starter" } = Astro.props;
 
 // Check if user is logged in for conditional rendering
-const { data: { session } } = await Astro.locals.supabase.auth.getSession();
+const {
+  data: { session },
+} = await Astro.locals.supabase.auth.getSession();
 ---
 
 <!doctype html>
@@ -23,21 +25,23 @@ const { data: { session } } = await Astro.locals.supabase.auth.getSession();
     <title>{title}</title>
   </head>
   <body>
-    {session && (
-      <header class="border-b bg-background">
-        <div class="container mx-auto flex items-center justify-between px-4 py-3">
-          <nav class="flex items-center gap-6">
-            <a href="/dashboard" class="text-sm font-medium hover:text-primary">
-              Dashboard
-            </a>
-            <a href="/generate" class="text-sm font-medium hover:text-primary">
-              Generuj
-            </a>
-          </nav>
-          <LogoutButton client:load />
-        </div>
-      </header>
-    )}
+    {
+      session && (
+        <header class="border-b bg-background">
+          <div class="container mx-auto flex items-center justify-between px-4 py-3">
+            <nav class="flex items-center gap-6">
+              <a href="/dashboard" class="text-sm font-medium hover:text-primary">
+                Dashboard
+              </a>
+              <a href="/generate" class="text-sm font-medium hover:text-primary">
+                Generuj
+              </a>
+            </nav>
+            <LogoutButton client:load />
+          </div>
+        </header>
+      )
+    }
     <slot />
     <Toaster client:load />
   </body>

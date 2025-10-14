@@ -73,7 +73,7 @@ export function AddFlashcardModal({ open, onClose, onSuccess, availableSets }: A
   const handleSubmit = useCallback(async () => {
     // Validate flashcard content
     const flashcardValid = flashcardValidation.validate({ front, back });
-    
+
     // Validate set selection or new title
     let titleValid = true;
     if (mode === "new") {

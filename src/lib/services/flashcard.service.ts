@@ -298,11 +298,7 @@ export async function updateFlashcardSetTitle(
 /**
  * Deletes a flashcard set (cascades to flashcards and progress)
  */
-export async function deleteFlashcardSet(
-  supabase: SupabaseClient,
-  setId: number,
-  userId: string
-): Promise<boolean> {
+export async function deleteFlashcardSet(supabase: SupabaseClient, setId: number, userId: string): Promise<boolean> {
   try {
     const { error, count } = await supabase
       .from("flashcard_sets")
@@ -402,7 +398,9 @@ export async function createFlashcard(
         reps: 0,
         lapses: 0,
       })
-      .select("id, flashcard_id, state, due, stability, difficulty, elapsed_days, scheduled_days, reps, lapses, last_review")
+      .select(
+        "id, flashcard_id, state, due, stability, difficulty, elapsed_days, scheduled_days, reps, lapses, last_review"
+      )
       .single();
 
     if (progressError || !progressData) {
@@ -525,11 +523,7 @@ export async function updateFlashcard(
 /**
  * Deletes a flashcard (cascades to progress, decrements cards_count via trigger)
  */
-export async function deleteFlashcard(
-  supabase: SupabaseClient,
-  flashcardId: number,
-  userId: string
-): Promise<boolean> {
+export async function deleteFlashcard(supabase: SupabaseClient, flashcardId: number, userId: string): Promise<boolean> {
   try {
     // Need to verify ownership through the set
     const { data: flashcardData } = await supabase
@@ -550,10 +544,7 @@ export async function deleteFlashcard(
     }
 
     // Delete the flashcard
-    const { error, count } = await supabase
-      .from("flashcards")
-      .delete({ count: "exact" })
-      .eq("id", flashcardId);
+    const { error, count } = await supabase.from("flashcards").delete({ count: "exact" }).eq("id", flashcardId);
 
     if (error) {
       await logError(supabase, "Failed to delete flashcard", {

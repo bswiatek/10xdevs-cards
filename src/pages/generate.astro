@@ -4,7 +4,9 @@ import GenerateView from "@/components/GenerateView";
 
 // Protect route - require authentication
 // First, try to get current session
-let { data: { session } } = await Astro.locals.supabase.auth.getSession();
+let {
+  data: { session },
+} = await Astro.locals.supabase.auth.getSession();
 
 // If no session found, try to refresh (might be race condition with cookie setting)
 if (!session) {

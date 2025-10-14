@@ -17,12 +17,12 @@ export function createSupabaseServerClient(cookies: AstroCookies) {
       getAll() {
         // Get ALL cookies that Astro has access to
         // This is crucial for Supabase SSR to work properly
-        const allCookies: Array<{ name: string; value: string }> = [];
-        
+        const allCookies: { name: string; value: string }[] = [];
+
         // Extract project reference from URL for cookie naming
         // Handle both cloud (https://xxx.supabase.co) and local (http://127.0.0.1:54321)
         let projectRef = "";
-        
+
         if (supabaseUrl.includes("127.0.0.1") || supabaseUrl.includes("localhost")) {
           // Local Supabase uses "127" as project ref
           projectRef = "127";
@@ -30,7 +30,7 @@ export function createSupabaseServerClient(cookies: AstroCookies) {
           // Cloud Supabase extracts from subdomain
           projectRef = supabaseUrl.match(/https:\/\/([^.]+)/)?.[1] || "";
         }
-        
+
         // Check for all possible Supabase auth token cookies
         const cookiePatterns = [
           `sb-${projectRef}-auth-token`,
@@ -38,7 +38,7 @@ export function createSupabaseServerClient(cookies: AstroCookies) {
           `sb-${projectRef}-auth-token.1`,
           `sb-${projectRef}-auth-token-code-verifier`,
         ];
-        
+
         // Iterate through all known patterns
         for (const pattern of cookiePatterns) {
           const cookie = cookies.get(pattern);
@@ -49,7 +49,7 @@ export function createSupabaseServerClient(cookies: AstroCookies) {
             });
           }
         }
-        
+
         return allCookies;
       },
       setAll(cookiesToSet) {

@@ -28,7 +28,11 @@ export function SetsPagination({ pagination, onPageChange }: SetsPaginationProps
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
-      <span className="text-sm text-muted-foreground px-4" aria-current="page" aria-label={`Strona ${current_page} z ${total_pages}`}>
+      <span
+        className="text-sm text-muted-foreground px-4"
+        aria-current="page"
+        aria-label={`Strona ${current_page} z ${total_pages}`}
+      >
         Strona {current_page} z {total_pages}
       </span>
       <Button

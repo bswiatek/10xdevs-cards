@@ -108,7 +108,12 @@ export function SetDetailsView({ setId }: SetDetailsViewProps) {
           <div className="h-10 w-2/3 bg-muted animate-pulse rounded" />
           <div className="h-6 w-1/3 bg-muted animate-pulse rounded" />
         </div>
-        <FlashcardsList flashcards={[]} onEdit={handleEditFlashcard} onDelete={handleDeleteFlashcard} isLoading={true} />
+        <FlashcardsList
+          flashcards={[]}
+          onEdit={handleEditFlashcard}
+          onDelete={handleDeleteFlashcard}
+          isLoading={true}
+        />
       </div>
     );
   }
@@ -178,15 +183,21 @@ export function SetDetailsView({ setId }: SetDetailsViewProps) {
         open={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onSuccess={handleModalSuccess}
-        availableSets={setDetails ? [{
-          id: setDetails.id,
-          user_id: setDetails.user_id,
-          title: setDetails.title,
-          cards_count: setDetails.cards_count,
-          due_cards_count: setDetails.due_cards_count,
-          created_at: setDetails.created_at,
-          updated_at: setDetails.updated_at,
-        }] : []}
+        availableSets={
+          setDetails
+            ? [
+                {
+                  id: setDetails.id,
+                  user_id: setDetails.user_id,
+                  title: setDetails.title,
+                  cards_count: setDetails.cards_count,
+                  due_cards_count: setDetails.due_cards_count,
+                  created_at: setDetails.created_at,
+                  updated_at: setDetails.updated_at,
+                },
+              ]
+            : []
+        }
       />
     </div>
   );

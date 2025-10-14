@@ -27,7 +27,11 @@ function SetCardSkeleton() {
 export function SetsGrid({ sets, onClickSet, isLoading = false, searchQuery = "" }: SetsGridProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" aria-busy="true" aria-label="Ładowanie zestawów">
+      <div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        aria-busy="true"
+        aria-label="Ładowanie zestawów"
+      >
         {Array.from({ length: 6 }).map((_, i) => (
           <SetCardSkeleton key={i} />
         ))}
@@ -40,7 +44,11 @@ export function SetsGrid({ sets, onClickSet, isLoading = false, searchQuery = ""
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" role="list" aria-label="Lista zestawów fiszek">
+    <div
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+      role="list"
+      aria-label="Lista zestawów fiszek"
+    >
       {sets.map((set) => (
         <SetCard key={set.id} set={set} onClick={onClickSet} searchQuery={searchQuery} />
       ))}

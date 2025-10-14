@@ -32,11 +32,7 @@ export function EmptyState({ searchQuery, onClearSearch, onAddFlashcard }: Empty
       <p className="text-muted-foreground mb-4">
         Nie masz jeszcze żadnych zestawów fiszek. Stwórz pierwszy zestaw, aby rozpocząć naukę.
       </p>
-      {onAddFlashcard && (
-        <Button onClick={onAddFlashcard}>
-          Dodaj pierwszą fiszkę
-        </Button>
-      )}
+      {onAddFlashcard && <Button onClick={onAddFlashcard}>Dodaj pierwszą fiszkę</Button>}
     </div>
   );
 }

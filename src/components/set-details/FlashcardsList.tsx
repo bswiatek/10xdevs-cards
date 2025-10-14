@@ -33,7 +33,11 @@ function FlashcardSkeleton() {
 export function FlashcardsList({ flashcards, onEdit, onDelete, isLoading = false }: FlashcardsListProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" aria-busy="true" aria-label="Ładowanie fiszek">
+      <div
+        className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        aria-busy="true"
+        aria-label="Ładowanie fiszek"
+      >
         {Array.from({ length: 8 }).map((_, i) => (
           <FlashcardSkeleton key={i} />
         ))}
@@ -46,7 +50,11 @@ export function FlashcardsList({ flashcards, onEdit, onDelete, isLoading = false
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" role="list" aria-label="Lista fiszek">
+    <div
+      className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      role="list"
+      aria-label="Lista fiszek"
+    >
       {flashcards.map((flashcard) => (
         <FlashcardListItem key={flashcard.id} flashcard={flashcard} onEdit={onEdit} onDelete={onDelete} />
       ))}

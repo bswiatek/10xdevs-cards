@@ -4,7 +4,9 @@ import { RegisterForm } from "@/components/auth/RegisterForm";
 
 // Check if user is already logged in
 // First, try to get current session
-let { data: { session } } = await Astro.locals.supabase.auth.getSession();
+let {
+  data: { session },
+} = await Astro.locals.supabase.auth.getSession();
 
 // If session found, redirect to generate
 if (session) {

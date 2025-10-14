@@ -25,27 +25,15 @@ export const FlashcardSetsListQuerySchema = z.object({
  * Schema for updating flashcard set title
  */
 export const UpdateFlashcardSetSchema = z.object({
-  title: z
-    .string()
-    .trim()
-    .min(1, "Title is required")
-    .max(200, "Title must not exceed 200 characters"),
+  title: z.string().trim().min(1, "Title is required").max(200, "Title must not exceed 200 characters"),
 });
 
 /**
  * Schema for creating a flashcard in a set
  */
 export const CreateFlashcardSchema = z.object({
-  front: z
-    .string()
-    .trim()
-    .min(1, "Front is required")
-    .max(200, "Front must not exceed 200 characters"),
-  back: z
-    .string()
-    .trim()
-    .min(1, "Back is required")
-    .max(500, "Back must not exceed 500 characters"),
+  front: z.string().trim().min(1, "Front is required").max(200, "Front must not exceed 200 characters"),
+  back: z.string().trim().min(1, "Back is required").max(500, "Back must not exceed 500 characters"),
 });
 
 /**
@@ -60,12 +48,7 @@ export const UpdateFlashcardSchema = z
       .min(1, "Front cannot be empty")
       .max(200, "Front must not exceed 200 characters")
       .optional(),
-    back: z
-      .string()
-      .trim()
-      .min(1, "Back cannot be empty")
-      .max(500, "Back must not exceed 500 characters")
-      .optional(),
+    back: z.string().trim().min(1, "Back cannot be empty").max(500, "Back must not exceed 500 characters").optional(),
   })
   .refine((data) => data.front !== undefined || data.back !== undefined, {
     message: "At least one field (front or back) must be provided",
