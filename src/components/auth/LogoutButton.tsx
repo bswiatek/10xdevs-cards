@@ -17,11 +17,9 @@ export function LogoutButton() {
         // Redirect to login page
         window.location.href = "/login";
       } else {
-        console.error("Logout failed");
         setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Logout error:", error);
+    } catch {
       setIsLoading(false);
     }
   };

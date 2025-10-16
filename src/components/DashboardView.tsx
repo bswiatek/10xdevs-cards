@@ -9,7 +9,7 @@ import { ErrorState } from "./dashboard/ErrorState";
 import { AddFlashcardModal } from "./dashboard/AddFlashcardModal";
 
 export function DashboardView() {
-  const { sets, pagination, isLoading, error, searchQuery, currentPage, setSearchQuery, setCurrentPage, refetch } =
+  const { sets, pagination, isLoading, error, searchQuery, setSearchQuery, setCurrentPage, refetch } =
     useDashboardSets();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);

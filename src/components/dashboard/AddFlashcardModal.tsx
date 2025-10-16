@@ -46,7 +46,7 @@ export function AddFlashcardModal({ open, onClose, onSuccess, availableSets }: A
         setSelectedSetId(availableSets[0].id.toString());
       }
     }
-  }, [open, availableSets]);
+  }, [open, availableSets, selectedSetId, flashcardValidation, titleValidation]);
 
   // Live validation for flashcard fields
   const handleFrontChange = (value: string) => {

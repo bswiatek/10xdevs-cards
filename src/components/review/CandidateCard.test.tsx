@@ -275,7 +275,7 @@ describe("CandidateCard", () => {
 
     it("applies correct badge styling", () => {
       const candidate = createMockCandidate({ wasEdited: true });
-      const { container } = render(<CandidateCard {...defaultProps} candidate={candidate} />);
+      render(<CandidateCard {...defaultProps} candidate={candidate} />);
 
       const badge = screen.getByText("Edytowano");
       expect(badge.className).toContain("rounded-full");

@@ -3,7 +3,7 @@ import { loginSchema } from "@/lib/validations/auth";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals, cookies }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     // Parse request body
     const body = await request.json();
@@ -74,8 +74,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
-  } catch (error) {
-    console.error("Login error:", error);
+  } catch {
     return new Response(
       JSON.stringify({
         error: "Wystąpił błąd podczas logowania",

@@ -47,15 +47,19 @@ test.describe("Authentication - Login Flow", () => {
     await expect(loginPage.submitButton).toBeVisible();
 
     // Step 2: Fill in login credentials (use pressSequentially for React controlled inputs)
+    if (!email || !password) {
+      throw new Error("E2E_USERNAME and E2E_PASSWORD must be set");
+    }
+
     await loginPage.emailInput.click();
-    await loginPage.emailInput.pressSequentially(email!, { delay: 50 });
+    await loginPage.emailInput.pressSequentially(email, { delay: 50 });
 
     await loginPage.passwordInput.click();
-    await loginPage.passwordInput.pressSequentially(password!, { delay: 50 });
+    await loginPage.passwordInput.pressSequentially(password, { delay: 50 });
 
     // Assert: Fields are filled correctly
-    await expect(loginPage.emailInput).toHaveValue(email!);
-    await expect(loginPage.passwordInput).toHaveValue(password!);
+    await expect(loginPage.emailInput).toHaveValue(email);
+    await expect(loginPage.passwordInput).toHaveValue(password);
 
     // Step 3: Submit the login form and wait for navigation
     const navigationPromise = page.waitForURL("**/generate", { timeout: 15000 });
@@ -105,11 +109,15 @@ test.describe("Authentication - Login Flow", () => {
     const password = process.env.E2E_PASSWORD;
 
     // Step 1: Login first
+    if (!email || !password) {
+      throw new Error("E2E_USERNAME and E2E_PASSWORD must be set");
+    }
+
     await loginPage.goto();
     await loginPage.emailInput.click();
-    await loginPage.emailInput.pressSequentially(email!, { delay: 50 });
+    await loginPage.emailInput.pressSequentially(email, { delay: 50 });
     await loginPage.passwordInput.click();
-    await loginPage.passwordInput.pressSequentially(password!, { delay: 50 });
+    await loginPage.passwordInput.pressSequentially(password, { delay: 50 });
 
     const navigationPromise = page.waitForURL("**/generate", { timeout: 15000 });
     await loginPage.submitButton.click();

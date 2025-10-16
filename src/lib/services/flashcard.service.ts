@@ -1,4 +1,3 @@
-import type { Database } from "../../db/database.types";
 import type { SupabaseClient } from "../../db/supabase.client";
 import type {
   FlashcardSetListDTO,
