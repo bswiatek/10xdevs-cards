@@ -22,7 +22,7 @@ export function SetHeader({ setDetails, onStartStudy, onDeleteSet }: SetHeaderPr
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 space-y-2">
-          <h1 className="text-3xl font-bold break-words">{setDetails.title}</h1>
+          <h1 className="text-3xl font-bold break-words" data-testid="set-title">{setDetails.title}</h1>
           <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
             <div className="flex items-center gap-1">
               <FileText className="h-4 w-4" aria-hidden="true" />
@@ -49,7 +49,7 @@ export function SetHeader({ setDetails, onStartStudy, onDeleteSet }: SetHeaderPr
             size="icon"
             onClick={onDeleteSet}
             aria-label="Usuń zestaw"
-            data-test-id="set-delete-button"
+            data-testid="set-delete-button"
           >
             <Trash2 className="h-4 w-4" />
           </Button>

@@ -15,7 +15,7 @@ export class SetDetailsPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.setTitle = page.locator("h1");
+    this.setTitle = page.getByTestId("set-title");
     this.deleteButton = page.getByTestId("set-delete-button");
     this.startStudyButton = page.getByRole("button", { name: /rozpocznij naukę/i });
     this.dashboardLink = page.getByTestId("nav-dashboard-link");
@@ -85,6 +85,6 @@ export class SetDetailsPage {
    * Wait for redirect after deletion
    */
   async waitForDashboardRedirect() {
-    await this.page.waitForURL("/");
+    await this.page.waitForURL("/dashboard");
   }
 }

@@ -33,7 +33,7 @@ export function LogoutButton() {
       onClick={handleLogout}
       disabled={isLoading}
       aria-label="Wyloguj się"
-      data-test-id="logout-button"
+      data-testid="logout-button"
     >
       {isLoading ? (
         <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />

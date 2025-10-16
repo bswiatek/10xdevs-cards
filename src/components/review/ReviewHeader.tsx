@@ -54,14 +54,14 @@ export function ReviewHeader({ counters, onRequestSave, onAcceptAll }: ReviewHea
                 disabled={!hasRemaining}
                 variant="outline"
                 size="lg"
-                data-test-id="review-accept-all-button"
+                data-testid="review-accept-all-button"
               >
                 <CheckCheck className="mr-2 h-4 w-4" />
                 Zaakceptuj wszystkie
               </Button>
 
               {/* Save button */}
-              <Button onClick={onRequestSave} disabled={!canSave} size="lg" data-test-id="review-save-set-button">
+              <Button onClick={onRequestSave} disabled={!canSave} size="lg" data-testid="review-save-set-button">
                 <Save className="mr-2 h-4 w-4" />
                 Zapisz zestaw
               </Button>

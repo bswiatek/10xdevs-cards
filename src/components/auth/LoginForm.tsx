@@ -58,7 +58,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
   const hasError = status === "error";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6" data-test-id="login-form">
+    <form onSubmit={handleSubmit} className="space-y-6" data-testid="login-form">
       {hasError && errorMessage && (
         <div
           id={errorId}
@@ -84,7 +84,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
             required
             disabled={isLoading}
             autoComplete="email"
-            data-test-id="login-email-input"
+            data-testid="login-email-input"
           />
         </div>
 
@@ -102,7 +102,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
             required
             disabled={isLoading}
             autoComplete="current-password"
-            data-test-id="login-password-input"
+            data-testid="login-password-input"
           />
         </div>
       </div>
@@ -113,7 +113,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
         className="w-full"
         size="lg"
         aria-busy={isLoading}
-        data-test-id="login-submit-button"
+        data-testid="login-submit-button"
       >
         {isLoading ? (
           <>

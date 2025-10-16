@@ -119,7 +119,7 @@ test.describe("Flashcard Generation E2E Flow", () => {
     // Step 10: Verify redirect back to dashboard
     await test.step("User is redirected to dashboard after deletion", async () => {
       await setDetailsPage.waitForDashboardRedirect();
-      await expect(page).toHaveURL("/");
+      await expect(page).toHaveURL("/dashboard");
     });
 
     // Step 11: Verify set is no longer visible

@@ -14,7 +14,7 @@ export function GenerateButton({ disabled, loading }: GenerateButtonProps) {
       className="w-full sm:w-auto"
       size="lg"
       aria-busy={loading}
-      data-test-id="generate-submit-button"
+      data-testid="generate-submit-button"
     >
       {loading ? (
         <>

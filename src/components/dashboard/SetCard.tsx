@@ -44,7 +44,7 @@ export function SetCard({ set, onClick, searchQuery = "" }: SetCardProps) {
         }
       }}
       aria-label={`Zestaw fiszek: ${set.title}, ${set.cards_count} fiszek, ${set.due_cards_count} do nauki`}
-      data-test-id="dashboard-set-card"
+      data-testid="dashboard-set-card"
       data-set-id={set.id}
     >
       <CardHeader>

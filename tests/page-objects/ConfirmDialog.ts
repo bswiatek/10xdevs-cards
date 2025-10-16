@@ -15,8 +15,8 @@ export class ConfirmDialog {
   constructor(page: Page) {
     this.page = page;
     this.dialog = page.getByTestId("confirm-dialog");
-    this.title = this.dialog.locator('[role="heading"]');
-    this.description = this.dialog.locator('[id*="description"]');
+    this.title = page.getByTestId("confirm-dialog-title");
+    this.description = page.getByTestId("confirm-dialog-description");
     this.confirmButton = page.getByTestId("confirm-dialog-confirm-button");
     this.cancelButton = this.dialog.getByRole("button", { name: /anuluj/i });
   }
