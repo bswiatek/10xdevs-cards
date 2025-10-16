@@ -13,15 +13,19 @@ export class LoginPage {
   }
 
   get passwordInput() {
-    return this.page.getByLabel(/password|hasło/i);
+    return this.page.getByLabel(/hasło/i);
   }
 
   get submitButton() {
-    return this.page.getByRole("button", { name: /login|sign in|zaloguj/i });
+    return this.page.getByRole("button", { name: /zaloguj się/i });
   }
 
   get errorMessage() {
     return this.page.locator('[role="alert"]');
+  }
+
+  get pageTitle() {
+    return this.page.getByRole("heading", { name: /generator fiszek ai/i, level: 1 });
   }
 
   // Actions
@@ -37,6 +41,47 @@ export class LoginPage {
 
   async getErrorText() {
     return this.errorMessage.textContent();
+  }
+
+  async waitForRedirect() {
+    await this.page.waitForURL(/\/(generate|dashboard)/);
+  }
+}
+
+/**
+ * Page Object Model for Generate Page
+ */
+export class GeneratePage {
+  constructor(private readonly page: Page) {}
+
+  // Locators
+  get pageTitle() {
+    return this.page.getByRole("heading", { name: /generuj fiszki ai/i, level: 1 });
+  }
+
+  get sourceTextArea() {
+    return this.page.getByLabel(/tekst źródłowy/i);
+  }
+
+  get generateButton() {
+    return this.page.getByRole("button", { name: /generuj fiszki/i });
+  }
+
+  get charCounter() {
+    return this.page.locator('[data-testid="char-counter"]');
+  }
+
+  // Actions
+  async goto() {
+    await this.page.goto("/generate");
+  }
+
+  async fillSourceText(text: string) {
+    await this.sourceTextArea.fill(text);
+  }
+
+  async clickGenerate() {
+    await this.generateButton.click();
   }
 }
 
