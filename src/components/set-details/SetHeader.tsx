@@ -44,7 +44,13 @@ export function SetHeader({ setDetails, onStartStudy, onDeleteSet }: SetHeaderPr
             <Play className="h-4 w-4 mr-2" />
             Rozpocznij naukę
           </Button>
-          <Button variant="destructive" size="icon" onClick={onDeleteSet} aria-label="Usuń zestaw">
+          <Button
+            variant="destructive"
+            size="icon"
+            onClick={onDeleteSet}
+            aria-label="Usuń zestaw"
+            data-test-id="set-delete-button"
+          >
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>

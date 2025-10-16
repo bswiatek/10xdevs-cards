@@ -69,7 +69,7 @@ export function SaveSetTitleModal({ isOpen, acceptedCount, onSave, onClose, isSa
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" data-test-id="save-set-title-modal">
         <DialogHeader>
           <DialogTitle>Zapisz zestaw fiszek</DialogTitle>
           <DialogDescription>
@@ -96,6 +96,7 @@ export function SaveSetTitleModal({ isOpen, acceptedCount, onSave, onClose, isSa
               placeholder="np. Historia Polski - Daty"
               className={error ? "border-red-500" : ""}
               disabled={isSaving}
+              data-test-id="save-set-title-input"
             />
             {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
           </div>
@@ -105,7 +106,7 @@ export function SaveSetTitleModal({ isOpen, acceptedCount, onSave, onClose, isSa
           <Button variant="outline" onClick={handleClose} disabled={isSaving}>
             Anuluj
           </Button>
-          <Button onClick={handleSave} disabled={!isValid || isSaving}>
+          <Button onClick={handleSave} disabled={!isValid || isSaving} data-test-id="save-set-confirm-button">
             {isSaving ? "Zapisywanie..." : "Zapisz zestaw"}
           </Button>
         </DialogFooter>

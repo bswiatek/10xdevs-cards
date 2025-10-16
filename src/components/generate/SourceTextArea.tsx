@@ -35,6 +35,7 @@ export function SourceTextArea({ value, onChange, errorMessage, required = false
         aria-invalid={hasError}
         aria-required={required}
         required={required}
+        data-test-id="generate-source-textarea"
       />
 
       {/* Error message */}

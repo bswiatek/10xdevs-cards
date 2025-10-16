@@ -13,6 +13,7 @@ export function LoadingOverlay({ visible }: LoadingOverlayProps) {
       role="status"
       aria-busy="true"
       aria-live="polite"
+      data-test-id="generate-loading-overlay"
     >
       <div className="flex flex-col items-center gap-4 rounded-lg border bg-card p-8 shadow-lg">
         <Loader2 className="h-12 w-12 animate-spin text-primary" aria-hidden="true" />

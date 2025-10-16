@@ -3,14 +3,14 @@ import { LoginPage, GeneratePage } from "../fixtures/page-objects";
 
 /**
  * E2E Test: User Authentication and Login Flow
- * 
+ *
  * This test covers the first part of the critical user journey:
  * - Navigate to login page
  * - Fill in email and password from test environment variables
  * - Submit login form
  * - Verify successful redirect to /generate page
  * - Verify page title "Generuj fiszki AI" is displayed
- * 
+ *
  * Test data:
  * - Uses existing test user from .env.test (E2E_USERNAME, E2E_PASSWORD)
  * - Test environment uses dedicated Supabase test database
@@ -49,7 +49,7 @@ test.describe("Authentication - Login Flow", () => {
     // Step 2: Fill in login credentials (use pressSequentially for React controlled inputs)
     await loginPage.emailInput.click();
     await loginPage.emailInput.pressSequentially(email!, { delay: 50 });
-    
+
     await loginPage.passwordInput.click();
     await loginPage.passwordInput.pressSequentially(password!, { delay: 50 });
 
@@ -67,7 +67,7 @@ test.describe("Authentication - Login Flow", () => {
 
     // Step 4: Verify the generate page is displayed
     await expect(generatePage.pageTitle).toBeVisible({ timeout: 5000 });
-    
+
     // Assert: Page title contains correct text
     await expect(generatePage.pageTitle).toHaveText(/generuj fiszki ai/i);
 
@@ -85,7 +85,7 @@ test.describe("Authentication - Login Flow", () => {
     await loginPage.emailInput.pressSequentially("invalid@email.com", { delay: 50 });
     await loginPage.passwordInput.click();
     await loginPage.passwordInput.pressSequentially("wrongpassword", { delay: 50 });
-    
+
     // Step 3: Submit the form
     await loginPage.submitButton.click();
 
@@ -110,11 +110,11 @@ test.describe("Authentication - Login Flow", () => {
     await loginPage.emailInput.pressSequentially(email!, { delay: 50 });
     await loginPage.passwordInput.click();
     await loginPage.passwordInput.pressSequentially(password!, { delay: 50 });
-    
+
     const navigationPromise = page.waitForURL("**/generate", { timeout: 15000 });
     await loginPage.submitButton.click();
     await navigationPromise;
-    
+
     await expect(page).toHaveURL("/generate");
 
     // Step 2: Try to access login page again

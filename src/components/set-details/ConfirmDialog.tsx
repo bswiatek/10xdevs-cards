@@ -32,7 +32,7 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <AlertDialogContent>
+      <AlertDialogContent data-test-id="confirm-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
@@ -42,6 +42,7 @@ export function ConfirmDialog({
           <AlertDialogAction
             onClick={onConfirm}
             className={isDestructive ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : ""}
+            data-test-id="confirm-dialog-confirm-button"
           >
             {confirmLabel}
           </AlertDialogAction>

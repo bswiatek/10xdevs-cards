@@ -34,7 +34,7 @@ async function setupTestUser() {
       console.log("✓ Test user already exists and can login");
       console.log("  User ID:", signInData.user.id);
       console.log("  Email:", signInData.user.email);
-      
+
       // Sign out after check
       await supabase.auth.signOut();
       return;
@@ -43,10 +43,10 @@ async function setupTestUser() {
     // If login failed, check if it's due to wrong password or missing user
     if (signInError) {
       console.log("Login attempt failed:", signInError.message);
-      
+
       // Try to create the user
       console.log("Attempting to create test user...");
-      
+
       // Note: User creation via client API requires admin privileges
       // For Supabase, you may need to use the service role key or admin API
       console.log("\n⚠ WARNING: Cannot create user via standard API");
@@ -54,7 +54,7 @@ async function setupTestUser() {
       console.log(`  Email: ${testEmail}`);
       console.log(`  Password: ${testPassword}`);
       console.log(`  User ID (optional): ${testUserId}`);
-      
+
       process.exit(1);
     }
   } catch (error) {

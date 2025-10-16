@@ -49,13 +49,19 @@ export function ReviewHeader({ counters, onRequestSave, onAcceptAll }: ReviewHea
             {/* Action buttons */}
             <div className="flex gap-2">
               {/* Accept all button */}
-              <Button onClick={onAcceptAll} disabled={!hasRemaining} variant="outline" size="lg">
+              <Button
+                onClick={onAcceptAll}
+                disabled={!hasRemaining}
+                variant="outline"
+                size="lg"
+                data-test-id="review-accept-all-button"
+              >
                 <CheckCheck className="mr-2 h-4 w-4" />
                 Zaakceptuj wszystkie
               </Button>
 
               {/* Save button */}
-              <Button onClick={onRequestSave} disabled={!canSave} size="lg">
+              <Button onClick={onRequestSave} disabled={!canSave} size="lg" data-test-id="review-save-set-button">
                 <Save className="mr-2 h-4 w-4" />
                 Zapisz zestaw
               </Button>
