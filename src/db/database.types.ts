@@ -2,8 +2,8 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 
 export interface Database {
   graphql_public: {
-    Tables: Record<string, never>;
-    Views: Record<string, never>;
+    Tables: Record<never, never>;
+    Views: Record<never, never>;
     Functions: {
       graphql: {
         Args: {
@@ -15,8 +15,8 @@ export interface Database {
         Returns: Json;
       };
     };
-    Enums: Record<string, never>;
-    CompositeTypes: Record<string, never>;
+    Enums: Record<never, never>;
+    CompositeTypes: Record<never, never>;
   };
   public: {
     Tables: {
@@ -95,15 +95,7 @@ export interface Database {
           updated_at?: string;
           user_id?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: "flashcard_sets_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
       flashcards: {
         Row: {
@@ -193,15 +185,7 @@ export interface Database {
           total_tokens?: number | null;
           user_id?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: "generation_sessions_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
       study_reviews: {
         Row: {
@@ -282,13 +266,6 @@ export interface Database {
             referencedRelation: "flashcard_sets_with_due_count";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "study_sessions_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
         ];
       };
       system_logs: {
@@ -316,35 +293,6 @@ export interface Database {
           metadata?: Json | null;
           user_id?: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: "system_logs_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      users: {
-        Row: {
-          created_at: string;
-          email: string;
-          id: string;
-          role: Database["public"]["Enums"]["user_role"];
-        };
-        Insert: {
-          created_at?: string;
-          email: string;
-          id?: string;
-          role?: Database["public"]["Enums"]["user_role"];
-        };
-        Update: {
-          created_at?: string;
-          email?: string;
-          id?: string;
-          role?: Database["public"]["Enums"]["user_role"];
-        };
         Relationships: [];
       };
     };
@@ -359,29 +307,15 @@ export interface Database {
           updated_at: string | null;
           user_id: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: "flashcard_sets_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
     };
-    Functions: {
-      is_admin: {
-        Args: Record<PropertyKey, never>;
-        Returns: boolean;
-      };
-    };
+    Functions: Record<never, never>;
     Enums: {
       flashcard_state: "New" | "Learning" | "Review" | "Relearning";
       log_level_type: "INFO" | "WARNING" | "ERROR";
-      user_role: "user" | "admin";
     };
-    CompositeTypes: Record<string, never>;
+    CompositeTypes: Record<never, never>;
   };
 }
 
@@ -502,7 +436,6 @@ export const Constants = {
     Enums: {
       flashcard_state: ["New", "Learning", "Review", "Relearning"],
       log_level_type: ["INFO", "WARNING", "ERROR"],
-      user_role: ["user", "admin"],
     },
   },
 } as const;
