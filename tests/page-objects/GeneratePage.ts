@@ -33,11 +33,9 @@ export class GeneratePage {
    */
   async fillSourceText(text: string) {
     await this.sourceTextArea.click();
-    // Use fill() for performance with long texts, then trigger input/change events
     await this.sourceTextArea.fill(text);
-    // Trigger events manually to ensure React state updates
-    await this.sourceTextArea.dispatchEvent("input");
-    await this.sourceTextArea.dispatchEvent("change");
+    // Wait for React state to update
+    await this.page.waitForTimeout(100);
   }
 
   /**
