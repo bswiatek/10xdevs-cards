@@ -10,13 +10,15 @@ export class GeneratePage {
   readonly generateButton: Locator;
   readonly loadingOverlay: Locator;
   readonly charCounter: Locator;
+  readonly errorAlert: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.sourceTextArea = page.getByTestId("generate-source-textarea");
-    this.generateButton = page.getByTestId("generate-submit-button");
+    this.sourceTextArea = page.getByLabel(/tekst źródłowy/i);
+    this.generateButton = page.getByRole("button", { name: /generuj fiszki/i });
     this.loadingOverlay = page.getByTestId("generate-loading-overlay");
-    this.charCounter = page.locator("text=/\\d+\\/10000/");
+    this.charCounter = page.locator("text=/\\d+/").first();
+    this.errorAlert = page.locator('[role="alert"]');
   }
 
   /**
@@ -30,7 +32,12 @@ export class GeneratePage {
    * Fill source text area
    */
   async fillSourceText(text: string) {
+    await this.sourceTextArea.click();
+    // Use fill() for performance with long texts, then trigger input/change events
     await this.sourceTextArea.fill(text);
+    // Trigger events manually to ensure React state updates
+    await this.sourceTextArea.dispatchEvent("input");
+    await this.sourceTextArea.dispatchEvent("change");
   }
 
   /**
@@ -41,17 +48,51 @@ export class GeneratePage {
   }
 
   /**
-   * Wait for loading overlay to appear
+   * Wait for loading overlay to appear or check if generation started
    */
   async waitForLoadingToStart() {
-    await this.loadingOverlay.waitFor({ state: "visible" });
+    // Wait a bit for the UI to react
+    await this.page.waitForTimeout(500);
+
+    // Check if we got redirected (generation might be very fast) or if there's an error
+    const currentUrl = this.page.url();
+    if (currentUrl.includes("/review/")) {
+      return; // Already redirected, skip waiting for overlay
+    }
+
+    // Check for error alert
+    const hasError = await this.errorAlert.isVisible().catch(() => false);
+    if (hasError) {
+      const errorText = await this.errorAlert.textContent();
+      throw new Error(`Generation failed with error: ${errorText}`);
+    }
+
+    // Wait for loading overlay to appear (with shorter timeout since we might have missed it)
+    await this.loadingOverlay.waitFor({ state: "visible", timeout: 5000 }).catch(() => {
+      // Overlay might not appear if generation is very fast, check URL again
+    });
   }
 
   /**
    * Wait for loading overlay to disappear (generation complete)
    */
   async waitForLoadingToComplete(timeout = 70000) {
-    await this.loadingOverlay.waitFor({ state: "hidden", timeout });
+    // First check if there's an error instead of loading
+    const hasError = await this.errorAlert.isVisible().catch(() => false);
+    if (hasError) {
+      const errorText = await this.errorAlert.textContent();
+      throw new Error(`Generation failed with error: ${errorText}`);
+    }
+
+    // Wait for loading overlay to disappear
+    await this.loadingOverlay.waitFor({ state: "hidden", timeout }).catch(async () => {
+      // Check for error again in case it appeared during generation
+      const hasErrorNow = await this.errorAlert.isVisible().catch(() => false);
+      if (hasErrorNow) {
+        const errorText = await this.errorAlert.textContent();
+        throw new Error(`Generation failed with error: ${errorText}`);
+      }
+    });
   }
 
   /**

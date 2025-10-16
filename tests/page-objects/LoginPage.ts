@@ -15,9 +15,9 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.emailInput = page.getByTestId("login-email-input");
-    this.passwordInput = page.getByTestId("login-password-input");
-    this.submitButton = page.getByTestId("login-submit-button");
+    this.emailInput = page.getByLabel(/email/i);
+    this.passwordInput = page.getByLabel(/hasło/i);
+    this.submitButton = page.getByRole("button", { name: /zaloguj się/i });
     this.errorMessage = page.locator('[role="alert"]');
     this.forgotPasswordLink = page.getByRole("link", { name: /zapomniałeś hasła/i });
     this.registerLink = page.getByRole("link", { name: /zarejestruj się/i });
@@ -34,14 +34,16 @@ export class LoginPage {
    * Fill email input
    */
   async fillEmail(email: string) {
-    await this.emailInput.fill(email);
+    await this.emailInput.click();
+    await this.emailInput.pressSequentially(email, { delay: 50 });
   }
 
   /**
    * Fill password input
    */
   async fillPassword(password: string) {
-    await this.passwordInput.fill(password);
+    await this.passwordInput.click();
+    await this.passwordInput.pressSequentially(password, { delay: 50 });
   }
 
   /**
@@ -64,7 +66,7 @@ export class LoginPage {
    * Wait for redirect after successful login
    */
   async waitForRedirect() {
-    await this.page.waitForURL("/generate");
+    await this.page.waitForURL("**/generate", { timeout: 15000 });
   }
 
   /**
