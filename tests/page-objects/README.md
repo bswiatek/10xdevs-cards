@@ -16,35 +16,45 @@ The Page Object Model (POM) pattern helps maintain clean, reusable, and maintain
 ### Pages
 
 #### `LoginPage`
+
 Handles login page interactions (`/login`)
+
 - Email/password input
 - Login submission
 - Error handling
 - Navigation to other auth pages
 
 #### `GeneratePage`
+
 Manages flashcard generation from source text (`/generate`)
+
 - Source text input
 - Generate button interaction
 - Loading state handling
 - Character count validation
 
 #### `ReviewPage`
+
 Controls candidate review and set creation (`/review/[id]`)
+
 - Accept/reject candidates
 - Accept all functionality
 - Counter tracking (accepted, rejected, remaining)
 - Save set initiation
 
 #### `DashboardPage`
+
 Manages flashcard sets listing (`/` or `/dashboard`)
+
 - Set cards display
 - Search functionality
 - Set selection by title or ID
 - Navigation to other pages
 
 #### `SetDetailsPage`
+
 Handles individual set management (`/sets/[id]`)
+
 - Set information display
 - Deletion functionality
 - Study initiation
@@ -53,19 +63,25 @@ Handles individual set management (`/sets/[id]`)
 ### Components
 
 #### `NavigationComponent`
+
 Global navigation bar interactions
+
 - Dashboard navigation
 - Generate page navigation
 - Logout functionality
 
 #### `SaveSetTitleModal`
+
 Modal for saving flashcard set with title
+
 - Title input
 - Validation handling
 - Confirm/cancel actions
 
 #### `ConfirmDialog`
+
 Generic confirmation dialog (used for deletions)
+
 - Dialog content access
 - Confirm/cancel actions
 - Visibility management
@@ -75,19 +91,19 @@ Generic confirmation dialog (used for deletions)
 ### Basic Test Structure
 
 ```typescript
-import { test, expect } from '@playwright/test';
-import { LoginPage, DashboardPage } from '../page-objects';
+import { test, expect } from "@playwright/test";
+import { LoginPage, DashboardPage } from "../page-objects";
 
-test('user can view dashboard after login', async ({ page }) => {
+test("user can view dashboard after login", async ({ page }) => {
   const loginPage = new LoginPage(page);
   const dashboardPage = new DashboardPage(page);
 
   // Navigate and login
   await loginPage.goto();
-  await loginPage.login('user@example.com', 'password123');
-  
+  await loginPage.login("user@example.com", "password123");
+
   // Verify dashboard is accessible
-  await expect(page).toHaveURL('/dashboard');
+  await expect(page).toHaveURL("/dashboard");
   await expect(dashboardPage.pageTitle).toBeVisible();
 });
 ```
@@ -95,16 +111,10 @@ test('user can view dashboard after login', async ({ page }) => {
 ### Complete Flow Test
 
 ```typescript
-import { test, expect } from '@playwright/test';
-import {
-  LoginPage,
-  GeneratePage,
-  ReviewPage,
-  SaveSetTitleModal,
-  DashboardPage
-} from '../page-objects';
+import { test, expect } from "@playwright/test";
+import { LoginPage, GeneratePage, ReviewPage, SaveSetTitleModal, DashboardPage } from "../page-objects";
 
-test('complete flashcard creation flow', async ({ page }) => {
+test("complete flashcard creation flow", async ({ page }) => {
   // Initialize page objects
   const loginPage = new LoginPage(page);
   const generatePage = new GeneratePage(page);
@@ -114,21 +124,21 @@ test('complete flashcard creation flow', async ({ page }) => {
 
   // Login
   await loginPage.goto();
-  await loginPage.login('user@example.com', 'password');
+  await loginPage.login("user@example.com", "password");
 
   // Generate flashcards
-  await generatePage.fillSourceText('a'.repeat(1500));
+  await generatePage.fillSourceText("a".repeat(1500));
   await generatePage.clickGenerate();
   await generatePage.waitForLoadingToComplete();
 
   // Review and save
   await reviewPage.clickAcceptAll();
   await reviewPage.clickSaveSet();
-  await saveTitleModal.saveSet('My Test Set');
+  await saveTitleModal.saveSet("My Test Set");
 
   // Verify on dashboard
   await dashboardPage.goto();
-  const hasSet = await dashboardPage.hasSetWithTitle('My Test Set');
+  const hasSet = await dashboardPage.hasSetWithTitle("My Test Set");
   expect(hasSet).toBe(true);
 });
 ```
@@ -136,22 +146,22 @@ test('complete flashcard creation flow', async ({ page }) => {
 ### Modal Interactions
 
 ```typescript
-import { test, expect } from '@playwright/test';
-import { SetDetailsPage, ConfirmDialog } from '../page-objects';
+import { test, expect } from "@playwright/test";
+import { SetDetailsPage, ConfirmDialog } from "../page-objects";
 
-test('user can delete a set with confirmation', async ({ page }) => {
+test("user can delete a set with confirmation", async ({ page }) => {
   const setDetailsPage = new SetDetailsPage(page);
   const confirmDialog = new ConfirmDialog(page);
 
   await setDetailsPage.goto(123);
   await setDetailsPage.clickDelete();
-  
+
   await confirmDialog.waitForVisible();
   await expect(confirmDialog.dialog).toBeVisible();
-  
+
   const title = await confirmDialog.getTitle();
-  expect(title).toContain('Usuń zestaw');
-  
+  expect(title).toContain("Usuń zestaw");
+
   await confirmDialog.confirmAndWait();
   await setDetailsPage.waitForDashboardRedirect();
 });
@@ -160,26 +170,26 @@ test('user can delete a set with confirmation', async ({ page }) => {
 ### Navigation
 
 ```typescript
-import { test, expect } from '@playwright/test';
-import { DashboardPage, NavigationComponent } from '../page-objects';
+import { test, expect } from "@playwright/test";
+import { DashboardPage, NavigationComponent } from "../page-objects";
 
-test('user can navigate between pages', async ({ page }) => {
+test("user can navigate between pages", async ({ page }) => {
   const dashboardPage = new DashboardPage(page);
   const navigation = new NavigationComponent(page);
 
   await dashboardPage.goto();
-  
+
   // Navigate to generate
   await navigation.goToGenerate();
-  await expect(page).toHaveURL('/generate');
-  
+  await expect(page).toHaveURL("/generate");
+
   // Navigate back to dashboard
   await navigation.goToDashboard();
-  await expect(page).toHaveURL('/dashboard');
-  
+  await expect(page).toHaveURL("/dashboard");
+
   // Logout
   await navigation.logout();
-  await expect(page).toHaveURL('/login');
+  await expect(page).toHaveURL("/login");
 });
 ```
 
@@ -188,11 +198,13 @@ test('user can navigate between pages', async ({ page }) => {
 ### 1. Use Locators from Page Objects
 
 ❌ **Bad:**
+
 ```typescript
-await page.getByTestId('login-submit-button').click();
+await page.getByTestId("login-submit-button").click();
 ```
 
 ✅ **Good:**
+
 ```typescript
 const loginPage = new LoginPage(page);
 await loginPage.clickLogin();
@@ -203,14 +215,14 @@ await loginPage.clickLogin();
 Use descriptive method names and test steps:
 
 ```typescript
-test('user journey', async ({ page }) => {
-  await test.step('User logs in', async () => {
+test("user journey", async ({ page }) => {
+  await test.step("User logs in", async () => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
     await loginPage.login(email, password);
   });
 
-  await test.step('User creates flashcard set', async () => {
+  await test.step("User creates flashcard set", async () => {
     // ... test logic
   });
 });
@@ -221,11 +233,11 @@ test('user journey', async ({ page }) => {
 Only create page objects when you need them:
 
 ```typescript
-test('specific feature', async ({ page }) => {
+test("specific feature", async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
   await loginPage.login(email, password);
-  
+
   // Only create when needed
   const dashboardPage = new DashboardPage(page);
   await expect(dashboardPage.pageTitle).toBeVisible();
@@ -253,6 +265,7 @@ await generatePage.generateFlashcards(text);
 Keep assertions in tests, not in page objects:
 
 ❌ **Bad:**
+
 ```typescript
 // In page object
 async verifyTitle(expectedTitle: string) {
@@ -261,10 +274,11 @@ async verifyTitle(expectedTitle: string) {
 ```
 
 ✅ **Good:**
+
 ```typescript
 // In test
 const title = await setDetailsPage.getTitle();
-expect(title).toContain('Expected Title');
+expect(title).toContain("Expected Title");
 ```
 
 ## File Structure
@@ -302,7 +316,7 @@ When creating a new page object:
 Example template:
 
 ```typescript
-import { type Page, type Locator } from '@playwright/test';
+import { type Page, type Locator } from "@playwright/test";
 
 export class NewPage {
   readonly page: Page;
@@ -310,11 +324,11 @@ export class NewPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.someElement = page.getByTestId('some-element');
+    this.someElement = page.getByTestId("some-element");
   }
 
   async goto() {
-    await this.page.goto('/new-page');
+    await this.page.goto("/new-page");
   }
 
   async doSomething() {

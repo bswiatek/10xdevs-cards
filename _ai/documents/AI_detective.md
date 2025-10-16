@@ -8,13 +8,13 @@
 
 ## TOP 5 plików o największej liczbie LOC (pliki produkcyjne)
 
-| #  | Ścieżka                                          | LOC | Potencjalna złożoność |
-|----|--------------------------------------------------|-----|-----------------------|
-| 1  | `src/components/dashboard/AddFlashcardModal.tsx` | 283 | ⚠️ Wysoka             |
-| 2  | `src/components/hooks/useReviewSession.ts`       | 236 | ⚠️ Wysoka             |
-| 3  | `src/components/account/ChangePasswordForm.tsx`  | 217 | ⚠️ Wysoka             |
-| 4  | `src/components/SetDetailsView.tsx`              | 204 | ⚠️ Średnia            |
-| 5  | `src/components/auth/RegisterForm.tsx`           | 198 | ⚠️ Wysoka             |
+| #   | Ścieżka                                          | LOC | Potencjalna złożoność |
+| --- | ------------------------------------------------ | --- | --------------------- |
+| 1   | `src/components/dashboard/AddFlashcardModal.tsx` | 283 | ⚠️ Wysoka             |
+| 2   | `src/components/hooks/useReviewSession.ts`       | 236 | ⚠️ Wysoka             |
+| 3   | `src/components/account/ChangePasswordForm.tsx`  | 217 | ⚠️ Wysoka             |
+| 4   | `src/components/SetDetailsView.tsx`              | 204 | ⚠️ Średnia            |
+| 5   | `src/components/auth/RegisterForm.tsx`           | 198 | ⚠️ Wysoka             |
 
 ---
 
@@ -38,12 +38,12 @@ Wydziel logikę formularza do dedykowanego hooka `useAddFlashcardForm`:
 // src/components/hooks/useAddFlashcardForm.ts
 const useAddFlashcardForm = (availableSets, onSuccess, onClose) => {
   // Zarządzanie stanem, walidacją i submitem
-  return { 
+  return {
     state: { mode, selectedSetId, newSetTitle, front, back, isSaving },
     handlers: { handleSubmit, handleModeChange, handleTitleChange },
-    validators: { flashcardValidation, titleValidation }
+    validators: { flashcardValidation, titleValidation },
   };
-}
+};
 ```
 
 #### b) Strategy Pattern dla trybów
@@ -54,12 +54,16 @@ Rozdziel logikę tworzenia zestawu od dodawania fiszki:
 const strategies = {
   existing: {
     validate: (selectedSetId) => !!selectedSetId,
-    submit: async (setId, flashcard) => { /* ... */ }
+    submit: async (setId, flashcard) => {
+      /* ... */
+    },
   },
   new: {
     validate: (title) => titleValidation.validate(title),
-    submit: async (title, flashcard) => { /* ... */ }
-  }
+    submit: async (title, flashcard) => {
+      /* ... */
+    },
+  },
 };
 ```
 
@@ -104,41 +108,45 @@ Użyj `useReducer` dla lepszego zarządzania złożonym stanem:
 
 ```typescript
 type ReviewAction =
-  | { type: 'ACCEPT_CANDIDATE'; candidateId: string }
-  | { type: 'REJECT_CANDIDATE'; candidateId: string }
-  | { type: 'UNDO_CANDIDATE'; candidateId: string }
-  | { type: 'EDIT_CANDIDATE'; candidateId: string; front: string; back: string }
-  | { type: 'OPEN_EDIT_MODAL'; candidateId: string }
-  | { type: 'CLOSE_EDIT_MODAL' };
+  | { type: "ACCEPT_CANDIDATE"; candidateId: string }
+  | { type: "REJECT_CANDIDATE"; candidateId: string }
+  | { type: "UNDO_CANDIDATE"; candidateId: string }
+  | { type: "EDIT_CANDIDATE"; candidateId: string; front: string; back: string }
+  | { type: "OPEN_EDIT_MODAL"; candidateId: string }
+  | { type: "CLOSE_EDIT_MODAL" };
 
 const reviewReducer = (state: ReviewState, action: ReviewAction): ReviewState => {
-  switch(action.type) {
-    case 'ACCEPT_CANDIDATE':
+  switch (action.type) {
+    case "ACCEPT_CANDIDATE":
       return {
         ...state,
-        candidates: state.candidates.map(c => 
-          c.id === action.candidateId ? { ...c, action: 'accepted' } : c
-        )
+        candidates: state.candidates.map((c) => (c.id === action.candidateId ? { ...c, action: "accepted" } : c)),
       };
     // ...
   }
-}
+};
 ```
 
 #### b) Facade Pattern - rozbicie na mniejsze hooki
 
 ```typescript
 // Separacja odpowiedzialności
-const useReviewState = () => { /* zarządzanie kandydatami */ };
-const useReviewCounters = (candidates) => { /* memoizowane liczniki */ };
-const useReviewModals = () => { /* stan modali */ };
+const useReviewState = () => {
+  /* zarządzanie kandydatami */
+};
+const useReviewCounters = (candidates) => {
+  /* memoizowane liczniki */
+};
+const useReviewModals = () => {
+  /* stan modali */
+};
 
 // Główny hook jako fasada
 export const useReviewSession = (sessionId, initialSession) => {
   const state = useReviewState(initialSession);
   const counters = useReviewCounters(state.candidates);
   const modals = useReviewModals();
-  
+
   return { state, counters, modals };
 };
 ```
@@ -149,10 +157,12 @@ Użyj `useMemo` dla liczników aby uniknąć przeliczania:
 
 ```typescript
 const counters = useMemo(() => {
-  let accepted = 0, rejected = 0, remaining = 0;
+  let accepted = 0,
+    rejected = 0,
+    remaining = 0;
   for (const candidate of candidates) {
-    if (candidate.action === 'accepted' || candidate.action === 'edited') accepted++;
-    else if (candidate.action === 'rejected') rejected++;
+    if (candidate.action === "accepted" || candidate.action === "edited") accepted++;
+    else if (candidate.action === "rejected") rejected++;
     else remaining++;
   }
   return { accepted, rejected, remaining };
@@ -166,12 +176,9 @@ Wydziel funkcje selekcji do osobnego modułu:
 ```typescript
 // src/lib/selectors/review-selectors.ts
 export const reviewSelectors = {
-  getAcceptedCandidates: (candidates) => 
-    candidates.filter(c => c.action === 'accepted' || c.action === 'edited'),
-  getPendingCandidates: (candidates) => 
-    candidates.filter(c => c.action === 'pending'),
-  getCandidateById: (candidates, id) => 
-    candidates.find(c => c.id === id)
+  getAcceptedCandidates: (candidates) => candidates.filter((c) => c.action === "accepted" || c.action === "edited"),
+  getPendingCandidates: (candidates) => candidates.filter((c) => c.action === "pending"),
+  getCandidateById: (candidates, id) => candidates.find((c) => c.id === id),
 };
 ```
 
@@ -213,8 +220,8 @@ interface PasswordFieldProps {
   required?: boolean;
 }
 
-export const PasswordField = ({ 
-  id, label, value, onChange, error, ...props 
+export const PasswordField = ({
+  id, label, value, onChange, error, ...props
 }: PasswordFieldProps) => (
   <div className="space-y-2">
     <label htmlFor={id} className="block text-sm font-medium">
@@ -261,9 +268,9 @@ const validateForm = (data: ChangePasswordInput) => {
 // src/components/hooks/usePasswordChangeForm.ts
 const usePasswordChangeForm = () => {
   const [values, setValues] = useState<ChangePasswordInput>({
-    oldPassword: '',
-    newPassword: '',
-    confirm: ''
+    oldPassword: "",
+    newPassword: "",
+    confirm: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -292,7 +299,7 @@ export const PasswordChangeSuccess = () => (
       Hasło zostało zmienione
     </p>
     <p className="mt-1 text-sm text-green-700 dark:text-green-400">
-      Twoje hasło zostało pomyślnie zaktualizowane. 
+      Twoje hasło zostało pomyślnie zaktualizowane.
       Za chwilę zostaniesz przekierowany do strony logowania.
     </p>
   </div>
@@ -329,16 +336,16 @@ Rozdziel logikę biznesową od prezentacji:
 const useSetDetailsPresenter = (setId: number) => {
   const { setDetails, isLoading, error, refetch } = useSetDetails(setId);
   const [modals, setModals] = useState({ /* ... */ });
-  
+
   const handlers = {
     handleDeleteSet: async () => { /* API call */ },
     handleDeleteFlashcard: async (id) => { /* API call */ },
     // ...
   };
-  
-  return { 
+
+  return {
     viewModel: { setDetails, isLoading, error, modals },
-    handlers 
+    handlers
   };
 };
 
@@ -359,7 +366,7 @@ export const SetDetailsProvider = ({ children, setId }) => {
   const [editingFlashcard, setEditingFlashcard] = useState(null);
   const [deletingFlashcard, setDeletingFlashcard] = useState(null);
   // ... centralny stan modali
-  
+
   return (
     <SetDetailsContext.Provider value={{ /* ... */ }}>
       {children}
@@ -377,19 +384,19 @@ Przenieś API calls do serwisu:
 export const flashcardService = {
   deleteSet: async (setId: number) => {
     const response = await fetch(`/api/flashcard-sets/${setId}`, {
-      method: 'DELETE'
+      method: "DELETE",
     });
-    if (!response.ok) throw new Error('Failed to delete set');
+    if (!response.ok) throw new Error("Failed to delete set");
     return response.json();
   },
-  
+
   deleteFlashcard: async (flashcardId: number) => {
     const response = await fetch(`/api/flashcards/${flashcardId}`, {
-      method: 'DELETE'
+      method: "DELETE",
     });
-    if (!response.ok) throw new Error('Failed to delete flashcard');
+    if (!response.ok) throw new Error("Failed to delete flashcard");
     return response.json();
-  }
+  },
 };
 ```
 
@@ -476,30 +483,27 @@ const validateForm = (data: RegisterInput) => {
 
 ```typescript
 // src/components/hooks/useAuthForm.ts
-const useAuthForm = <T extends ZodSchema>(
-  schema: T,
-  onSubmit: (data: z.infer<T>) => Promise<void>
-) => {
+const useAuthForm = <T extends ZodSchema>(schema: T, onSubmit: (data: z.infer<T>) => Promise<void>) => {
   const [values, setValues] = useState<z.infer<T>>({} as z.infer<T>);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<FormStatus>('idle');
+  const [status, setStatus] = useState<FormStatus>("idle");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = schema.safeParse(values);
-    
+
     if (!result.success) {
       setErrors(result.error.flatten().fieldErrors);
-      setStatus('error');
+      setStatus("error");
       return;
     }
-    
-    setStatus('loading');
+
+    setStatus("loading");
     try {
       await onSubmit(result.data);
-      setStatus('success');
+      setStatus("success");
     } catch (error) {
-      setStatus('error');
+      setStatus("error");
       setErrors({ form: error.message });
     }
   };
@@ -518,7 +522,7 @@ export const PASSWORD_REQUIREMENTS = {
   minLength: PASSWORD_MIN_LENGTH,
   requireUppercase: false,
   requireNumber: false,
-  requireSpecial: false
+  requireSpecial: false,
 };
 ```
 
@@ -535,7 +539,7 @@ interface AuthFormProps<T> {
 
 export function AuthForm<T>({ fields, onSubmit, submitLabel, schema }: AuthFormProps<T>) {
   const { values, errors, status, handleSubmit, setValues } = useAuthForm(schema, onSubmit);
-  
+
   return (
     <form onSubmit={handleSubmit}>
       {fields.map(field => (
@@ -564,31 +568,37 @@ export function AuthForm<T>({ fields, onSubmit, submitLabel, schema }: AuthFormP
 Wszystkie analizowane pliki wymagają podobnych technik optymalizacji:
 
 ### 1. Extract Custom Hooks
+
 - Separacja logiki biznesowej od warstwy prezentacji
 - Zwiększenie testowalności
 - Reużywalność logiki
 
 ### 2. Zod Validation
+
 - Wykorzystanie istniejących schematów w `src/lib/validations/`
 - Zgodność z tech stack projektu
 - Jednolite podejście do walidacji
 
 ### 3. Component Composition
+
 - Rozbicie dużych komponentów na mniejsze, reużywalne części
 - Principle of Single Responsibility
 - Łatwiejsza konserwacja
 
 ### 4. Service Layer
+
 - Przeniesienie logiki API do `src/lib/services/`
 - Separacja warstw aplikacji
 - Łatwiejsze mockowanie w testach
 
 ### 5. Reducer Pattern
+
 - Dla złożonego zarządzania stanem
 - Przewidywalny przepływ danych
 - Łatwiejsze debugowanie
 
 ### 6. Memoization
+
 - Optymalizacja wydajności (useMemo, useCallback)
 - Unikanie niepotrzebnych re-renderów
 - Lepsze performance dla dużych list
@@ -598,14 +608,17 @@ Wszystkie analizowane pliki wymagają podobnych technik optymalizacji:
 ## Priorytety wdrożenia
 
 ### Wysoki priorytet (Quick Wins)
+
 1. ✅ **RegisterForm.tsx i ChangePasswordForm.tsx** - wykorzystanie istniejących Zod schemas, shared components
 2. **useReviewSession.ts** - memoization liczników, useReducer
 
 ### Średni priorytet
+
 3. **AddFlashcardModal.tsx** - extract custom hook, component composition
 4. **SetDetailsView.tsx** - presenter pattern, service layer
 
 ### Niski priorytet (Long-term improvements)
+
 5. Wprowadzenie React Hook Form dla wszystkich formularzy
 6. Stworzenie Design System dla komponentów formularzy
 7. Migracja do Zustand/Redux dla global state management

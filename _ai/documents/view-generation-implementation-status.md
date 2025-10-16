@@ -28,6 +28,7 @@ src/
 ## Zaimplementowane funkcjonalności
 
 ### 1. Routing i Layout ✅
+
 - **Ścieżka**: `/generate`
 - **Layout**: Wykorzystuje `Layout.astro` z kontenerem o max-width 4xl
 - **Nagłówek**: Tytuł i opis widoku
@@ -35,16 +36,19 @@ src/
 ### 2. Zarządzanie stanem (useGenerateForm hook) ✅
 
 #### Sanityzacja tekstu:
+
 - Usuwanie znaczników HTML: `/<[^>]*>/g`
 - Normalizacja białych znaków: `replace(/\s+/g, " ")`
 - Trim początku i końca
 
 #### Walidacja:
+
 - Minimalna długość: 1000 znaków
 - Maksymalna długość: 10000 znaków
 - Walidacja w czasie rzeczywistym
 
 #### Obsługa błędów:
+
 - `validation_400` - błąd walidacji długości
 - `timeout_60s` - przekroczenie limitu czasu (60s)
 - `service_unavailable` - niedostępność usługi AI (503)
@@ -53,11 +57,13 @@ src/
 - `unknown` - nieoczekiwany błąd
 
 #### Funkcje hooka:
+
 - `setSourceText()` - ustawia tekst z sanityzacją
 - `submit()` - wysyła żądanie do API
 - `resetError()` - czyści błędy
 
 #### Dodatkowe funkcje:
+
 - Zachowanie tekstu w localStorage przy błędzie
 - Czyszczenie localStorage po sukcesie
 - Timeout 60s z użyciem AbortController
@@ -66,6 +72,7 @@ src/
 ### 3. Komponenty UI ✅
 
 #### SourceTextArea
+
 - Kontrolowany textarea z `value` i `onChange`
 - Sanityzacja przy paste event
 - ARIA labels dla a11y: `aria-describedby`, `aria-invalid`, `aria-required`
@@ -73,6 +80,7 @@ src/
 - Helper text z informacją o zakresie
 
 #### CharCounter
+
 - Licznik znaków w czasie rzeczywistym
 - Kolorowe wskazówki stanu:
   - Szary: brak tekstu
@@ -83,6 +91,7 @@ src/
 - ARIA live region dla a11y
 
 #### GenerateButton
+
 - Przycisk typu submit
 - Disabled gdy `!isValidLength || isSubmitting`
 - Wskaźnik ładowania z ikoną Loader2
@@ -90,6 +99,7 @@ src/
 - ARIA busy state
 
 #### LoadingOverlay
+
 - Pełnoekranowy overlay z backdrop blur
 - Spinner z opisem procesu
 - Informacja o czasie oczekiwania (do 60s)
@@ -97,6 +107,7 @@ src/
 - Z-index 50 dla pewności widoczności
 
 #### ErrorBanner
+
 - Alert z rolą `alert` i `aria-live="assertive"`
 - Dynamiczna ikona zależna od typu błędu
 - Tytuł błędu i szczegółowy komunikat
@@ -105,6 +116,7 @@ src/
 - Timestamp wystąpienia błędu
 
 #### InfoHelper
+
 - Blok wskazówek z ikoną Info
 - Lista wymagań i porad:
   - Zakres 1000-10000 znaków
@@ -115,6 +127,7 @@ src/
 ### 4. Integracja z API ✅
 
 #### Endpoint: POST /api/generations
+
 - Komenda: `GenerateFlashcardsCommand { source_text: string }`
 - Odpowiedź sukces (201): `GenerationSessionDTO`
 - Odpowiedź błąd (400): walidacja długości
@@ -122,6 +135,7 @@ src/
 - Odpowiedź błąd (503): niedostępność AI
 
 #### Flow po sukcesie:
+
 1. Otrzymanie `GenerationSessionDTO`
 2. Czyszczenie draft z localStorage
 3. Przekierowanie: `window.location.href = '/review?session={id}'`
@@ -129,6 +143,7 @@ src/
 ### 5. Accessibility (a11y) ✅
 
 Wszystkie komponenty implementują standardy WCAG:
+
 - Semantyczny HTML
 - ARIA labels i descriptions
 - ARIA live regions dla dynamicznej treści
@@ -152,6 +167,7 @@ Wszystkie komponenty implementują standardy WCAG:
 ## Testy manualne
 
 ### Przepływ happy path:
+
 1. ✅ Otwórz `/generate`
 2. ✅ Wklej tekst 1000-10000 znaków
 3. ✅ Obserwuj licznik (zielony przy OK)
@@ -160,11 +176,13 @@ Wszystkie komponenty implementują standardy WCAG:
 6. ✅ Przekierowanie do `/review?session={id}`
 
 ### Testy walidacji:
+
 - ✅ Tekst < 1000 znaków - przycisk disabled, komunikat błędu
 - ✅ Tekst > 10000 znaków - przycisk disabled, komunikat błędu
 - ✅ Paste HTML - automatyczna sanityzacja
 
 ### Testy błędów:
+
 - ✅ Timeout 60s - banner z komunikatem i retry
 - ✅ Błąd serwera - banner z komunikatem i retry
 - ✅ Błąd sieci - banner z komunikatem i retry
@@ -172,23 +190,24 @@ Wszystkie komponenty implementują standardy WCAG:
 
 ## Zgodność z planem implementacji
 
-| Sekcja planu | Status | Uwagi |
-|--------------|--------|-------|
-| 1. Przegląd | ✅ | Zgodnie z US-008/US-009/US-010 |
-| 2. Routing widoku | ✅ | `/generate` z Astro + React |
-| 3. Struktura komponentów | ✅ | Wszystkie komponenty zaimplementowane |
-| 4. Szczegóły komponentów | ✅ | Zgodnie ze specyfikacją |
-| 5. Typy | ✅ | TypeScript types + Zod validation |
-| 6. Zarządzanie stanem | ✅ | Custom hook + localStorage |
-| 7. Integracja API | ✅ | POST /api/generations |
-| 8. Interakcje użytkownika | ✅ | Wszystkie obsłużone |
-| 9. Warunki i walidacja | ✅ | 1000-10000 + sanityzacja |
-| 10. Obsługa błędów | ✅ | Wszystkie scenariusze |
-| 11. Kroki implementacji | ✅ | Wszystkie kroki wykonane |
+| Sekcja planu              | Status | Uwagi                                 |
+| ------------------------- | ------ | ------------------------------------- |
+| 1. Przegląd               | ✅     | Zgodnie z US-008/US-009/US-010        |
+| 2. Routing widoku         | ✅     | `/generate` z Astro + React           |
+| 3. Struktura komponentów  | ✅     | Wszystkie komponenty zaimplementowane |
+| 4. Szczegóły komponentów  | ✅     | Zgodnie ze specyfikacją               |
+| 5. Typy                   | ✅     | TypeScript types + Zod validation     |
+| 6. Zarządzanie stanem     | ✅     | Custom hook + localStorage            |
+| 7. Integracja API         | ✅     | POST /api/generations                 |
+| 8. Interakcje użytkownika | ✅     | Wszystkie obsłużone                   |
+| 9. Warunki i walidacja    | ✅     | 1000-10000 + sanityzacja              |
+| 10. Obsługa błędów        | ✅     | Wszystkie scenariusze                 |
+| 11. Kroki implementacji   | ✅     | Wszystkie kroki wykonane              |
 
 ## Co dalej?
 
 ### Następne kroki (opcjonalne):
+
 1. **Testy automatyczne**: Unit testy dla hooka i komponentów
 2. **E2E testy**: Cypress/Playwright dla flow generowania
 3. **Widok /review**: Implementacja recenzji kandydatów
@@ -196,6 +215,7 @@ Wszystkie komponenty implementują standardy WCAG:
 5. **Analytics**: Tracking użycia i błędów
 
 ### Znane ograniczenia MVP:
+
 - Brak autentykacji (placeholder w middleware)
 - Brak persystencji draft pomiędzy sesjami (tylko localStorage)
 - Brak limit rate'u dla API calls
@@ -212,6 +232,7 @@ Wszystkie komponenty implementują standardy WCAG:
 - **Czas implementacji**: ~3 iteracje (zgodnie z podejściem max 3 kroki)
 
 ## Autorzy
+
 - AI Assistant (implementacja)
 - Plan: view-generation-implementation-plan.md
 - Stack: Astro 5 + React 19 + TypeScript 5 + Tailwind 4

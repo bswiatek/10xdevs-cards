@@ -3,6 +3,7 @@
 ## 🚀 Co zostało zaimplementowane?
 
 ### Podstawowe funkcje
+
 - ✅ Rejestracja użytkownika (`/register`)
 - ✅ Logowanie użytkownika (`/login`)
 - ✅ Wylogowanie (przycisk w nawigacji)
@@ -10,6 +11,7 @@
 - ✅ Redirect zalogowanych ze stron auth (do `/generate`)
 
 ### Techniczne
+
 - ✅ Supabase SSR z cookies
 - ✅ Walidacja Zod (client + server)
 - ✅ TypeScript (pełne typowanie)
@@ -52,6 +54,7 @@ npm run dev
 ## 📝 API Endpoints
 
 ### POST `/api/auth/login`
+
 ```json
 {
   "email": "user@example.com",
@@ -60,6 +63,7 @@ npm run dev
 ```
 
 ### POST `/api/auth/register`
+
 ```json
 {
   "email": "user@example.com",
@@ -69,6 +73,7 @@ npm run dev
 ```
 
 ### POST `/api/auth/logout`
+
 ```json
 {}
 ```
@@ -145,6 +150,7 @@ src/
 ## 🔧 Rozwiązane problemy
 
 ### Astro 5 Cookies API
+
 - **Problem:** `AstroCookies` nie posiada metody `getAll()`
 - **Rozwiązanie:** Manualna iteracja przez wzorce cookies Supabase
 - **Status:** ✅ Działa poprawnie

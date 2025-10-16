@@ -12,15 +12,8 @@ Routing realizowany w obrębie Astro + React + TypeScript zgodnie ze stackiem i 
 
 ## 3. Struktura komponentów
 
-- GenerateView (/generate)
-    - SourceTextArea
-    - CharCounter
-    - GenerateButton
-    - LoadingOverlay/Spinner
-    - ErrorToast/Banner z Retry
-    - InfoHelper (wskazówki dot. zakresu i sanitizacji)
-.
-
+- GenerateView (/generate) - SourceTextArea - CharCounter - GenerateButton - LoadingOverlay/Spinner - ErrorToast/Banner z Retry - InfoHelper (wskazówki dot. zakresu i sanitizacji)
+  .
 
 ## 4. Szczegóły komponentów
 
@@ -33,7 +26,6 @@ Routing realizowany w obrębie Astro + React + TypeScript zgodnie ze stackiem i 
 - Typy: GenerateFormVM, GenerateFlashcardsCommand, GenerationSessionDTO, GenerationErrorViewModel.
 - Propsy: Brak w MVP; opcjonalnie initialText lub returnPath, jeśli wejście następuje z innego przepływu.
 
-
 ### SourceTextArea
 
 - Opis komponentu: Kontrolowany textarea do wklejenia i edycji tekstu źródłowego z natychmiastową sanitacją i wsparciem dostępności.
@@ -42,7 +34,6 @@ Routing realizowany w obrębie Astro + React + TypeScript zgodnie ze stackiem i 
 - Obsługiwana walidacja: Długość po sanitizacji, informacja o błędzie przy zbyt krótkim lub zbyt długim tekście zgodnie z US-008.
 - Typy: część GenerateFormVM (sourceText, charCount, isValidLength).
 - Propsy: value, onChange, errorMessage?, required.
-
 
 ### CharCounter
 
@@ -53,7 +44,6 @@ Routing realizowany w obrębie Astro + React + TypeScript zgodnie ze stackiem i 
 - Typy: count: number, isValid: boolean (pochodne GenerateFormVM).
 - Propsy: count, min=1000, max=10000, isValid.
 
-
 ### GenerateButton
 
 - Opis komponentu: Przycisk „Generuj fiszki” aktywny tylko przy poprawnej długości i braku trwającej operacji.
@@ -62,7 +52,6 @@ Routing realizowany w obrębie Astro + React + TypeScript zgodnie ze stackiem i 
 - Obsługiwana walidacja: Blokada oparte na isValidLength oraz stanie ładowania.
 - Typy: część GenerateFormVM (canSubmit, isSubmitting).
 - Propsy: disabled, loading.
-
 
 ### LoadingOverlay/Spinner
 
@@ -73,7 +62,6 @@ Routing realizowany w obrębie Astro + React + TypeScript zgodnie ze stackiem i 
 - Typy: część GenerateFormVM (isSubmitting).
 - Propsy: visible: boolean.
 
-
 ### ErrorToast/Banner
 
 - Opis komponentu: Prezentuje komunikaty o błędach wejścia, timeout i niedostępności usługi AI z możliwością ponowienia.
@@ -82,7 +70,6 @@ Routing realizowany w obrębie Astro + React + TypeScript zgodnie ze stackiem i 
 - Obsługiwana walidacja: Brak, pokazuje stan błędu powstały po walidacji lub odpowiedzi/timeout.
 - Typy: GenerationErrorViewModel (code, message, timestamp).
 - Propsy: error?: GenerationErrorViewModel, onRetry?: () => void.
-
 
 ### InfoHelper
 
@@ -93,39 +80,18 @@ Routing realizowany w obrębie Astro + React + TypeScript zgodnie ze stackiem i 
 - Typy: Brak.
 - Propsy: Brak.
 
-
 ## 5. Typy
 
-- GenerateFlashcardsCommand
-    - source_text: string
-Komenda żądania POST /api/generations, z walidacją 1000–10000 znaków po stronie API.
-- CandidateFlashcardDTO
-    - tempid: string
-    - front: string
-    - back: string
-Pojedynczy kandydat wygenerowany przez AI, używany w ekranie recenzji po udanym procesie.
-- GenerationSessionDTO
-    - generationsessionid: number
-    - inputlength: number
-    - candidatesgenerated: number
-    - generationtimems: number
-    - candidates: CandidateFlashcardDTO[]
-    - createdat: string
-Odpowiedź z backendu po sukcesie, przekazywana do widoku recenzji w oparciu o sesję generacji.
-- GenerateFormVM
-    - sourceText: string
-    - charCount: number
-    - isValidLength: boolean
-    - isSubmitting: boolean
-    - apiError?: GenerationErrorViewModel
-    - canSubmit: boolean
-Model stanu formularza i interakcji użytkownika w widoku.
-- GenerationErrorViewModel
-    - code: 'validation_400' | 'timeout_60s' | 'service_unavailable' | 'network' | 'server_500' | 'unknown'
-    - message: string
-    - timestamp: string
-Ujednolicone odwzorowanie błędów i komunikatów zgodnych z PRD, w tym timeout 60 s i niedostępność usługi.
-
+- GenerateFlashcardsCommand - source_text: string
+  Komenda żądania POST /api/generations, z walidacją 1000–10000 znaków po stronie API.
+- CandidateFlashcardDTO - tempid: string - front: string - back: string
+  Pojedynczy kandydat wygenerowany przez AI, używany w ekranie recenzji po udanym procesie.
+- GenerationSessionDTO - generationsessionid: number - inputlength: number - candidatesgenerated: number - generationtimems: number - candidates: CandidateFlashcardDTO[] - createdat: string
+  Odpowiedź z backendu po sukcesie, przekazywana do widoku recenzji w oparciu o sesję generacji.
+- GenerateFormVM - sourceText: string - charCount: number - isValidLength: boolean - isSubmitting: boolean - apiError?: GenerationErrorViewModel - canSubmit: boolean
+  Model stanu formularza i interakcji użytkownika w widoku.
+- GenerationErrorViewModel - code: 'validation_400' | 'timeout_60s' | 'service_unavailable' | 'network' | 'server_500' | 'unknown' - message: string - timestamp: string
+  Ujednolicone odwzorowanie błędów i komunikatów zgodnych z PRD, w tym timeout 60 s i niedostępność usługi.
 
 ## 6. Zarządzanie stanem
 
@@ -145,13 +111,11 @@ MVP endpoint nie wymaga jeszcze autentykacji i zwraca 400 przy błędach walidac
 - Przycisk „Generuj fiszki” aktywuje się wyłącznie dla zakresu 1000–10000 znaków i rozpoczyna proces wraz ze wskaźnikiem ładowania bez progresu.
 - Po sukcesie następuje przekierowanie do widoku recenzji kandydatów; po błędzie (timeout, niedostępność, 400, 500) wyświetlany jest banner/ toast z możliwością Spróbuj ponownie oraz zachowanym tekstem.
 
-
 ## 9. Warunki i walidacja
 
 - Długość tekstu: 1000–10000 znaków walidowana po stronie klienta i serwera, z informacją o błędzie, gdy tekst jest za krótki lub za długi (US-008).
 - Limit czasu: klientowy timeout 60 s, po którym wyświetlany jest komunikat o przekroczeniu czasu (US-009/US-010).
 - Sanitizacja: usuwanie potencjalnych znaczników HTML/formatowania, normalizacja białych znaków i kontrola wyliczania długości po sanitizacji zgodnie z ograniczeniami PRD.
-
 
 ## 10. Obsługa błędów
 
@@ -159,7 +123,6 @@ MVP endpoint nie wymaga jeszcze autentykacji i zwraca 400 przy błędach walidac
 - Timeout 60 s: komunikat o przekroczeniu czasu oczekiwania z przyciskiem Spróbuj ponownie i zachowanym tekstem (US-010).
 - Niedostępność usługi AI: komunikat o chwilowej niedostępności oraz wskazanie możliwości ponowienia, z degradacją łagodną zgodnie z PRD.
 - 500 Internal Server Error: komunikat o błędzie technicznym i możliwość ponowienia po chwili, z rejestrowaniem błędu w warstwie backendowej zgodnie ze standardem logowania.
-
 
 ## 11. Kroki implementacji
 
@@ -173,4 +136,3 @@ MVP endpoint nie wymaga jeszcze autentykacji i zwraca 400 przy błędach walidac
 8. Po sukcesie przekierować do widoku recenzji kandydatów, przekazując generationsessionid i dane do dalszego etapu akceptacji/edycji/odrzucania zgodnie z PRD.
 9. Dodać testy: walidacja długości, sanitizacja, aktywacja przycisku, obsługa timeoutu i błędów 400/500, a11y (rola alert, aria-busy, focus management).
 10. Zweryfikować zgodność ze stackiem i docelowymi przepływami zapisu zestawu po recenzji (CreateFlashcardSetCommand z generationsessionid + flashcards) dla pełnego end-to-end po generacji.
-

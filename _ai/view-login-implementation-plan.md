@@ -12,15 +12,8 @@ Routing implementowany zgodnie z założonym stosunkiem Astro + React + TypeScri
 
 ## 3. Struktura komponentów
 
-- LoginView (/login)
-    - LoginForm
-        - EmailInput
-        - PasswordInput
-        - SubmitButton
-        - AuthErrorToast/Banner
-        - RegisterLink
-.
-
+- LoginView (/login) - LoginForm - EmailInput - PasswordInput - SubmitButton - AuthErrorToast/Banner - RegisterLink
+  .
 
 ## 4. Szczegóły komponentów
 
@@ -33,24 +26,22 @@ Routing implementowany zgodnie z założonym stosunkiem Astro + React + TypeScri
 - Typy: LoginResult, AuthErrorViewModel (VM) do transportu stanu błędu na poziomie widoku.
 - Propsy: Brak zewnętrznych propów w MVP; ewentualnie initialRedirectPath do wsparcia scenariusza wejścia z zasobu chronionego (przechowywanego w query lub state).
 
-
 ### LoginForm
 
 - Opis komponentu: Formularz kontrolowany z polami email i hasło, maskowaniem hasła, obsługą klawiatury i stanem ładowania, który wywołuje logikę autentykacji oraz emituje wyniki do rodzica.
 - Główne elementy:
-    - EmailInput typu email z walidacją zgodną z RFC 5322 oraz komunikatami inline.
-    - PasswordInput typu password z maskowaniem oraz minimalnym warunkiem niepustości, bez ujawniania detali błędu.
-    - SubmitButton z blokadą podczas wysyłki i wskaźnikiem ładowania.
-    - AuthErrorToast/Banner z ogólnym komunikatem „Nieprawidłowe dane logowania” bez wskazywania konkretnego pola.
-    - RegisterLink do ekranu rejestracji.
+  - EmailInput typu email z walidacją zgodną z RFC 5322 oraz komunikatami inline.
+  - PasswordInput typu password z maskowaniem oraz minimalnym warunkiem niepustości, bez ujawniania detali błędu.
+  - SubmitButton z blokadą podczas wysyłki i wskaźnikiem ładowania.
+  - AuthErrorToast/Banner z ogólnym komunikatem „Nieprawidłowe dane logowania” bez wskazywania konkretnego pola.
+  - RegisterLink do ekranu rejestracji.
 - Obsługiwane interakcje: onSubmit (kliknięcie lub Enter), onChange w polach, onDismiss dla toastu błędu oraz onSuccess do rodzica w razie pomyślnego logowania.
 - Obsługiwana walidacja:
-    - Email: format RFC 5322, spójny z wymogiem PRD dotyczącym walidacji email przy rejestracji i powielony standard na logowaniu.
-    - Hasło: wymagane (niepuste), bez ujawniania szczegółów w komunikacie błędu przy nieudanym logowaniu.
-    - Błąd autentykacji: prezentacja ogólnego komunikatu bez wskazania czy błąd dotyczy emaila czy hasła.
+  - Email: format RFC 5322, spójny z wymogiem PRD dotyczącym walidacji email przy rejestracji i powielony standard na logowaniu.
+  - Hasło: wymagane (niepuste), bez ujawniania szczegółów w komunikacie błędu przy nieudanym logowaniu.
+  - Błąd autentykacji: prezentacja ogólnego komunikatu bez wskazania czy błąd dotyczy emaila czy hasła.
 - Typy: LoginCommand DTO (email, password), LoginFormVM (pola, stany, błędy), AuthErrorCode (np. invalid_credentials, network_error).
 - Propsy: onSuccess(result: LoginResult), onError(error: AuthErrorViewModel), disabled?: boolean do ewentualnej blokady zewnętrznej.
-
 
 ### EmailInput
 
@@ -61,16 +52,14 @@ Routing implementowany zgodnie z założonym stosunkiem Astro + React + TypeScri
 - Typy: FieldError VM (message, field), część LoginFormVM.
 - Propsy: value, onChange, error, required.
 
-
 ### PasswordInput
 
 - Opis komponentu: Pole hasła z maskowaniem i atrybutami bezpieczeństwa i dostępności.
-- Główne elementy: input type="password", label, aria-* i ewentualny komunikat błędu przy walidacji wstępnej (np. puste pole).
+- Główne elementy: input type="password", label, aria-\* i ewentualny komunikat błędu przy walidacji wstępnej (np. puste pole).
 - Obsługiwane interakcje: onChange, onBlur, Enter (delegowane do formularza).
 - Obsługiwana walidacja: wymagane (niepuste), z komunikatem ogólnym przy niepowodzeniu logowania bez wskazywania, który parametr był błędny.
 - Typy: FieldError VM, część LoginFormVM.
 - Propsy: value, onChange, error, required.
-
 
 ### SubmitButton
 
@@ -81,7 +70,6 @@ Routing implementowany zgodnie z założonym stosunkiem Astro + React + TypeScri
 - Typy: część LoginFormVM (isSubmitting).
 - Propsy: loading?: boolean, disabled?: boolean.
 
-
 ### AuthErrorToast/Banner
 
 - Opis komponentu: Prezentuje ogólny, bezpieczny komunikat o błędzie logowania lub błędach sieciowych, z możliwością zamknięcia.
@@ -90,7 +78,6 @@ Routing implementowany zgodnie z założonym stosunkiem Astro + React + TypeScri
 - Obsługiwana walidacja: brak, wyłącznie prezentacja stanu błędu.
 - Typy: AuthErrorViewModel (code, message, timestamp).
 - Propsy: error?: AuthErrorViewModel, onDismiss?: () => void.
-
 
 ### RegisterLink
 
@@ -101,37 +88,19 @@ Routing implementowany zgodnie z założonym stosunkiem Astro + React + TypeScri
 - Typy: brak dodatkowych.
 - Propsy: href?: string (domyślnie /register).
 
-
 ## 5. Typy
 
-- LoginCommand DTO
-    - email: string
-    - password: string
-Używany do wywołania autentykacji po stronie klienta w oparciu o Supabase Auth i tokenową sesję z PRD.
-- LoginResult
-    - access_token: string
-    - user_id: string
-    - expires_at: string
-Wartości wykorzystywane do utrzymania sesji i przekierowań po zalogowaniu, zgodnie z „Sesja utrzymywana przez token”.
-- LoginFormVM
-    - email: string
-    - password: string
-    - errors: { email?: string; password?: string }
-    - apiError?: AuthErrorViewModel
-    - isSubmitting: boolean
-    - canSubmit: boolean
-Model stanu formularza dla kontrolowanej obsługi walidacji i wysyłki.
-- AuthErrorViewModel
-    - code: 'invalid_credentials' | 'network_error' | 'unknown'
-    - message: string
-    - timestamp: string
-Do jednolitej prezentacji bezpiecznych komunikatów o błędzie.
-- FieldError
-    - field: 'email' | 'password'
-    - message: string
-Stosowane w komponentach pól dla komunikatów inline.
+- LoginCommand DTO - email: string - password: string
+  Używany do wywołania autentykacji po stronie klienta w oparciu o Supabase Auth i tokenową sesję z PRD.
+- LoginResult - access_token: string - user_id: string - expires_at: string
+  Wartości wykorzystywane do utrzymania sesji i przekierowań po zalogowaniu, zgodnie z „Sesja utrzymywana przez token”.
+- LoginFormVM - email: string - password: string - errors: { email?: string; password?: string } - apiError?: AuthErrorViewModel - isSubmitting: boolean - canSubmit: boolean
+  Model stanu formularza dla kontrolowanej obsługi walidacji i wysyłki.
+- AuthErrorViewModel - code: 'invalid_credentials' | 'network_error' | 'unknown' - message: string - timestamp: string
+  Do jednolitej prezentacji bezpiecznych komunikatów o błędzie.
+- FieldError - field: 'email' | 'password' - message: string
+  Stosowane w komponentach pól dla komunikatów inline.
 - Zgodność ze stylem DTO: Projekt typów utrzymany w duchu istniejących DTO z pliku types.ts dla spójności warstw i nazewnictwa.
-
 
 ## 6. Zarządzanie stanem
 
@@ -151,13 +120,11 @@ Typy żądania/odpowiedzi: request LoginCommand { email, password }, odpowiedź 
 - W trakcie wysyłki przycisk jest zablokowany, a formularz może pokazać wskaźnik ładowania zgodnie z UX spinners/toasty przyjętymi w aplikacji.
 - Przy nieprawidłowych danych pojawia się ogólny komunikat błędu bez wskazania, który parametr jest niepoprawny, a przy sukcesie następuje przekierowanie do głównego widoku aplikacji.
 
-
 ## 9. Warunki i walidacja
 
 - Email: weryfikacja zgodnie z RFC 5322, spójna z wymaganiami rejestracji w PRD i przyjęta także dla logowania dla jednolitości doświadczenia.
 - Hasło: wymagane (niepuste), bez dodatkowej walidacji długości w PRD dla logowania, z komunikatem ogólnym w razie błędu autentykacji.
 - Komunikaty: w przypadku błędnych danych logowania prezentowany jest tylko ogólny komunikat bez ujawniania, który element był błędny, zgodnie z kryteriami bezpieczeństwa.
-
 
 ## 10. Obsługa błędów
 
@@ -165,7 +132,6 @@ Typy żądania/odpowiedzi: request LoginCommand { email, password }, odpowiedź 
 - Błąd autentykacji: ogólny komunikat „Nieprawidłowe dane logowania”, brak wskazania pola, możliwość ponowienia próby bez czyszczenia pól.
 - Błąd sieci/serwera: komunikat o problemach technicznych i zachęta do spróbowania ponownie, bez ujawniania szczegółów wewnętrznych.
 - Logowanie błędów: wzorzec logowania stosowany w backendowych endpointach (logError) wskazuje na standard centralnego logowania, który należy rozważyć również dla błędów autentykacji, aby wspierać przeglądanie logów przez administratora zgodnie z PRD.
-
 
 ## 11. Kroki implementacji
 

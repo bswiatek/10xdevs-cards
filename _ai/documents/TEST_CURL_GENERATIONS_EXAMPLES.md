@@ -1,6 +1,7 @@
 # Przykłady testowania endpointa POST /api/generations
 
 ## Wymagania wstępne
+
 1. Uruchom dev server: `npm run dev`
 2. Server powinien działać na `http://localhost:4321` (domyślny port Astro)
 3. Upewnij się, że połączenie z Supabase jest skonfigurowane
@@ -18,6 +19,7 @@ curl -X POST http://localhost:3000/api/generations \
 ```
 
 **Oczekiwana odpowiedź (201):**
+
 ```json
 {
   "generation_session_id": 1,
@@ -60,6 +62,7 @@ curl -X POST http://localhost:3000/api/generations \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -67,9 +70,7 @@ curl -X POST http://localhost:3000/api/generations \
   "details": {
     "_errors": [],
     "source_text": {
-      "_errors": [
-        "Source text must be at least 1000 characters"
-      ]
+      "_errors": ["Source text must be at least 1000 characters"]
     }
   }
 }
@@ -90,6 +91,7 @@ curl -X POST http://localhost:3000/api/generations \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -97,9 +99,7 @@ curl -X POST http://localhost:3000/api/generations \
   "details": {
     "_errors": [],
     "source_text": {
-      "_errors": [
-        "Source text must not exceed 10000 characters"
-      ]
+      "_errors": ["Source text must not exceed 10000 characters"]
     }
   }
 }
@@ -116,6 +116,7 @@ curl -X POST http://localhost:3000/api/generations \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -134,6 +135,7 @@ curl -X POST http://localhost:3000/api/generations \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -141,9 +143,7 @@ curl -X POST http://localhost:3000/api/generations \
   "details": {
     "_errors": [],
     "source_text": {
-      "_errors": [
-        "Required"
-      ]
+      "_errors": ["Required"]
     }
   }
 }
@@ -184,11 +184,13 @@ EOF
 Po wykonaniu testów możesz sprawdzić w Supabase:
 
 ### Sprawdź zapisane sesje generowania:
+
 ```sql
 SELECT * FROM generation_sessions ORDER BY started_at DESC LIMIT 5;
 ```
 
 ### Sprawdź logi systemowe:
+
 ```sql
 SELECT * FROM system_logs ORDER BY created_at DESC LIMIT 10;
 ```
@@ -198,14 +200,17 @@ SELECT * FROM system_logs ORDER BY created_at DESC LIMIT 10;
 ## Troubleshooting
 
 ### Błąd połączenia:
+
 - Sprawdź czy dev server jest uruchomiony: `npm run dev`
 - Sprawdź port: domyślnie `4321`, ale może być inny
 
 ### Błąd 500:
+
 - Sprawdź logi konsoli serwera
 - Sprawdź czy zmienne środowiskowe `SUPABASE_URL` i `SUPABASE_KEY` są ustawione
 - Sprawdź tabele `system_logs` w bazie danych
 
 ### Timeout:
+
 - Mock AI powinien działać natychmiastowo
 - Jeśli wystąpi timeout, sprawdź połączenie z bazą danych

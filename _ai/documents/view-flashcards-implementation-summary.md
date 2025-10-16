@@ -5,9 +5,11 @@
 Zaimplementowano pełne widoki frontendu zgodnie z planem implementacji:
 
 ### 1. Dashboard (Lista zestawów fiszek)
+
 **Ścieżka:** `/dashboard`
 
 #### Komponenty:
+
 - **DashboardView** - główny komponent widoku
 - **SetsSearchBar** - wyszukiwarka z debouncing (300ms), min. 3 znaki
 - **SetsToolbar** - pasek narzędzi z przyciskiem "Dodaj fiszkę"
@@ -19,6 +21,7 @@ Zaimplementowano pełne widoki frontendu zgodnie z planem implementacji:
 - **AddFlashcardModal** - modal do dodawania fiszki (tryb istniejący/nowy zestaw)
 
 #### Funkcjonalności:
+
 ✅ Wyszukiwanie pełnotekstowe z debouncing 300ms
 ✅ Highlight wyników wyszukiwania (min. 3 znaki)
 ✅ Paginacja 20/stronę
@@ -31,9 +34,11 @@ Zaimplementowano pełne widoki frontendu zgodnie z planem implementacji:
 ✅ Obsługa stanów: loading, empty, error
 
 ### 2. Szczegóły Zestawu
+
 **Ścieżka:** `/sets/:id`
 
 #### Komponenty:
+
 - **SetDetailsView** - główny komponent widoku szczegółów
 - **SetHeader** - nagłówek z metadanymi i akcjami
 - **FlashcardsList** - lista fiszek z paginacją
@@ -43,6 +48,7 @@ Zaimplementowano pełne widoki frontendu zgodnie z planem implementacji:
 - **ConfirmDialog** - dialog potwierdzenia (usuwanie fiszki/zestawu)
 
 #### Funkcjonalności:
+
 ✅ Wyświetlanie metadanych zestawu (tytuł, liczba fiszek, due_cards_count, data)
 ✅ Przycisk "Rozpocznij naukę" (placeholder)
 ✅ Lista fiszek z progress (state, reps, lapses)
@@ -56,31 +62,37 @@ Zaimplementowano pełne widoki frontendu zgodnie z planem implementacji:
 ### 3. Custom Hooks
 
 #### useDashboardSets.ts
+
 - Zarządzanie stanem listy zestawów
 - Debouncing wyszukiwania (300ms)
 - AbortController dla race conditions
 - Auto-fetch przy zmianach
 
 #### useSetDetails.ts
+
 - Pobieranie szczegółów zestawu
 - AbortController
 - Auto-refetch
 
 #### useFlashcardValidation.ts
+
 - Walidacja front (max 200 znaków)
 - Walidacja back (max 500 znaków)
 - Live validation
 
 #### useTitleValidation.ts
+
 - Walidacja tytułu zestawu (max 200 znaków)
 
 ### 4. Strony Astro
 
 #### dashboard.astro
+
 - Autentykacja + przekierowanie do /login
 - Ładowanie DashboardView z client:load
 
 #### sets/[id].astro
+
 - Autentykacja + przekierowanie
 - Parsowanie ID z URL
 - Walidacja ID
@@ -89,6 +101,7 @@ Zaimplementowano pełne widoki frontendu zgodnie z planem implementacji:
 ### 5. Integracja API
 
 #### Wykorzystane endpointy:
+
 - **GET /api/flashcard-sets** - lista zestawów z paginacją i wyszukiwaniem
 - **GET /api/flashcard-sets/:id** - szczegóły zestawu z fiszkami
 - **POST /api/flashcard-sets** - tworzenie nowego zestawu
@@ -100,6 +113,7 @@ Zaimplementowano pełne widoki frontendu zgodnie z planem implementacji:
 ### 6. Komponenty UI (shadcn/ui)
 
 Wykorzystano i zainstalowano:
+
 - button, card, dialog, input, label, textarea (już istniejące)
 - badge, skeleton, alert-dialog, select (nowo dodane)
 - sonner (toast notifications)
@@ -124,11 +138,13 @@ Wykorzystano i zainstalowano:
 ### 9. Obsługa błędów
 
 #### Walidacja client-side:
+
 - Długość pól (200/500 znaków)
 - Wymagane pola
 - Live feedback
 
 #### Obsługa API errors:
+
 - 400 Bad Request → wyświetlenie błędów walidacji
 - 401 Unauthorized → przekierowanie /login
 - 403 Forbidden → komunikat o braku dostępu
@@ -137,6 +153,7 @@ Wykorzystano i zainstalowano:
 - 500 Server Error → ogólny komunikat błędu
 
 #### Network errors:
+
 - Toast notifications z sonner
 - Retry buttons w ErrorState
 - AbortController dla race conditions
@@ -170,12 +187,14 @@ Wykorzystano i zainstalowano:
 ## Pliki utworzone
 
 ### Hooks (7 plików)
+
 - src/components/hooks/useDashboardSets.ts
 - src/components/hooks/useSetDetails.ts
 - src/components/hooks/useFlashcardValidation.ts
 - src/components/hooks/useTitleValidation.ts
 
 ### Dashboard Components (8 plików)
+
 - src/components/DashboardView.tsx
 - src/components/dashboard/SetsSearchBar.tsx
 - src/components/dashboard/SetsToolbar.tsx
@@ -187,6 +206,7 @@ Wykorzystano i zainstalowano:
 - src/components/dashboard/AddFlashcardModal.tsx
 
 ### Set Details Components (6 plików)
+
 - src/components/SetDetailsView.tsx
 - src/components/set-details/SetHeader.tsx
 - src/components/set-details/FlashcardListItem.tsx
@@ -196,10 +216,12 @@ Wykorzystano i zainstalowano:
 - src/components/set-details/ConfirmDialog.tsx
 
 ### Pages (2 pliki)
+
 - src/pages/dashboard.astro
 - src/pages/sets/[id].astro
 
 ### Modyfikacje
+
 - src/pages/index.astro (redirect do /dashboard)
 - src/layouts/Layout.astro (dodano Toaster, zmiana linków nav)
 

@@ -1,22 +1,28 @@
 # Review View Implementation - Status Report
 
 ## Implementation Date
+
 January 11, 2025
 
 ## Overview
+
 Successfully implemented the complete Review View frontend according to the implementation plan. The view allows users to review, accept, edit, or reject AI-generated flashcard candidates and save them as a flashcard set.
 
 ## Implemented Components
 
 ### 1. Types and View Models (`src/types.ts`)
+
 Added the following UI-specific types:
+
 - `ReviewCandidateVM`: View model for candidate flashcards with UI state
 - `ReviewCounters`: Counters for accepted/rejected/remaining candidates
 - `EditModalState`: State management for edit modal
 - `ReviewState`: Complete state structure for the review view
 
 ### 2. Custom Hook (`src/components/hooks/useReviewSession.ts`)
+
 Implemented `useReviewSession` hook with:
+
 - Initialization from `GenerationSessionDTO`
 - Candidate management (accept, reject, undo, edit)
 - Counter recalculation (O(1) updates)
@@ -26,23 +32,27 @@ Implemented `useReviewSession` hook with:
 ### 3. UI Components
 
 #### CandidateCard (`src/components/review/CandidateCard.tsx`)
+
 - Displays front/back of flashcard
 - Visual states: green border for accepted, red border for rejected
 - Actions: Accept, Edit, Reject (for pending), Undo (for accepted/rejected)
 - "Edited" badge for modified candidates
 
 #### CandidateList (`src/components/review/CandidateList.tsx`)
+
 - Scrollable list of candidate cards
 - Empty state message when no candidates
 - Delegates all actions to individual cards
 
 #### ReviewHeader (`src/components/review/ReviewHeader.tsx`)
+
 - Sticky header with counters
 - Shows: Accepted, Rejected, Remaining counts with icons
 - "Save Set" button (disabled when accepted count is 0)
 - Warning message when no accepted candidates
 
 #### EditCandidateModal (`src/components/review/EditCandidateModal.tsx`)
+
 - Dialog for editing flashcard content
 - Real-time validation: front (1-200 chars), back (1-500 chars)
 - Character counters with visual feedback
@@ -50,6 +60,7 @@ Implemented `useReviewSession` hook with:
 - Saves changes and marks candidate as "edited"
 
 #### SaveSetTitleModal (`src/components/review/SaveSetTitleModal.tsx`)
+
 - Dialog for entering set title before saving
 - Title validation: 1-200 characters
 - Character counter
@@ -57,7 +68,9 @@ Implemented `useReviewSession` hook with:
 - Loading state during save
 
 ### 4. Main Component (`src/components/ReviewView.tsx`)
+
 The orchestrator component that:
+
 - Loads session data from sessionStorage
 - Manages review state via useReviewSession hook
 - Handles API call to POST /api/flashcard-sets
@@ -67,6 +80,7 @@ The orchestrator component that:
 - Fallback UI when no session data available
 
 ### 5. Astro Page (`src/pages/review/sessionId.astro`)
+
 - Dynamic route with sessionId parameter
 - Validates sessionId (must be valid number)
 - Loads ReviewView with client:load directive
@@ -76,7 +90,9 @@ The orchestrator component that:
 ### 6. Integration Updates
 
 #### useGenerateForm hook (`src/components/hooks/useGenerateForm.ts`)
+
 Updated to:
+
 - Store GenerationSessionDTO in sessionStorage
 - Redirect to `/review/sessionId` after successful generation
 - Use route params instead of query params
@@ -84,6 +100,7 @@ Updated to:
 ## Features Implemented
 
 ### Core Functionality
+
 ✅ Accept candidates
 ✅ Reject candidates  
 ✅ Edit candidates with validation
@@ -93,6 +110,7 @@ Updated to:
 ✅ Session data persistence via sessionStorage
 
 ### Validation
+
 ✅ Front field: 1-200 characters
 ✅ Back field: 1-500 characters
 ✅ Set title: 1-200 characters
@@ -100,6 +118,7 @@ Updated to:
 ✅ Real-time character counters
 
 ### Error Handling
+
 ✅ 400 Bad Request: Shows validation details
 ✅ 404 Not Found: Session doesn't exist
 ✅ 422 Unprocessable: Session already used
@@ -108,6 +127,7 @@ Updated to:
 ✅ Missing session data: Redirect to generate page
 
 ### User Experience
+
 ✅ Visual feedback for accepted (green) and rejected (red) cards
 ✅ "Edited" badge for modified candidates
 ✅ Loading states during save
@@ -120,9 +140,11 @@ Updated to:
 ## API Integration
 
 ### Endpoints Used
+
 - `POST /api/flashcard-sets`: Creates new flashcard set from candidates
 
 ### Request Format
+
 ```typescript
 {
   title: string,
@@ -132,6 +154,7 @@ Updated to:
 ```
 
 ### Response Handling
+
 - Success (201): Shows toast, redirects to sets list
 - Errors: Displays appropriate error messages
 
@@ -147,18 +170,22 @@ Updated to:
 ## Technical Details
 
 ### State Management
+
 - Local React state via custom hooks
 - SessionStorage for session data persistence
 - O(1) counter updates for performance
 
 ### Styling
+
 - Tailwind CSS 4 with utility classes
 - Shadcn/ui components (Card, Dialog, Button, Input, Textarea, Label)
 - Responsive design with mobile-first approach
 - Dark mode support
 
 ### Dependencies Added
+
 Installed Shadcn/ui components:
+
 - card
 - dialog
 - textarea

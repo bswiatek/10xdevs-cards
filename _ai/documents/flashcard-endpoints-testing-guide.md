@@ -1,7 +1,9 @@
 # API Testing Guide - Flashcard Endpoints
 
 ## Authentication Setup
+
 All endpoints require authentication. Include the Bearer token in the Authorization header:
+
 ```
 Authorization: Bearer <access_token>
 ```
@@ -9,11 +11,13 @@ Authorization: Bearer <access_token>
 ## Endpoints
 
 ### 1. List Flashcard Sets
+
 ```http
 GET /api/flashcard-sets?page=1&limit=20&search=javascript&sort=created_at&order=desc
 ```
 
 **Query Parameters:**
+
 - `page` (optional): Page number, default 1
 - `limit` (optional): Items per page, default 20, max 100
 - `search` (optional): Search in title or flashcard content
@@ -21,6 +25,7 @@ GET /api/flashcard-sets?page=1&limit=20&search=javascript&sort=created_at&order=
 - `order` (optional): asc | desc, default desc
 
 **Response 200:**
+
 ```json
 {
   "flashcard_sets": [
@@ -44,11 +49,13 @@ GET /api/flashcard-sets?page=1&limit=20&search=javascript&sort=created_at&order=
 ```
 
 ### 2. Get Flashcard Set Details
+
 ```http
 GET /api/flashcard-sets/1
 ```
 
 **Response 200:**
+
 ```json
 {
   "id": 1,
@@ -78,6 +85,7 @@ GET /api/flashcard-sets/1
 ```
 
 ### 3. Update Flashcard Set Title
+
 ```http
 PATCH /api/flashcard-sets/1
 Content-Type: application/json
@@ -88,6 +96,7 @@ Content-Type: application/json
 ```
 
 **Response 200:**
+
 ```json
 {
   "id": 1,
@@ -101,6 +110,7 @@ Content-Type: application/json
 ```
 
 ### 4. Delete Flashcard Set
+
 ```http
 DELETE /api/flashcard-sets/1
 ```
@@ -108,6 +118,7 @@ DELETE /api/flashcard-sets/1
 **Response 204:** No content
 
 ### 5. Create Flashcard in Set
+
 ```http
 POST /api/flashcard-sets/1/flashcards
 Content-Type: application/json
@@ -119,6 +130,7 @@ Content-Type: application/json
 ```
 
 **Response 201:**
+
 ```json
 {
   "id": 2,
@@ -144,6 +156,7 @@ Content-Type: application/json
 ```
 
 ### 6. Update Flashcard
+
 ```http
 PATCH /api/flashcards/2
 Content-Type: application/json
@@ -155,6 +168,7 @@ Content-Type: application/json
 ```
 
 **Response 200:**
+
 ```json
 {
   "id": 2,
@@ -166,6 +180,7 @@ Content-Type: application/json
 ```
 
 ### 7. Delete Flashcard
+
 ```http
 DELETE /api/flashcards/2
 ```
@@ -175,6 +190,7 @@ DELETE /api/flashcards/2
 ## Error Responses
 
 ### 400 Bad Request
+
 ```json
 {
   "error": "Bad Request",
@@ -188,6 +204,7 @@ DELETE /api/flashcards/2
 ```
 
 ### 401 Unauthorized
+
 ```json
 {
   "error": "Unauthorized",
@@ -196,6 +213,7 @@ DELETE /api/flashcards/2
 ```
 
 ### 404 Not Found
+
 ```json
 {
   "error": "Not Found",
@@ -204,6 +222,7 @@ DELETE /api/flashcards/2
 ```
 
 ### 500 Internal Server Error
+
 ```json
 {
   "error": "Internal Server Error",
@@ -214,21 +233,25 @@ DELETE /api/flashcards/2
 ## Validation Rules
 
 ### Flashcard Set Title
+
 - Required
 - Trimmed
 - 1-200 characters
 
 ### Flashcard Front
+
 - Required
 - Trimmed
 - 1-200 characters
 
 ### Flashcard Back
+
 - Required
 - Trimmed
 - 1-500 characters
 
 ### Query Parameters
+
 - `page`: integer >= 1
 - `limit`: integer 1-100
 - `sort`: one of [created_at, updated_at, title]
@@ -238,12 +261,14 @@ DELETE /api/flashcards/2
 ## Testing with curl
 
 ### Get all sets
+
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN" \
   http://localhost:4321/api/flashcard-sets
 ```
 
 ### Create flashcard
+
 ```bash
 curl -X POST \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -253,6 +278,7 @@ curl -X POST \
 ```
 
 ### Update set title
+
 ```bash
 curl -X PATCH \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -262,6 +288,7 @@ curl -X PATCH \
 ```
 
 ### Delete flashcard
+
 ```bash
 curl -X DELETE \
   -H "Authorization: Bearer YOUR_TOKEN" \

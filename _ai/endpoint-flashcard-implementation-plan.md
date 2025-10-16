@@ -1,9 +1,11 @@
 # API Endpoint Implementation Plan: Flashcard Sets and Flashcards
 
 ## 1. Przegląd punktu końcowego
+
 Plan obejmuje wdrożenie CRUD i listowania dla zestawów fiszek oraz tworzenia/aktualizacji/usuwania pojedynczych fiszek z kontrolą dostępu użytkownika, paginacją, wyszukiwaniem i walidacją zgodną z constraintami bazy i RLS.
 
 ## 2. Szczegóły żądania
+
 - Metody HTTP: GET, PATCH, DELETE dla /flashcard-sets; GET dla /flashcard-sets/:id; POST dla /flashcard-sets/:setId/flashcards; PATCH i DELETE dla /flashcards/:id.
 - Struktury URL:
   - /flashcard-sets
@@ -19,6 +21,7 @@ Plan obejmuje wdrożenie CRUD i listowania dla zestawów fiszek oraz tworzenia/a
   - PATCH /flashcards/:id: { front?, back? } co najmniej jedno pole; front 1..200, back 1..500.
 
 ## 3. Wykorzystywane typy
+
 - DTO/Command:
   - PaginationDTO, FlashcardSetListDTO, FlashcardSetListResponseDTO.
   - FlashcardProgressDTO, FlashcardWithProgressDTO, FlashcardSetDetailDTO.
@@ -26,6 +29,7 @@ Plan obejmuje wdrożenie CRUD i listowania dla zestawów fiszek oraz tworzenia/a
 - Tabele i typy DB: flashcardsets, flashcards, flashcardprogress, widok flashcardsets_with_due_count, ENUM flashcardstate, triggery updated_at i cardscount, RLS policies.
 
 ## 3. Szczegóły odpowiedzi
+
 - GET /flashcard-sets: 200 z { flashcard_sets: FlashcardSetListDTO[], pagination: PaginationDTO } zgodnie ze specyfikacją; due_cards_count z widoku (coalesce 0).
 - GET /flashcard-sets/:id: 200 z FlashcardSetDetailDTO, gdzie flashcards zawiera progress (state, due, reps, lapses).
 - PATCH /flashcard-sets/:id: 200 z zaktualizowanym FlashcardSetListDTO.
@@ -34,6 +38,7 @@ Plan obejmuje wdrożenie CRUD i listowania dla zestawów fiszek oraz tworzenia/a
 - PATCH /flashcards/:id: 200 z zaktualizowaną fiszką (bez progress w odpowiedzi).
 
 ## 4. Przepływ danych
+
 - Autentykacja: Supabase Auth; auth.uid dostępny po stronie serwera; Authorization Bearer wymagany dla wszystkich wywołań.
 - RLS: Włączony dla flashcardsets/flashcards/flashcardprogress, ogranicza dostęp do zasobów użytkownika; admin może mieć rozszerzony odczyt.
 - Listowanie setów: SELECT z widoku flashcardsets_with_due_count filtrowany po userid=auth.uid, z paginacją i sortowaniem zgodnym z allowlist; search realizowane przez ILIKE na title oraz dołączenia do flashcards dla content (z DISTINCT ON/EXISTS).
@@ -43,12 +48,14 @@ Plan obejmuje wdrożenie CRUD i listowania dla zestawów fiszek oraz tworzenia/a
 - Usuwanie: DELETE setu kaskadowo usuwa fiszki i progress (ON DELETE CASCADE); DELETE fiszki usuwa także progress i dekrementuje cardscount przez trigger.
 
 ## 5. Względy bezpieczeństwa
+
 - Autoryzacja: weryfikacja tokena; RLS policies egzekwują dostęp na poziomie wiersza; dodatkowe sprawdzenie właścicielstwa przy operacjach 403 vs 404 według polityki błędów.
 - Walidacja i sanitizacja: allowlist na sort/order; limit ograniczony do 100; trim i długości dla title/front/back; parametryzowane zapytania, brak interpolacji.
 - Rate limiting: na modyfikujące endpointy i potencjalnie GET z search; rekomendowane per user/IP w warstwie edge/server.
 - Logowanie audytowe: systemlogs (servicerole) dla ERROR i kluczowych zdarzeń; metadata JSONB z kontekstem, ale bez PII wrażliwego.
 
 ## 6. Obsługa błędów
+
 - 400 Bad Request: nieprawidłowe query/body (limit>100, sort/order spoza allowlist, puste lub zbyt długie pola; brak pól w PATCH flashcards).
 - 401 Unauthorized: brak lub niepoprawny Bearer token; brak auth.uid.
 - 403 Forbidden: zasób istnieje, lecz nie należy do użytkownika; wykryte przez RLS przy dodatkowej weryfikacji istnienia zasobu (sprawdzanej serwerowo).
@@ -57,6 +64,7 @@ Plan obejmuje wdrożenie CRUD i listowania dla zestawów fiszek oraz tworzenia/a
 - 500 Internal Server Error: błędy bazy/nieoczekiwane; log do systemlogs z loglevel=ERROR i eventtype (np. api.flashcards.create.failed).
 
 ## 7. Rozważania dotyczące wydajności
+
 - Indeksy: wykorzystanie idx_flashcardsets_user_created (userid, created_at DESC) dla list; idx_flashcards_flashcardsetid dla dołączeń; widok due count oparty o joiny i partial index na flashcardprogress.due.
 - Wyszukiwanie: ILIKE na title i treści fiszek może być kosztowne; rozważyć pg_trgm dla przyspieszenia, gdy search stanie się popularny.
 - Paginacja: LIMIT/OFFSET z total count; opcjonalnie keyset w przyszłości; limit maks. 100.
@@ -64,6 +72,7 @@ Plan obejmuje wdrożenie CRUD i listowania dla zestawów fiszek oraz tworzenia/a
 - Reuse RLS: minimalizacja logiki autoryzacji w kodzie, przeniesienie kosztu do DB.
 
 ## 8. Etapy wdrożenia
+
 1. Schemat i RLS: upewnić się, że tabele, widoki, indeksy, triggery i RLS (flashcardsets, flashcards, flashcardprogress, systemlogs) są wdrożone jak w db-plan.md.
 2. Warstwa typów: zaimportować DTO/Command z types.ts i powiązać z handlerami endpointów; zdefiniować mapowania rekordów DB → DTO.
 3. Walidacja: zbudować schematy dla query/body (page, limit, sort, order, search; title/front/back), z ograniczeniami długości i allowlist; trim i normalizacja whitespace.

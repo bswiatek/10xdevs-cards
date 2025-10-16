@@ -10,31 +10,29 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Szczegóły zestawu: “/sets/:id” (zabezpieczona, sprawdza 403/404).
 - Dodawanie fiszki ręcznie: modal kontekstowy w dashboardzie i szczegółach zestawu (bez osobnej ścieżki, stan w URL opcjonalny ?modal=add).
 
-
 ## 3. Struktura komponentów
 
 - DashboardPage
-    - SetsSearchBar
-    - SetsToolbar
-        - NewSetButton
-    - SetsGrid
-        - SetCard (powtarzalny)
-    - SetsPagination
-    - EmptyState / ErrorState
-    - AddFlashcardModal (portal, współdzielony)
+  - SetsSearchBar
+  - SetsToolbar
+    - NewSetButton
+  - SetsGrid
+    - SetCard (powtarzalny)
+  - SetsPagination
+  - EmptyState / ErrorState
+  - AddFlashcardModal (portal, współdzielony)
 - SetDetailsPage
-    - SetHeader
-        - SetMeta
-        - StartStudyButton
-        - DeleteSetButton
-    - FlashcardsList
-        - FlashcardListItem (EditButton, DeleteButton)
-    - InfiniteLoader/Pagination
-    - EmptyState / ErrorState
-    - AddFlashcardModal (portal, współdzielony)
-    - EditFlashcardModal (portal)
-    - ConfirmDialog (usuwanie fiszki/zestawu)
-
+  - SetHeader
+    - SetMeta
+    - StartStudyButton
+    - DeleteSetButton
+  - FlashcardsList
+    - FlashcardListItem (EditButton, DeleteButton)
+  - InfiniteLoader/Pagination
+  - EmptyState / ErrorState
+  - AddFlashcardModal (portal, współdzielony)
+  - EditFlashcardModal (portal)
+  - ConfirmDialog (usuwanie fiszki/zestawu)
 
 ## 4. Szczegóły komponentów
 
@@ -43,17 +41,16 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Opis komponentu: Widok listy zestawów z wyszukiwaniem pełnotekstowym (debounce ≥300 ms), paginacją 20/stronę, sortowaniem po created_at desc i CTA do tworzenia/generowania oraz szybkiego wejścia w naukę.
 - Główne elementy: nagłówek, pasek wyszukiwania, siatka kart, paginacja, stany puste/błędu.
 - Obsługiwane interakcje:
-    - Wpisywanie frazy (min 3 znaki uruchamia zapytanie, highlight wyników w tytułach).
-    - Zmiana strony (pobranie GET /flashcard-sets?page=N\&limit=20\&search=).
-    - Klik w SetCard → nawigacja do /sets/:id.
-    - Klik “Nowy zestaw fiszek” → nawigacja do flow generowania lub otwarcie modalu dodawania fiszki (wg PRD preferowany generator; modal służy US-017).
+  - Wpisywanie frazy (min 3 znaki uruchamia zapytanie, highlight wyników w tytułach).
+  - Zmiana strony (pobranie GET /flashcard-sets?page=N\&limit=20\&search=).
+  - Klik w SetCard → nawigacja do /sets/:id.
+  - Klik “Nowy zestaw fiszek” → nawigacja do flow generowania lub otwarcie modalu dodawania fiszki (wg PRD preferowany generator; modal służy US-017).
 - Obsługiwana walidacja:
-    - Walidacja długości wyszukiwanej frazy (zapytania dopiero od 3 znaków; <3 znaków nie wysyła zapytań, czyści highlight).
-    - Walidacja parametrów paginacji (limit max 100, u nas 20; fallback przy 422).
+  - Walidacja długości wyszukiwanej frazy (zapytania dopiero od 3 znaków; <3 znaków nie wysyła zapytań, czyści highlight).
+  - Walidacja parametrów paginacji (limit max 100, u nas 20; fallback przy 422).
 - Typy:
-    - FlashcardSetListDTO, FlashcardSetListResponseDTO, PaginationDTO.
+  - FlashcardSetListDTO, FlashcardSetListResponseDTO, PaginationDTO.
 - Propsy: brak (strona), korzysta z hooków i klienta API.
-
 
 ### SetsSearchBar
 
@@ -64,7 +61,6 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Typy: { value: string; onSearch: (q: string)=>void }.
 - Propsy: value, onChange/onDebounced.
 
-
 ### SetsGrid
 
 - Opis: Siatka kart zestawów; każdy SetCard pokazuje tytuł, datę, liczbę fiszek i due_cards_count.
@@ -73,7 +69,6 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Walidacja: brak, tylko prezentacja.
 - Typy: FlashcardSetListDTO[].
 - Propsy: items: FlashcardSetListDTO[], onClickSet(id).
-
 
 ### SetCard
 
@@ -84,7 +79,6 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Typy: FlashcardSetListDTO.
 - Propsy: data: FlashcardSetListDTO.
 
-
 ### SetsPagination
 
 - Opis: Kontrolka do nawigacji po stronach, zgodna z PaginationDTO.
@@ -93,7 +87,6 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Walidacja: page w zakresie 1..total_pages.
 - Typy: PaginationDTO.
 - Propsy: pagination, onChange.
-
 
 ### SetDetailsPage
 
@@ -104,7 +97,6 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Typy: FlashcardSetDetailDTO, FlashcardWithProgressDTO.
 - Propsy: z routera param id.
 
-
 ### SetHeader
 
 - Opis: Nagłówek: tytuł, meta (daty, counts), akcje: Dodaj fiszkę, Rozpocznij naukę, Usuń zestaw.
@@ -113,7 +105,6 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Walidacja: confirm dialog z liczbą fiszek, ostrzeżenie o nieodwracalności.
 - Typy: FlashcardSetDetailDTO.
 - Propsy: set: FlashcardSetDetailDTO, onDelete, onAdd.
-
 
 ### FlashcardsList
 
@@ -124,19 +115,17 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Typy: FlashcardWithProgressDTO[].
 - Propsy: items, onEdit, onDelete, pagination/infinite props.
 
-
 ### AddFlashcardModal
 
 - Opis: Modal do ręcznego tworzenia fiszki z live walidacją długości, wyborem zestawu lub utworzeniem nowego, oraz podglądem fiszki przed zapisem.
 - Elementy: pola “przód”, “tył”, dropdown “zestaw”, checkbox “Utwórz nowy zestaw”, input tytułu nowego zestawu, sekcja “Podgląd”.
 - Interakcje:
-    - Live walidacja: front ≤200, back ≤500, niewymuszone min>0; blokuj zapis, pokaż błędy 400/422.
-    - Tryb “nowy zestaw”: wymaga niepustego tytułu; po zapisie tworzy set + POST flashcards (lub jeden złożony flow po stronie API — zmapowane niżej).
-    - Po sukcesie: komunikat sukcesu, zamknięcie modalu, odświeżenie listy/sekcji.
+  - Live walidacja: front ≤200, back ≤500, niewymuszone min>0; blokuj zapis, pokaż błędy 400/422.
+  - Tryb “nowy zestaw”: wymaga niepustego tytułu; po zapisie tworzy set + POST flashcards (lub jeden złożony flow po stronie API — zmapowane niżej).
+  - Po sukcesie: komunikat sukcesu, zamknięcie modalu, odświeżenie listy/sekcji.
 - Walidacja: front non-empty ≤200, back non-empty ≤500; jeśli createNewSet=true → title non-empty; sanitize input (trim, normalizacja whitespaces).
 - Typy: CreateFlashcardCommand, CreateFlashcardResponseDTO, CreateFlashcardSetCommand (gdy nowy zestaw).
 - Propsy: isOpen, onClose, defaultSetId?, onCreated(result).
-
 
 ### EditFlashcardModal
 
@@ -147,7 +136,6 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Typy: UpdateFlashcardCommand.
 - Propsy: isOpen, flashcard, onClose, onSaved.
 
-
 ### ConfirmDialog
 
 - Opis: Ogólny dialog potwierdzenia dla usuwania fiszki/zestawu; treść zawiera fragment fiszki lub liczby z zestawu.
@@ -156,32 +144,29 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Walidacja: brak, informacja o nieodwracalności operacji przy zestawie.
 - Typy: none specyficzne.
 
-
 ## 5. Typy
 
 - Z istniejących:
-    - FlashcardSetListDTO, FlashcardSetListResponseDTO, PaginationDTO, FlashcardSetDetailDTO, FlashcardWithProgressDTO, CreateFlashcardCommand, CreateFlashcardResponseDTO, UpdateFlashcardCommand.
+  - FlashcardSetListDTO, FlashcardSetListResponseDTO, PaginationDTO, FlashcardSetDetailDTO, FlashcardWithProgressDTO, CreateFlashcardCommand, CreateFlashcardResponseDTO, UpdateFlashcardCommand.
 - Nowe ViewModel:
-    - SearchState: { query: string; debounced: string; isActive: boolean } do sterowania wyszukiwaniem.
-    - HighlightMatch: { text: string; ranges: { start: number; end: number }[] } do podświetlania wyników w tytułach; generowane na kliencie z debounced query.
-    - AddFlashcardFormVM: { front: string; back: string; setId?: number; createNewSet: boolean; newSetTitle: string; errors: { front?: string; back?: string; newSetTitle?: string }; isValid: boolean }.
-    - EditFlashcardFormVM: { id: number; front: string; back: string; errors: { front?: string; back?: string }; isValid: boolean }.
-    - ListState<T>: { items: T[]; loading: boolean; error?: string; pagination: PaginationDTO } dla dashboardu.
-    - DetailState: { data?: FlashcardSetDetailDTO; loading: boolean; error?: string }.
-
+  - SearchState: { query: string; debounced: string; isActive: boolean } do sterowania wyszukiwaniem.
+  - HighlightMatch: { text: string; ranges: { start: number; end: number }[] } do podświetlania wyników w tytułach; generowane na kliencie z debounced query.
+  - AddFlashcardFormVM: { front: string; back: string; setId?: number; createNewSet: boolean; newSetTitle: string; errors: { front?: string; back?: string; newSetTitle?: string }; isValid: boolean }.
+  - EditFlashcardFormVM: { id: number; front: string; back: string; errors: { front?: string; back?: string }; isValid: boolean }.
+  - ListState<T>: { items: T[]; loading: boolean; error?: string; pagination: PaginationDTO } dla dashboardu.
+  - DetailState: { data?: FlashcardSetDetailDTO; loading: boolean; error?: string }.
 
 ## 6. Zarządzanie stanem
 
 - Dashboard: useDashboardSetsState
-    - Stan: query, debouncedQuery, page, listState<FlashcardSetListDTO>, highlight map.
-    - Efekty: debounce 300–500 ms; fetch przy zmianie page/debouncedQuery; anulowanie w locie; reset page przy nowym debouncedQuery.
+  - Stan: query, debouncedQuery, page, listState<FlashcardSetListDTO>, highlight map.
+  - Efekty: debounce 300–500 ms; fetch przy zmianie page/debouncedQuery; anulowanie w locie; reset page przy nowym debouncedQuery.
 - SetDetails: useSetDetailsState
-    - Stan: detail, pagination/infinite cursor, loading, error.
-    - Akcje: refetch po CRUD (optimistic: usunięcie fiszki; pessimistic: dodanie/edycja).
+  - Stan: detail, pagination/infinite cursor, loading, error.
+  - Akcje: refetch po CRUD (optimistic: usunięcie fiszki; pessimistic: dodanie/edycja).
 - Modale: useModalState dla AddFlashcardModal/EditFlashcardModal/ConfirmDialog (open, data, methods).
 - Walidacja: useFlashcardValidation(front, back) → errors, isValid; useTitleValidation(title) dla nowego zestawu.
 - Komunikaty: useToast do sukcesów/błędów; focus management i aria-hidden dla body przy modalach.
-
 
 ## 7. Integracja API
 
@@ -193,7 +178,6 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - DELETE /flashcard-sets/:id → 204.
 - Nagłówki: Authorization: Bearer {access_token} we wszystkich chronionych wywołaniach; obsługa 401/403/404/422 zgodnie z specyfikacją.
 
-
 ## 8. Interakcje użytkownika
 
 - Wyszukiwanie: po 3+ znakach uruchamia się debounce i odświeżenie listy; highlight wystąpień w tytułach; brak wyników → EmptyState z komunikatem.
@@ -204,16 +188,14 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - Usuwanie fiszki: dialog potwierdzenia z treścią; po potwierdzeniu DELETE i aktualizacja counts; toast sukcesu.
 - Usuwanie zestawu: dialog z liczbą fiszek i ostrzeżeniem; DELETE i redirect do dashboardu; toast sukcesu.
 
-
 ## 9. Warunki i walidacja
 
 - Wyszukiwanie: nie wysyłać zapytań dla <3 znaków; trim; zabezpieczyć przed 422 parametrami limit/order/sort zgodnie z dozwolonymi wartościami.
 - Add/Edit fiszka:
-    - front: non-empty, długość ≤200; back: non-empty, długość ≤500; błędy wyświetlane inline live (US-017/US-022).
-    - createNewSet: wymaga newSetTitle non-empty; blokuje Submit i prezentuje błąd.
+  - front: non-empty, długość ≤200; back: non-empty, długość ≤500; błędy wyświetlane inline live (US-017/US-022).
+  - createNewSet: wymaga newSetTitle non-empty; blokuje Submit i prezentuje błąd.
 - Usuwanie: confirm dialogs wymagane, z ostrzeżeniem o nieodwracalności dla zestawu; focus na przycisku potwierdzenia; ESC anuluje.
 - Dostęp: reakcja na 401/403 — redirect do logowania/komunikat dostępu; 404 — stan “Nie znaleziono”.
-
 
 ## 10. Obsługa błędów
 
@@ -224,7 +206,6 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 - 400 Bad Request: walidacja client-side zapobiega; jeśli wystąpi, pokaż konkretne błędy pól.
 - Network/offline: banner “Utracono połączenie. Spróbuj ponownie.”, retry przywraca ostatnie zapytanie; formularze zachowują wprowadzone dane.
 
-
 ## 11. Kroki implementacji
 
 1. Routing: zarejestruj trasy “/” i “/sets/:id” w routerze aplikacji, zabezpiecz middlewarem auth i przechwytywaniem 401/403.
@@ -232,8 +213,8 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 3. DashboardPage: zaimplementuj useDashboardSetsState z debounce i fetch GET /flashcard-sets; wyrenderuj SetsSearchBar, SetsGrid, SetsPagination, EmptyState/ErrorState.
 4. Highlight: dodaj util do generowania zakresów dopasowań dla tytułów na podstawie debouncedQuery i zastosuj lekkie podświetlenie w SetCard.
 5. AddFlashcardModal: formularz z live walidacją 200/500, wyborem zestawu (lista z lokalnych danych lub dodatkowe GET /flashcard-sets dla dropdownu), tryb nowego zestawu z polem tytułu; przy zapisie wywołaj:
-    - gdy istniejący zestaw: POST /flashcard-sets/:setId/flashcards,
-    - gdy nowy zestaw: najpierw POST do endpointu tworzenia zestawu (jeśli dostępny wg types CreateFlashcardSetCommand), następnie POST fiszki do nowo utworzonego setu; jeśli brak endpointu tworzenia zestawu w opisie, dodać fallback: komunikat i prowadzić do generatora AI (po PRD jest proces tworzenia przez generator; opcjonalnie zapewnić minimalny endpoint w backendzie).
+   - gdy istniejący zestaw: POST /flashcard-sets/:setId/flashcards,
+   - gdy nowy zestaw: najpierw POST do endpointu tworzenia zestawu (jeśli dostępny wg types CreateFlashcardSetCommand), następnie POST fiszki do nowo utworzonego setu; jeśli brak endpointu tworzenia zestawu w opisie, dodać fallback: komunikat i prowadzić do generatora AI (po PRD jest proces tworzenia przez generator; opcjonalnie zapewnić minimalny endpoint w backendzie).
 6. SetDetailsPage: fetch GET /flashcard-sets/:id; wyrenderuj SetHeader, FlashcardsList z paginacją (lub batch loading), przyciski akcji, ConfirmDialog dla usunięć.
 7. EditFlashcardModal: implementacja z PATCH /flashcards/:id i odświeżeniem listy po sukcesie.
 8. Delete flashcard: ConfirmDialog → DELETE /flashcards/:id; optimistic update items i decrement cards_count w nagłówku; revert przy błędzie.
@@ -243,7 +224,7 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 
 <implementation_breakdown>
 
-1) Podsumowania i wymagania:
+1. Podsumowania i wymagania:
 
 - PRD: Lista zestawów z paginacją 20, wyszukiwanie pełnotekstowe z podświetlaniem, ręczne dodawanie fiszki z walidacją 200/500, confirm dialogs dla usunięć, A11y, obsługa błędów; brak multimediów i formatowania; polski UI.
 - User Stories: US-017/018 ręczne dodawanie i tworzenie zestawu w modalu; US-019 lista zestawów z meta i paginacją; US-020 wyszukiwanie min 3 znaki z highlight; US-021 szczegóły z listą fiszek i CRUD; US-022 edycja z live walidacją; US-023/024 usuwanie fiszki/zestawu z confirm i konsekwencjami (liczniki, redirect).
@@ -253,34 +234,34 @@ Widoki obejmują dashboard z listą zestawów do szybkiego wejścia w naukę i z
 
 Wyzwania: niespójność dokumentacji endpointów (brak POST setu w sekcji 2.4, ale jest w types.ts) — zaprojektowano plan z fallbackiem; wydajne highlighty przy dużych listach — stosować tylko tytuły i pamiętać o debounced query; integralność liczb (cards_count) przy operacjach — optimistic updates z bezpiecznym refetchem.
 
-2) Kluczowe wymagania z PRD: min 3 znaki do search, highlight, 20/strona, sort created_at desc, due_cards_count na kartach, confirm dialogs, live walidacja 200/500, podgląd fiszki, focus management w modalach, 401/422/403/404 obsługa.
-3) Główne komponenty: opisane wyżej, typy/zdarzenia/walidacje dodane.
-4) Drzewo komponentów:
-App
+2. Kluczowe wymagania z PRD: min 3 znaki do search, highlight, 20/strona, sort created_at desc, due_cards_count na kartach, confirm dialogs, live walidacja 200/500, podgląd fiszki, focus management w modalach, 401/422/403/404 obsługa.
+3. Główne komponenty: opisane wyżej, typy/zdarzenia/walidacje dodane.
+4. Drzewo komponentów:
+   App
 
 - DashboardPage
-    - SetsSearchBar
-    - SetsToolbar
-        - NewSetButton
-    - SetsGrid
-        - SetCard*
-    - SetsPagination
-    - EmptyState/ErrorState
-    - AddFlashcardModal
+  - SetsSearchBar
+  - SetsToolbar
+    - NewSetButton
+  - SetsGrid
+    - SetCard\*
+  - SetsPagination
+  - EmptyState/ErrorState
+  - AddFlashcardModal
 - SetDetailsPage
-    - SetHeader
-    - FlashcardsList
-        - FlashcardListItem*
-    - Pagination/InfiniteLoader
-    - EmptyState/ErrorState
-    - AddFlashcardModal
-    - EditFlashcardModal
-    - ConfirmDialog
+  - SetHeader
+  - FlashcardsList
+    - FlashcardListItem\*
+  - Pagination/InfiniteLoader
+  - EmptyState/ErrorState
+  - AddFlashcardModal
+  - EditFlashcardModal
+  - ConfirmDialog
 
-5) DTO/VM: zdefiniowane w sekcji typów; AddFlashcardFormVM, EditFlashcardFormVM, SearchState, ListState, DetailState, HighlightMatch.
-6) Stan i hooki: useDashboardSetsState, useSetDetailsState, useFlashcardValidation, useTitleValidation, useModalState, useToast.
-7) Wywołania API i akcje: mapowane w sekcji 7; każde z akcjami UI (toast, redirect, refetch, optimistic).
-8) Mapowanie user stories:
+5. DTO/VM: zdefiniowane w sekcji typów; AddFlashcardFormVM, EditFlashcardFormVM, SearchState, ListState, DetailState, HighlightMatch.
+6. Stan i hooki: useDashboardSetsState, useSetDetailsState, useFlashcardValidation, useTitleValidation, useModalState, useToast.
+7. Wywołania API i akcje: mapowane w sekcji 7; każde z akcjami UI (toast, redirect, refetch, optimistic).
+8. Mapowanie user stories:
 
 - US-017/018: AddFlashcardModal z trybem nowego zestawu, walidacją, podglądem i sukces toasts.
 - US-019: DashboardPage lista z paginacją, meta.
@@ -290,13 +271,13 @@ App
 - US-023: Usuwanie fiszki dialog, aktualizacja liczb, komunikat.
 - US-024: Usuwanie zestawu dialog, ostrzeżenie, redirect i komunikat.
 
-9) Interakcje i oczekiwane wyniki: opisane w sekcji 8; każdy krok kończy się czytelnym feedbackiem.
-10) Warunki API i weryfikacja: 200/201/204 ścieżki szczęśliwe; 400/422 walidacje pól; 401 auth redirect; 403 brak dostępu; 404 brak zasobu; komponenty walidują lokalnie i prezentują komunikaty.
-11) Scenariusze błędów i obsługa: wyżej w sekcji 10.
-12) Wyzwania i rozwiązania:
+9. Interakcje i oczekiwane wyniki: opisane w sekcji 8; każdy krok kończy się czytelnym feedbackiem.
+10. Warunki API i weryfikacja: 200/201/204 ścieżki szczęśliwe; 400/422 walidacje pól; 401 auth redirect; 403 brak dostępu; 404 brak zasobu; komponenty walidują lokalnie i prezentują komunikaty.
+11. Scenariusze błędów i obsługa: wyżej w sekcji 10.
+12. Wyzwania i rozwiązania:
 
 - Debounce i wyścigi zapytań: użyć AbortController i znaczników requestId.
 - Niespójność endpointów tworzenia zestawu: wykrywanie możliwości POST /flashcard-sets przez feature flag w kliencie; jeśli brak, kierować do flow generatora lub blokować tryb “nowy zestaw” z komunikatem.
 - Spójność liczników cards_count/due_cards_count: po operacjach odświeżać nagłówki i/lub re-fetch danych szczegółów.
 - A11y modalów i dialogów: użyć gotowych komponentów z focus trap; testy klawiatury.
-</implementation_breakdown>
+  </implementation_breakdown>

@@ -64,10 +64,10 @@ describe('MyComponent', () => {
   it('handles user interaction', async () => {
     const user = userEvent.setup();
     const handleClick = vi.fn();
-    
+
     render(<MyComponent onClick={handleClick} />);
     await user.click(screen.getByRole('button'));
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });
@@ -106,20 +106,20 @@ npm run test:e2e:report
 **Example**:
 
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('user can login and see dashboard', async ({ page }) => {
+test("user can login and see dashboard", async ({ page }) => {
   // Navigate to login page
-  await page.goto('/login');
-  
+  await page.goto("/login");
+
   // Fill login form
-  await page.getByLabel(/email/i).fill('user@example.com');
-  await page.getByLabel(/password/i).fill('password123');
-  await page.getByRole('button', { name: /login/i }).click();
-  
+  await page.getByLabel(/email/i).fill("user@example.com");
+  await page.getByLabel(/password/i).fill("password123");
+  await page.getByRole("button", { name: /login/i }).click();
+
   // Verify redirect to dashboard
   await expect(page).toHaveURL(/.*dashboard/);
-  await expect(page.getByRole('heading', { name: /dashboard/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /dashboard/i })).toBeVisible();
 });
 ```
 
@@ -129,25 +129,25 @@ For complex flows, use the Page Object Model pattern:
 
 ```typescript
 // tests/fixtures/page-objects.ts
-import type { Page } from '@playwright/test';
+import type { Page } from "@playwright/test";
 
 export class LoginPage {
   constructor(private page: Page) {}
-  
+
   async login(email: string, password: string) {
     await this.page.getByLabel(/email/i).fill(email);
     await this.page.getByLabel(/password/i).fill(password);
-    await this.page.getByRole('button', { name: /login/i }).click();
+    await this.page.getByRole("button", { name: /login/i }).click();
   }
 }
 
 // In your test
-import { LoginPage } from '../fixtures/page-objects';
+import { LoginPage } from "../fixtures/page-objects";
 
-test('login with POM', async ({ page }) => {
+test("login with POM", async ({ page }) => {
   const loginPage = new LoginPage(page);
-  await page.goto('/login');
-  await loginPage.login('user@example.com', 'password123');
+  await page.goto("/login");
+  await loginPage.login("user@example.com", "password123");
 });
 ```
 
@@ -181,33 +181,33 @@ test('login with POM', async ({ page }) => {
 ### Mocking in Vitest
 
 ```typescript
-import { vi } from 'vitest';
+import { vi } from "vitest";
 
 // Mock a function
 const mockFn = vi.fn();
 mockFn.mockReturnValue(42);
 
 // Mock a module
-vi.mock('@/lib/supabase', () => ({
+vi.mock("@/lib/supabase", () => ({
   supabase: {
     auth: {
-      signIn: vi.fn().mockResolvedValue({ user: { id: '123' } }),
+      signIn: vi.fn().mockResolvedValue({ user: { id: "123" } }),
     },
   },
 }));
 
 // Spy on existing function
-const spy = vi.spyOn(console, 'log');
+const spy = vi.spyOn(console, "log");
 ```
 
 ### Mocking in Playwright
 
 ```typescript
 // Mock API responses
-await page.route('**/api/flashcard-sets', async (route) => {
+await page.route("**/api/flashcard-sets", async (route) => {
   await route.fulfill({
     status: 200,
-    body: JSON.stringify([{ id: '1', title: 'Test Set' }]),
+    body: JSON.stringify([{ id: "1", title: "Test Set" }]),
   });
 });
 ```
@@ -235,15 +235,18 @@ await page.route('**/api/flashcard-sets', async (route) => {
 ### Common Issues
 
 **Vitest: "Cannot find module '@/...'"**
+
 - Check path aliases in `vitest.config.ts`
 - Ensure TypeScript paths match
 
 **Playwright: "Timed out waiting for..."**
+
 - Increase timeout in `playwright.config.ts`
 - Check if dev server is running
 - Use `await page.pause()` to debug
 
 **Tests fail in CI but pass locally**
+
 - Check environment variables
 - Ensure database/API mocks are consistent
 - Review CI logs for race conditions

@@ -2,7 +2,7 @@
 
 ## Problem
 
-W PostgreSQL widoki (views) domyślnie działają z uprawnieniami właściciela widoku (SECURITY DEFINER), co oznacza, że **omijają polityki RLS** z tabel bazowych. 
+W PostgreSQL widoki (views) domyślnie działają z uprawnieniami właściciela widoku (SECURITY DEFINER), co oznacza, że **omijają polityki RLS** z tabel bazowych.
 
 Przed migracją `20251016181407_secure_flashcard_sets_view.sql`, widok `flashcard_sets_with_due_count` umożliwiał dostęp do wszystkich danych niezależnie od polityk RLS na tabelach `flashcard_sets`, `flashcards` i `flashcard_progress`.
 
@@ -19,13 +19,14 @@ Migracja `20251016181407_secure_flashcard_sets_view.sql` odtwarza widok z opcją
 Sprawdź, że widok ma włączoną opcję `security_invoker`:
 
 ```sql
-SELECT c.relname, c.reloptions 
-FROM pg_class c 
-WHERE c.relkind = 'v' 
+SELECT c.relname, c.reloptions
+FROM pg_class c
+WHERE c.relkind = 'v'
   AND c.relname = 'flashcard_sets_with_due_count';
 ```
 
 Powinno zwrócić:
+
 ```
 relname                        | reloptions
 -------------------------------+-------------------------

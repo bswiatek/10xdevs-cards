@@ -11,32 +11,41 @@
 ### 1. Utworzone komponenty współdzielone
 
 #### `src/components/forms/FormField.tsx` (nowy)
+
 Uniwersalny komponent pola formularza z:
+
 - Automatyczną obsługą błędów walidacji
 - Wsparcie dla accessibility (ARIA attributes)
 - Dynamiczne renderowanie etykiet z required indicator
 - TypeScript typing
 
 #### `src/components/forms/PasswordField.tsx` (nowy)
+
 Wyspecjalizowany komponent dla pól hasła:
+
 - Rozszerza `FormField`
 - Domyślne placeholder i autocomplete
 - Typ `type="password"`
 
 #### `src/components/forms/EmailField.tsx` (nowy)
+
 Wyspecjalizowany komponent dla pól email:
+
 - Rozszerza `FormField`
 - Domyślne placeholder i autocomplete
 - Typ `type="email"`
 - Automatyczna walidacja email przez przeglądarkę
 
 #### `src/components/forms/FormError.tsx` (nowy)
+
 Komponent dla wyświetlania błędów formularza:
+
 - Spójny styling z design system
 - ARIA role="alert"
 - Reużywalny w całej aplikacji
 
 #### `src/components/forms/index.ts` (nowy)
+
 Barrel export dla łatwiejszego importowania.
 
 ---
@@ -44,7 +53,9 @@ Barrel export dla łatwiejszego importowania.
 ### 2. Utworzony custom hook
 
 #### `src/components/hooks/useAuthForm.ts` (nowy)
+
 Uniwersalny hook dla formularzy z walidacją Zod:
+
 - **Generic type support** - działa z dowolnym schema Zod
 - **Zarządzanie stanem** - values, errors, status
 - **Automatyczna walidacja** - wykorzystuje Zod schema
@@ -52,6 +63,7 @@ Uniwersalny hook dla formularzy z walidacją Zod:
 - **TypeScript inference** - pełne typowanie z schema
 
 **Interfejs:**
+
 ```typescript
 interface UseAuthFormReturn<T> {
   values: z.infer<T>;
@@ -70,11 +82,13 @@ interface UseAuthFormReturn<T> {
 ### 3. Zrefaktoryzowane komponenty
 
 #### `src/components/auth/RegisterForm.tsx`
+
 **Przed:** 198 linii  
 **Po:** 115 linii  
 **Redukcja:** -83 linii (-42%)
 
 **Zmiany:**
+
 - ✅ Wykorzystanie `useAuthForm` hook
 - ✅ Użycie istniejącego `registerSchema` z `src/lib/validations/auth.ts`
 - ✅ Zastąpienie powtarzalnych Input pól komponentami `EmailField` i `PasswordField`
@@ -84,11 +98,13 @@ interface UseAuthFormReturn<T> {
 - ✅ Usunięcie duplikacji kodu
 
 #### `src/components/account/ChangePasswordForm.tsx`
+
 **Przed:** 217 linii  
 **Po:** 136 linii  
 **Redukcja:** -81 linii (-37%)
 
 **Zmiany:**
+
 - ✅ Wykorzystanie `useAuthForm` hook
 - ✅ Użycie istniejącego `changePasswordSchema` z `src/lib/validations/auth.ts`
 - ✅ Zastąpienie 3x Input pól komponentem `PasswordField`
@@ -103,11 +119,13 @@ interface UseAuthFormReturn<T> {
 ## Statystyki refaktoryzacji
 
 ### Redukcja kodu
+
 - **RegisterForm.tsx:** 198 → 115 linii (-42%)
 - **ChangePasswordForm.tsx:** 217 → 136 linii (-37%)
 - **Razem:** 415 → 251 linii (-164 linii, -39.5%)
 
 ### Nowe komponenty reużywalne
+
 - `FormField` - 53 linie
 - `PasswordField` - 40 linii
 - `EmailField` - 34 linie
@@ -116,6 +134,7 @@ interface UseAuthFormReturn<T> {
 - **Razem nowego kodu:** 233 linie
 
 ### Netto
+
 **415 (stary kod) - 251 (zrefaktoryzowany) + 233 (nowy shared) = 397 linii**
 
 Pomimo dodania nowych komponentów shared, całkowita ilość kodu zmniejszyła się o **18 linii (-4.3%)**, przy jednoczesnym zwiększeniu reużywalności i maintainability.
@@ -125,31 +144,37 @@ Pomimo dodania nowych komponentów shared, całkowita ilość kodu zmniejszyła 
 ## Korzyści refaktoryzacji
 
 ### 1. Zgodność z architekturą projektu
+
 - ✅ Wykorzystanie istniejących Zod schemas z `src/lib/validations/`
 - ✅ Zgodność z tech stack (Zod + TypeScript)
 - ✅ Spójny z guidelines projektu
 
 ### 2. Reużywalność
+
 - ✅ 4 nowe komponenty shared (`FormField`, `PasswordField`, `EmailField`, `FormError`)
 - ✅ 1 nowy uniwersalny hook (`useAuthForm`)
 - ✅ Możliwość wykorzystania w innych formularzach (LoginForm, ForgotPasswordForm)
 
 ### 3. Eliminacja duplikacji (DRY)
+
 - ✅ Brak powtarzania walidacji email/hasła
 - ✅ Wspólna logika obsługi błędów
 - ✅ Ujednolicone komponenty pól formularza
 
 ### 4. Maintainability
+
 - ✅ Zmiana stylu jednego pola → automatyczna zmiana wszędzie
 - ✅ Centralna walidacja w Zod schemas
 - ✅ Łatwiejsze dodawanie nowych formularzy
 
 ### 5. Type Safety
+
 - ✅ Pełne typowanie z Zod inference
 - ✅ TypeScript sprawdza zgodność values z schema
 - ✅ Eliminacja błędów runtime związanych z typami
 
 ### 6. Testowanie
+
 - ✅ Hook `useAuthForm` można testować osobno
 - ✅ Komponenty form fields testowalne w izolacji
 - ✅ Łatwiejsze mockowanie
@@ -183,7 +208,9 @@ Pomimo dodania nowych komponentów shared, całkowita ilość kodu zmniejszyła 
 ## Compliance
 
 ### Linting
+
 ✅ Wszystkie nowe i zmodyfikowane pliki przechodzą linting:
+
 ```bash
 npx eslint src/components/auth/RegisterForm.tsx \
            src/components/account/ChangePasswordForm.tsx \
@@ -193,14 +220,18 @@ npx eslint src/components/auth/RegisterForm.tsx \
 ```
 
 ### Build
+
 ✅ Projekt buduje się pomyślnie:
+
 ```bash
 npm run build
 # ✓ built in 2.26s
 ```
 
 ### React Compiler
+
 ✅ Zgodność z React Compiler:
+
 - useEffect dla side effects (onError callback)
 - Brak mutacji zewnętrznych zmiennych
 - Proper hooks usage
@@ -210,10 +241,12 @@ npm run build
 ## Możliwości dalszego rozwoju
 
 ### Quick Wins (następne kroki)
+
 1. **LoginForm.tsx** - zastosować ten sam pattern
 2. **ForgotPasswordRequestForm.tsx** - refaktoryzacja analogiczna
 
 ### Long-term improvements
+
 1. **React Hook Form integration**
    - Rozważyć migrację do React Hook Form dla większej funkcjonalności
    - Zachować kompatybilność z Zod schemas
@@ -235,6 +268,7 @@ npm run build
 ## Przykłady użycia
 
 ### Przed refaktoryzacją
+
 ```typescript
 // 198 linii powtarzalnego boilerplate
 const [email, setEmail] = useState("");
@@ -254,7 +288,7 @@ return (
   <form>
     <div className="space-y-2">
       <label htmlFor={emailId}>Email *</label>
-      <Input id={emailId} type="email" value={email} 
+      <Input id={emailId} type="email" value={email}
              onChange={(e) => setEmail(e.target.value)} />
       {validationErrors.email && <p>{validationErrors.email}</p>}
     </div>
@@ -264,9 +298,10 @@ return (
 ```
 
 ### Po refaktoryzacji
+
 ```typescript
 // 115 linii czystego, deklaratywnego kodu
-const { values, errors, isLoading, setValue, clearError, handleSubmit } = 
+const { values, errors, isLoading, setValue, clearError, handleSubmit } =
   useAuthForm({
     schema: registerSchema,
     onSubmit: async (data) => { /* ... */ }
@@ -298,14 +333,14 @@ return (
 
 ## Metryki sukcesu
 
-| Metryka | Cel | Osiągnięte |
-|---------|-----|------------|
-| Redukcja LOC | 25-40% | ✅ 39.5% |
-| Reużywalne komponenty | Min 3 | ✅ 5 (4 komponenty + 1 hook) |
-| Wykorzystanie Zod | 100% | ✅ 100% |
-| Zero linting errors | Tak | ✅ Tak |
-| Build success | Tak | ✅ Tak |
-| DRY compliance | Wysoka | ✅ Wysoka |
+| Metryka               | Cel    | Osiągnięte                   |
+| --------------------- | ------ | ---------------------------- |
+| Redukcja LOC          | 25-40% | ✅ 39.5%                     |
+| Reużywalne komponenty | Min 3  | ✅ 5 (4 komponenty + 1 hook) |
+| Wykorzystanie Zod     | 100%   | ✅ 100%                      |
+| Zero linting errors   | Tak    | ✅ Tak                       |
+| Build success         | Tak    | ✅ Tak                       |
+| DRY compliance        | Wysoka | ✅ Wysoka                    |
 
 ---
 

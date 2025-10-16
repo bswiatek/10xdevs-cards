@@ -50,8 +50,10 @@ TypeScript is a strongly typed programming language that builds on JavaScript, g
 ### Sanityzacja HTML
 
 1. Wklej tekst z HTML:
+
 ```html
-<h1>Tytuł</h1><p>Paragraf z <strong>bold</strong> i <em>italic</em></p>
+<h1>Tytuł</h1>
+<p>Paragraf z <strong>bold</strong> i <em>italic</em></p>
 ```
 
 2. HTML zostanie automatycznie usunięty
@@ -62,11 +64,13 @@ TypeScript is a strongly typed programming language that builds on JavaScript, g
 ### Symulacja timeout (do testów manualnych z modyfikacją kodu)
 
 W `useGenerateForm.ts` zmień:
+
 ```typescript
 const TIMEOUT_MS = 1000; // Zmień z 60000 na 1000 (1 sekunda)
 ```
 
 Następnie:
+
 1. Wklej poprawny tekst
 2. Kliknij "Generuj fiszki"
 3. Po 1 sekundzie pojawi się banner z błędem timeout
@@ -76,6 +80,7 @@ Następnie:
 ### Symulacja błędu API (jeśli endpoint zwraca błąd)
 
 Jeśli API zwróci błąd:
+
 - **400** - Banner: "Błąd walidacji" z komunikatem
 - **503** - Banner: "Usługa niedostępna" + przycisk retry
 - **500** - Banner: "Błąd serwera" + przycisk retry
@@ -100,11 +105,13 @@ Jeśli API zwróci błąd:
 ## Testy responsywności
 
 ### Mobile (< 640px)
+
 - Przycisk "Generuj fiszki" ma full width
 - Textarea zajmuje pełną szerokość
 - Layout jest jednkolumnowy
 
 ### Tablet/Desktop (>= 640px)
+
 - Przycisk "Generuj fiszki" ma auto width
 - Layout pozostaje czytelny z paddingami
 
@@ -170,6 +177,7 @@ GenerateView (kontener)
 **POST** `/api/generations`
 
 Request:
+
 ```json
 {
   "source_text": "string (1000-10000 chars)"
@@ -177,6 +185,7 @@ Request:
 ```
 
 Response 201:
+
 ```json
 {
   "generation_session_id": 1,
@@ -189,6 +198,7 @@ Response 201:
 ```
 
 Response 400:
+
 ```json
 {
   "error": "Bad Request",
@@ -200,6 +210,7 @@ Response 400:
 ## Kontakt/Issues
 
 Jeśli znajdziesz problemy:
+
 1. Sprawdź dokumentację: `_ai/view-generation-implementation-status.md`
 2. Sprawdź plan: `_ai/view-generation-implementation-plan.md`
 3. Sprawdź logi w terminalu serwera dev

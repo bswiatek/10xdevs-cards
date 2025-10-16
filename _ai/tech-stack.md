@@ -11,6 +11,7 @@ Dla projektu realizowanego przez jedną osobę to połączenie jest **optymalne*
 **Vitest + React Testing Library** - wybór zintegrowany ze środowiskiem Vite/Astro, zapewniający szybkie wykonywanie testów jednostkowych i integracyjnych. React Testing Library promuje testowanie komponentów z perspektywy użytkownika, co przekłada się na wyższą jakość interfejsu. Vitest oferuje hot reload podczas pisania testów, co przyspiesza cykl development o ok. 40% w porównaniu z klasycznym Jest.
 
 **Zakres testów jednostkowych**:
+
 - Logika walidacji (schematy Zod w `src/lib/validations/`)
 - Funkcje pomocnicze (`src/lib/utils.ts`, `src/lib/logging.ts`)
 - Logika biznesowa w custom hookach React (`src/components/hooks/*`)
@@ -22,6 +23,7 @@ Dla projektu realizowanego przez jedną osobę to połączenie jest **optymalne*
 **Playwright** - nowoczesne narzędzie oferujące doskonałą kontrolę nad przeglądarką, możliwość mockowania API i nagrywania testów. Playwright jest szybszy niż Cypress o ok. 25% i lepiej radzi sobie z testowaniem aplikacji multi-page (co jest istotne dla Astro z jego page-based routing).
 
 **Zakres testów E2E**:
+
 - Pełna ścieżka użytkownika: rejestracja → generowanie fiszek → recenzja → zapis → zarządzanie
 - Testy autentykacji (logowanie, wylogowanie, zmiana hasła)
 - Ochrona routingu (próba dostępu bez zalogowania)
@@ -36,6 +38,7 @@ Dla projektu realizowanego przez jedną osobę to połączenie jest **optymalne*
 **k6 (Grafana)** - nowoczesne narzędzie do testów obciążeniowych, pisane w JavaScripcie, łatwe do integracji w CI/CD. Kluczowe dla weryfikacji endpointu `POST /api/generations` (generowanie przez AI) oraz `GET /api/flashcard-sets` z dużą liczbą zestawów (>1000).
 
 **Krytyczne metryki**:
+
 - Czas odpowiedzi generowania fiszek: <60s (zgodnie z PRD)
 - Wydajność paginacji dashboardu przy 1000+ zestawach
 - Zużycie zasobów serwera podczas równoczesnych generacji
@@ -43,6 +46,7 @@ Dla projektu realizowanego przez jedną osobę to połączenie jest **optymalne*
 ### Integracja z CI/CD
 
 Wszystkie testy (jednostkowe, integracyjne, E2E) będą uruchamiane automatycznie w pipeline'ie CI/CD:
+
 - **Pre-commit hooks**: Testy jednostkowe (Husky + lint-staged)
 - **Pull Request**: Pełny zestaw testów jednostkowych i integracyjnych
 - **Merge do main**: Testy E2E na środowisku stagingowym

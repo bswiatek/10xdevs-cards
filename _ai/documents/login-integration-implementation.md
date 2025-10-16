@@ -12,11 +12,13 @@ Przeprowadzono pełną integrację modułu logowania z backendem Astro zgodnie z
 ## ⚠️ Ważne: Fix dla Astro 5 Cookies API
 
 **Problem:** Astro 5 `AstroCookies` nie posiada metody `getAll()`, co powodowało błąd:
+
 ```
 TypeError: cookies.getAll is not a function
 ```
 
 **Rozwiązanie:** W `src/db/supabase.client.ts` zaimplementowano manualną iterację przez cookies Supabase:
+
 - Ekstrakcja project reference z URL
 - Sprawdzenie znanych wzorców cookies: `sb-{ref}-auth-token*`
 - Zwracanie tylko istniejących cookies
@@ -28,6 +30,7 @@ Ten fix jest specyficzny dla Astro 5 i działa poprawnie z `@supabase/ssr`.
 ### 1. Konfiguracja Supabase SSR
 
 **Zmiany w pliku: `src/db/supabase.client.ts`**
+
 - Dodano wsparcie dla SSR poprzez `@supabase/ssr`
 - Utworzono funkcję `createSupabaseServerClient()` do zarządzania cookies w kontekście Astro
 - **FIX:** Zaimplementowano manualną iterację przez cookies (Astro 5 compatibility)
@@ -35,15 +38,18 @@ Ten fix jest specyficzny dla Astro 5 i działa poprawnie z `@supabase/ssr`.
 - Wyeksportowano typ `SupabaseClient` dla TypeScript
 
 **Zmiany w pliku: `src/middleware/index.ts`**
+
 - Zaktualizowano middleware do używania SSR klienta
 - Automatyczne tworzenie klienta z obsługą cookies dla każdego żądania
 
 **Zmiany w pliku: `src/env.d.ts`**
+
 - Zaktualizowano typ `context.locals.supabase` do użycia nowego SSR klienta
 
 ### 2. Walidacja danych (Zod schemas)
 
 **Nowy plik: `src/lib/validations/auth.ts`**
+
 - `loginSchema` - walidacja email + hasło
 - `registerSchema` - walidacja email + hasło + potwierdzenie (min. 8 znaków)
 - `changePasswordSchema` - walidacja zmiany hasła
@@ -53,6 +59,7 @@ Ten fix jest specyficzny dla Astro 5 i działa poprawnie z `@supabase/ssr`.
 ### 3. API Endpoints
 
 **Nowy plik: `src/pages/api/auth/login.ts`**
+
 - Endpoint POST `/api/auth/login`
 - Walidacja danych wejściowych z Zod
 - Logowanie przez Supabase Auth `signInWithPassword()`
@@ -61,6 +68,7 @@ Ten fix jest specyficzny dla Astro 5 i działa poprawnie z `@supabase/ssr`.
 - Sesja automatycznie zapisana w cookies przez SSR client
 
 **Nowy plik: `src/pages/api/auth/register.ts`**
+
 - Endpoint POST `/api/auth/register`
 - Walidacja z Zod
 - Rejestracja przez Supabase Auth `signUp()`
@@ -69,6 +77,7 @@ Ten fix jest specyficzny dla Astro 5 i działa poprawnie z `@supabase/ssr`.
 - Auto-login po rejestracji
 
 **Nowy plik: `src/pages/api/auth/logout.ts`**
+
 - Endpoint POST `/api/auth/logout`
 - Wylogowanie przez Supabase Auth `signOut()`
 - Automatyczne czyszczenie cookies
@@ -76,16 +85,19 @@ Ten fix jest specyficzny dla Astro 5 i działa poprawnie z `@supabase/ssr`.
 ### 4. Komponenty React
 
 **Zaktualizowano: `src/components/auth/LoginForm.tsx`**
+
 - Zintegrowano z API `/api/auth/login`
 - Przekierowanie do `/generate` po sukcesie
 - Obsługa błędów z komunikatami
 
 **Zaktualizowano: `src/components/auth/RegisterForm.tsx`**
+
 - Zintegrowano z API `/api/auth/register`
 - Przekierowanie do `/generate` po sukcesie (auto-login)
 - Walidacja po stronie klienta
 
 **Nowy plik: `src/components/auth/LogoutButton.tsx`**
+
 - Przycisk wylogowania z ikoną
 - Integracja z API `/api/auth/logout`
 - Przekierowanie do `/login` po wylogowaniu
@@ -94,29 +106,36 @@ Ten fix jest specyficzny dla Astro 5 i działa poprawnie z `@supabase/ssr`.
 ### 5. Strony Astro
 
 **Zaktualizowano: `src/pages/login.astro`**
+
 - Dodano sprawdzenie sesji SSR
 - Przekierowanie do `/generate` jeśli użytkownik jest zalogowany
 
 **Zaktualizowano: `src/pages/register.astro`**
+
 - Dodano sprawdzenie sesji SSR
 - Przekierowanie do `/generate` jeśli użytkownik jest zalogowany
 
 **Zaktualizowano: `src/pages/generate.astro`**
+
 - Dodano ochronę przed niezalogowanymi użytkownikami
 - Przekierowanie do `/login` jeśli brak sesji
 
 **Zaktualizowano: `src/pages/review/sessionId.astro`**
+
 - Dodano ochronę przed niezalogowanymi użytkownikami
 
 **Zaktualizowano: `src/pages/account/password.astro`**
+
 - Dodano ochronę przed niezalogowanymi użytkownikami
 
 **Zaktualizowano: `src/pages/index.astro`**
+
 - Dodano przekierowanie do `/generate` dla zalogowanych użytkowników
 
 ### 6. Layout i nawigacja
 
 **Zaktualizowano: `src/layouts/Layout.astro`**
+
 - Dodano sprawdzenie sesji
 - Dodano header z nawigacją dla zalogowanych użytkowników
 - Linki do "Generuj" i "Moje zestawy"
@@ -185,6 +204,7 @@ src/
 ```
 
 **Legenda:**
+
 - 🆕 = Nowy plik
 - ✨ = Zmodyfikowany plik
 
@@ -200,6 +220,7 @@ npm install zod @supabase/ssr
 ## Flow użytkownika
 
 ### Rejestracja
+
 1. Użytkownik wchodzi na `/register`
 2. Wypełnia email, hasło, potwierdzenie
 3. Walidacja po stronie klienta (React)
@@ -209,6 +230,7 @@ npm install zod @supabase/ssr
 7. Redirect do `/generate`
 
 ### Logowanie
+
 1. Użytkownik wchodzi na `/login`
 2. Wypełnia email i hasło
 3. POST do `/api/auth/login`
@@ -218,6 +240,7 @@ npm install zod @supabase/ssr
 7. Redirect do `/generate`
 
 ### Wylogowanie
+
 1. Użytkownik klika "Wyloguj" (widoczne wszędzie)
 2. POST do `/api/auth/logout`
 3. Supabase `signOut()`
@@ -225,6 +248,7 @@ npm install zod @supabase/ssr
 5. Redirect do `/login`
 
 ### Ochrona tras
+
 1. Każda chroniona strona sprawdza `getSession()` w SSR
 2. Jeśli brak sesji → redirect do `/login`
 3. Jeśli sesja istnieje → renderowanie strony
@@ -232,12 +256,15 @@ npm install zod @supabase/ssr
 ## Testy
 
 ### Build
+
 ```bash
 npm run build
 ```
+
 ✅ Build zakończony sukcesem - wszystkie pliki TypeScript kompilują się bez błędów
 
 ### Weryfikacja manualna (TODO po uruchomieniu dev)
+
 - [ ] Rejestracja nowego użytkownika
 - [ ] Logowanie istniejącego użytkownika
 - [ ] Wylogowanie
@@ -277,6 +304,7 @@ Zgodnie z auth-spec.md, do zaimplementowania w kolejnych fazach:
 ## Kontakt
 
 W przypadku pytań lub problemów, sprawdź:
+
 - `_ai/auth-spec.md` - pełna specyfikacja auth
 - `_ai/prd.md` - wymagania produktowe
 - `.cursor/rules/*.mdc` - best practices

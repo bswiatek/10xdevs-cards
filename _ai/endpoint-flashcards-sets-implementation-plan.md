@@ -24,6 +24,7 @@ Endpoint odpowiada za tworzenie nowego zestawu fiszek, zarówno na podstawie gen
 **Przykłady Request Body**:
 
 - **Generacja AI**:
+
 ```json
 {
   "title": "Introduction to Psychology",
@@ -46,6 +47,7 @@ Endpoint odpowiada za tworzenie nowego zestawu fiszek, zarówno na podstawie gen
 ```
 
 - **Ręczne stworzenie**:
+
 ```json
 {
   "title": "My Custom Flashcard Set"
@@ -73,6 +75,7 @@ Endpoint odpowiada za tworzenie nowego zestawu fiszek, zarówno na podstawie gen
   - generation_metadata (jeśli dotyczy)
 
 - **Przykład odpowiedzi**:
+
 ```json
 {
   "id": 1003,
@@ -113,15 +116,15 @@ Endpoint odpowiada za tworzenie nowego zestawu fiszek, zarówno na podstawie gen
 
 ## 7. Obsługa błędów
 
-- **400 Bad Request**: 
+- **400 Bad Request**:
   - Pusty tytuł
   - Brak wymaganych danych (np. flashcards przy generacji AI)
   - Niepoprawny format danych wejściowych
-- **401 Unauthorized**: 
+- **401 Unauthorized**:
   - Brak lub nieprawidłowy token
-- **404 Not Found**: 
+- **404 Not Found**:
   - Nie znaleziono sesji generacji (dla generation_session_id)
-- **422 Unprocessable Entity**: 
+- **422 Unprocessable Entity**:
   - Błędy walidacyjne, np. przekroczenie dozwolonej długości tekstu fiszek
-- **500 Internal Server Error**: 
+- **500 Internal Server Error**:
   - Błędy systemowe lub naruszenia zasad logiki biznesowej

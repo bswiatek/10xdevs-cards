@@ -24,8 +24,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -49,8 +49,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -89,8 +89,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -145,12 +145,12 @@ jobs:
         run: |
           echo "## 🚀 Pull Request CI Status" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           # Check job statuses
           LINT_STATUS="${{ needs.lint.result }}"
           UNIT_STATUS="${{ needs.unit-tests.result }}"
           E2E_STATUS="${{ needs.e2e-tests.result }}"
-          
+
           # Determine overall status
           if [[ "$LINT_STATUS" == "success" && "$UNIT_STATUS" == "success" && "$E2E_STATUS" == "success" ]]; then
             OVERALL="✅ All checks passed"
@@ -159,33 +159,33 @@ jobs:
             OVERALL="❌ Some checks failed"
             echo "status=failure" >> $GITHUB_OUTPUT
           fi
-          
+
           echo "### $OVERALL" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
-          
+
           # Lint status
           if [[ "$LINT_STATUS" == "success" ]]; then
             echo "| 🔍 Lint | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
           else
             echo "| 🔍 Lint | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # Unit tests status
           if [[ "$UNIT_STATUS" == "success" ]]; then
             echo "| 🧪 Unit Tests | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
           else
             echo "| 🧪 Unit Tests | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # E2E tests status
           if [[ "$E2E_STATUS" == "success" ]]; then
             echo "| 🎭 E2E Tests | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
           else
             echo "| 🎭 E2E Tests | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # Save comment body
           cat $GITHUB_STEP_SUMMARY > comment.md
 
@@ -195,21 +195,21 @@ jobs:
           script: |
             const fs = require('fs');
             const comment = fs.readFileSync('comment.md', 'utf8');
-            
+
             // Find existing comment
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
-            
+
             const botComment = comments.find(comment => 
               comment.user.type === 'Bot' && 
               comment.body.includes('Pull Request CI Status')
             );
-            
+
             const commentBody = comment + '\n\n---\n*Updated: ' + new Date().toISOString() + '*';
-            
+
             if (botComment) {
               // Update existing comment
               await github.rest.issues.updateComment({

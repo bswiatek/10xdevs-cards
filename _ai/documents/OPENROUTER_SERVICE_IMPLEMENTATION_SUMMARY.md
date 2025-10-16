@@ -9,7 +9,9 @@ Successfully implemented the OpenRouter service for AI-powered flashcard generat
 ## Files Created/Modified
 
 ### 1. `/src/types.ts`
+
 **Added OpenRouter-specific types:**
+
 - `MessageRole` - Type for chat message roles (system, user, assistant)
 - `Message` - Chat message structure
 - `JsonSchemaFormat` - JSON Schema format for structured outputs
@@ -21,24 +23,27 @@ Successfully implemented the OpenRouter service for AI-powered flashcard generat
 - `ChatResponse` - Complete chat response structure
 
 ### 2. `/src/lib/services/openrouter.service.ts` (NEW)
+
 **Implemented complete OpenRouter service with:**
 
 #### Constructor
+
 - API key validation (guard clause)
 - Configurable base URL (default: `https://openrouter.ai/api/v1`)
 - Default model: `openai/gpt-4o-mini`
 - Customizable default parameters
 
 #### Public Methods
+
 - `chat(options)` - Main method for chat completions
   - Validates input parameters
   - Executes requests with retry logic (max 3 attempts)
   - Exponential backoff with jitter for transient errors
   - Validates structured outputs when required
-  
 - `withDefaults(partialConfig)` - Creates new service instance with overridden defaults
 
 #### Private Methods
+
 - `buildRequestBody()` - Constructs OpenRouter API request body
 - `executeRequest()` - Executes HTTP request with proper headers
 - `validateParameters()` - Validates parameter ranges
@@ -51,7 +56,9 @@ Successfully implemented the OpenRouter service for AI-powered flashcard generat
 - `sleep()` - Utility for retry delays
 
 #### Error Handling
+
 Custom `OpenRouterError` class with error codes:
+
 - `MISSING_API_KEY` - API key not provided or invalid
 - `INVALID_MODEL` - Unsupported model specified
 - `INVALID_PARAMETERS` - Parameters out of acceptable ranges
@@ -64,41 +71,49 @@ Custom `OpenRouterError` class with error codes:
 - `SCHEMA_VALIDATION_FAILED` - Response doesn't match schema (422)
 
 #### Retry Strategy
+
 - Maximum 3 retry attempts
-- Exponential backoff: base delay 1000ms * 2^(attempt-1)
+- Exponential backoff: base delay 1000ms \* 2^(attempt-1)
 - Random jitter up to 1000ms added to backoff
 - Only retries transient errors (network, rate limit, timeout)
 - Non-transient errors fail immediately
 
 #### Security Features
+
 - API key kept server-side only
 - No sensitive data in error messages
 - HTTP-Referer and X-Title headers for tracking
 - Parameter validation to prevent injection attacks
 
 ### 3. `/src/lib/services/generation.service.ts` (MODIFIED)
+
 **Replaced mock generation with real AI:**
 
 #### New Helper Functions
+
 - `buildSystemMessage()` - Creates system prompt with flashcard generation guidelines
 - `buildUserMessage(sourceText)` - Creates user message with source text
 - `parseFlashcardCandidates(content)` - Validates and parses AI response
 
 #### JSON Schema Definition
+
 `FLASHCARD_SCHEMA` - Strict JSON schema enforcing:
+
 ```typescript
 {
   candidates: [
     {
-      front: string,  // Question/prompt
-      back: string    // Answer/explanation
-    }
-  ]
+      front: string, // Question/prompt
+      back: string, // Answer/explanation
+    },
+  ];
 }
 ```
 
 #### Updated Main Function
+
 `generateFlashcardsFromText()` now:
+
 1. Initializes OpenRouter service with API key from environment
 2. Builds system and user messages with clear instructions
 3. Calls OpenRouter with structured output enforcement
@@ -108,7 +123,9 @@ Custom `OpenRouterError` class with error codes:
 7. Logs token usage and performance metrics
 
 #### Error Codes
+
 New error codes added:
+
 - `AI_SERVICE_NOT_CONFIGURED` - API key missing
 - `AI_GENERATION_FAILED` - AI call failed
 - `AI_RESPONSE_PARSE_ERROR` - Response parsing failed
@@ -118,6 +135,7 @@ New error codes added:
 - `AI_RESPONSE_NO_CANDIDATES` - No candidates generated
 
 #### Configuration
+
 - Model: `openai/gpt-4o-mini`
 - Temperature: 0.3 (lower for consistency)
 - Max tokens: 2000
@@ -135,6 +153,7 @@ Must be set in `.env` file (already defined in `.env.example`).
 ## API Integration Details
 
 ### Request Headers
+
 ```
 Content-Type: application/json
 Authorization: Bearer {OPENROUTER_API_KEY}
@@ -143,6 +162,7 @@ X-Title: 10xDevs Cards
 ```
 
 ### Request Body Structure
+
 ```json
 {
   "model": "openai/gpt-4o-mini",
@@ -152,7 +172,7 @@ X-Title: 10xDevs Cards
       "content": "..."
     },
     {
-      "role": "user", 
+      "role": "user",
       "content": "..."
     }
   ],
@@ -170,6 +190,7 @@ X-Title: 10xDevs Cards
 ```
 
 ### Response Structure
+
 ```json
 {
   "choices": [
@@ -191,6 +212,7 @@ X-Title: 10xDevs Cards
 ## Testing Recommendations
 
 ### Unit Tests (to be added)
+
 - Test parameter validation
 - Test error mapping
 - Test JSON schema validation
@@ -198,12 +220,14 @@ X-Title: 10xDevs Cards
 - Test prompt augmentation
 
 ### Integration Tests (to be added)
+
 - Test end-to-end flashcard generation
 - Test with various input lengths
 - Test error scenarios (API down, rate limits)
 - Test with different models
 
 ### Manual Testing
+
 1. Set `OPENROUTER_API_KEY` in `.env`
 2. Start development server: `npm run dev`
 3. Navigate to `/generate`
@@ -233,6 +257,7 @@ X-Title: 10xDevs Cards
 ## Compliance with Plan
 
 ✅ All requirements from `service-openrouter-implementation-plan.md` implemented:
+
 - ✅ Proper class structure with constructor validation
 - ✅ Public `chat()` method with full parameter support
 - ✅ Public `withDefaults()` method for configuration

@@ -18,7 +18,6 @@
 - `/study/:setId` - Sesja nauki (prezentacja fiszek z oceną 1-5)
 - `/settings` - Ustawienia konta (zmiana hasła)
 
-
 #### Przepływy Użytkownika
 
 **Przepływ 1: Generowanie fiszek AI**
@@ -85,7 +84,6 @@
 - `POST /study-sessions` - start sesji nauki
 - `POST /study-sessions/:id/reviews` - zapis oceny fiszki (rating 1-5, FSRS update)
 
-
 #### Zarządzanie Stanem
 
 **State Management**: React Context API + hooks (dla MVP, bez Redux/Zustand)
@@ -109,7 +107,6 @@
 - Network errors: offline indicator + retry logic
 - Validation errors: inline form feedback
 
-
 ### Responsywność, Dostępność i Bezpieczeństwo
 
 #### Responsywność (Mobile-Responsive)
@@ -126,7 +123,6 @@
 - Lista kandydatów: vertical stacking przycisków Akceptuj/Edytuj/Odrzuć
 - Interfejs nauki: duże przyciski oceny (min 44x44px) dla touch
 - Paginacja: "Załaduj więcej" zamiast numerowanych stron na mobile
-
 
 #### Dostępność
 
@@ -147,7 +143,6 @@
 - Enter/Space dla przycisków
 - Escape dla zamykania modali
 - Arrow keys dla nawigacji między fiszkami (opcjonalnie)
-
 
 #### Bezpieczeństwo
 
@@ -182,7 +177,6 @@
 - `Spinner` - loading indicator (bez progresu w MVP)
 - `Toast` - notyfikacje sukcesu/błędu
 - `ConfirmDialog` - simple dialog dla usuwania (native confirm lub custom)
-
 
 #### Wzorce Interakcji
 
@@ -225,7 +219,6 @@
 - Każda fiszka: accordion (expand/collapse) lub karty z przód/tył widoczne
 - Inline actions: Edytuj (ikona), Usuń (ikona) z confirm dialog
 
-
 ### Obsługa Stanów Błędów i Wyjątków
 
 **Typy błędów z API**:
@@ -253,7 +246,6 @@
 - Format: timestamp, log_level (ERROR/WARNING), event_type, message, user_id, metadata
 - Dostęp dla administratorów: bezpośrednio z bazy danych (brak panelu admina w MVP)
 
-
 ### Strategie Buforowania i Optymalizacji Wydajności
 
 **Lazy Loading**:
@@ -279,15 +271,26 @@
 
 ## Unresolved Issues
 
-1. **Shadcn/ui Integration** - PRD wspomina o Shadcn/ui w stacku, ale tech-stack.md rekomenduje rezygnację dla uproszczenia MVP. Wymaga ostatecznej decyzji: używać Shadcn/ui components czy custom Tailwind components? 
+1. **Shadcn/ui Integration** - PRD wspomina o Shadcn/ui w stacku, ale tech-stack.md rekomenduje rezygnację dla uproszczenia MVP. Wymaga ostatecznej decyzji: używać Shadcn/ui components czy custom Tailwind components?
+
 - Używać Shadcn/ui, tech-stack.md został zaktualizowany
+
 2. **Email Verification** - PRD wyraźnie stwierdza "Brak weryfikacji email" w MVP, ale tech-stack.md ostrzega o krytycznym ryzyku bezpieczeństwa (spam, nadużycia). Czy warto dodać weryfikację pomimo wydłużenia czasu rozwoju o ~1 tydzień?
+
 - Nie dodajemy
+
 3. **Error Recovery dla Generacji** - Co się dzieje z `generation_session_id` po błędzie? Czy można retry z tym samym ID czy trzeba utworzyć nowy? API plan nie definiuje tego scenariusza.
+
 - można retry z tym samym id
+
 4. **Breadcrumb Navigation** - Nie zdefiniowano czy aplikacja powinna mieć breadcrumbs dla nawigacji (szczególnie w flow: lista → szczegóły zestawu → sesja nauki). Czy dodać dla UX?
+
 - tak, powinna mieć
+
 5. **Dark Mode** - PRD wspomina "Brak trybu ciemnego (można dodać w przyszłości)", ale nowoczesne aplikacje edukacyjne często tego wymagają. Czy warto dodać do MVP jeśli nie wydłuży to znacząco rozwoju (Tailwind dark: prefix)?
+
 - na tym etapie nie dodajemy
+
 6. **Pagination Strategy Long-term** - Paginacja kliencka (20-30 fiszek) działa dla MVP, ale GET `/flashcard-sets/:id` zwraca wszystkie fiszki zestawu. Dla zestawów >100 fiszek może być problem wydajnościowy. Czy modyfikować API o server-side pagination dla fiszek?
+
 - obecnie zostawmy paginację tylko na froncie

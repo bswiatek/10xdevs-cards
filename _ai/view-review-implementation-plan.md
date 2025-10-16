@@ -22,7 +22,6 @@ Jeśli sesja nie jest dostępna w pamięci klienta dla przekazanego :generationS
 - SaveSetTitleModal: modal nadania tytułu zestawu przed wysłaniem POST /api/flashcard-sets.
 - Toast/Alert: wyświetlanie komunikatów sukcesu i błędów zgodnie z kryteriami akceptacji i obsługą błędów endpointu.
 
-
 ## 4. Szczegóły komponentów
 
 ### ReviewViewPage
@@ -30,104 +29,97 @@ Jeśli sesja nie jest dostępna w pamięci klienta dla przekazanego :generationS
 - Opis: Główny kontener widoku, inicjalizuje stan recenzji na podstawie GenerationSessionDTO i renderuje sekcje listy oraz nagłówek.
 - Główne elementy: wrapper layoutu, ReviewHeader, CandidateList, SaveSetTitleModal (kontrolowany), EditCandidateModal (kontrolowany), Toast.
 - Obsługiwane interakcje:
-    - Inicjalizacja stanu z GenerationSessionDTO po wejściu na widok.
-    - Próba zapisu zestawu (otwiera modal tytułu, waliduje warunki i wywołuje API).
-    - Obsługa błędów 400/404/422/500 z POST /api/flashcard-sets.
+  - Inicjalizacja stanu z GenerationSessionDTO po wejściu na widok.
+  - Próba zapisu zestawu (otwiera modal tytułu, waliduje warunki i wywołuje API).
+  - Obsługa błędów 400/404/422/500 z POST /api/flashcard-sets.
 - Obsługiwana walidacja:
-    - Blokada zapisu gdy 0 zaakceptowanych/zaedytowanych (UI i weryfikacja przez zod refine po stronie API).
-    - Tytuł zestawu 1–200 znaków (UI zgodny ze schematem CreateFlashcardSetSchema).
+  - Blokada zapisu gdy 0 zaakceptowanych/zaedytowanych (UI i weryfikacja przez zod refine po stronie API).
+  - Tytuł zestawu 1–200 znaków (UI zgodny ze schematem CreateFlashcardSetSchema).
 - Typy:
-    - GenerationSessionDTO (wejście), FlashcardCandidateWithActionDTO (do POST), CreateFlashcardSetCommand (payload), CreateFlashcardSetResponseDTO (odpowiedź).
+  - GenerationSessionDTO (wejście), FlashcardCandidateWithActionDTO (do POST), CreateFlashcardSetCommand (payload), CreateFlashcardSetResponseDTO (odpowiedź).
 - Propsy:
-    - Router param generationSessionId, opcjonalny initialSession (np. z nawigacji po POST /api/generations).
-
+  - Router param generationSessionId, opcjonalny initialSession (np. z nawigacji po POST /api/generations).
 
 ### ReviewHeader
 
 - Opis: Pasek z licznikami zaakceptowanych/odrzuconych/pozostałych oraz przyciskiem Zapisz zestaw (disabled gdy 0 zaakceptowanych).
 - Główne elementy: wartości liczników, przycisk Zapisz zestaw, pomocnicze etykiety.
 - Obsługiwane interakcje:
-    - Klik Zapisz zestaw otwiera SaveSetTitleModal.
+  - Klik Zapisz zestaw otwiera SaveSetTitleModal.
 - Obsługiwana walidacja:
-    - Disabled gdy brak zaakceptowanych/zaedytowanych.
+  - Disabled gdy brak zaakceptowanych/zaedytowanych.
 - Typy:
-    - CountersVM: accepted, rejected, remaining (pochodne z ReviewState).
+  - CountersVM: accepted, rejected, remaining (pochodne z ReviewState).
 - Propsy:
-    - counters, onRequestSave().
-
+  - counters, onRequestSave().
 
 ### CandidateList
 
 - Opis: Lista przewijalna kart kandydatów, prezentująca przód/tył, status i dostępne akcje.
 - Główne elementy: kolekcja CandidateCard, pusta lista z komunikatem gdy 0 kandydatów pozostało do decyzji.
 - Obsługiwane interakcje:
-    - Przekazanie handlerów accept/reject/edit/undo do kart.
+  - Przekazanie handlerów accept/reject/edit/undo do kart.
 - Obsługiwana walidacja:
-    - Brak własnej – delegacja do CandidateCard/EditCandidateModal.
+  - Brak własnej – delegacja do CandidateCard/EditCandidateModal.
 - Typy:
-    - ReviewCandidateVM[] (opis poniżej), FlashcardActionType.
+  - ReviewCandidateVM[] (opis poniżej), FlashcardActionType.
 - Propsy:
-    - candidates: ReviewCandidateVM[], onAccept(id), onReject(id), onEditStart(vm), onUndo(id).
-
+  - candidates: ReviewCandidateVM[], onAccept(id), onReject(id), onEditStart(vm), onUndo(id).
 
 ### CandidateCard
 
 - Opis: Pojedyncza karta kandydata, pokazuje front/back, statusy wizualne (zielony dla zaakceptowanych, czerwony dla odrzuconych), akcje i cofnięcie.
 - Główne elementy: front, back, przyciski Akceptuj/Edytuj/Odrzuć, przycisk Cofnij (gdy zaakceptowany/odrzucony), ramka/status.
 - Obsługiwane interakcje:
-    - Akceptuj: ustawia action=accepted i zwiększa licznik.
-    - Odrzuć: ustawia action=rejected i zwiększa licznik.
-    - Edytuj: otwiera EditCandidateModal dla danego kandydata.
-    - Cofnij: powrót do stanu pending i aktualizacja liczników.
+  - Akceptuj: ustawia action=accepted i zwiększa licznik.
+  - Odrzuć: ustawia action=rejected i zwiększa licznik.
+  - Edytuj: otwiera EditCandidateModal dla danego kandydata.
+  - Cofnij: powrót do stanu pending i aktualizacja liczników.
 - Obsługiwana walidacja:
-    - Brak własnej – decyzje nie wymagają walidacji treści.
+  - Brak własnej – decyzje nie wymagają walidacji treści.
 - Typy:
-    - ReviewCandidateVM, FlashcardActionType.
+  - ReviewCandidateVM, FlashcardActionType.
 - Propsy:
-    - candidate: ReviewCandidateVM, onAccept(id), onReject(id), onEditStart(vm), onUndo(id).
-
+  - candidate: ReviewCandidateVM, onAccept(id), onReject(id), onEditStart(vm), onUndo(id).
 
 ### EditCandidateModal
 
 - Opis: Modal edycji treści, zawiera pola front/back, walidację 200/500 znaków w czasie rzeczywistym, po zapisie oznacza kandydata jako edited i wyświetla komunikat.
 - Główne elementy: pole textarea front, pole textarea back, liczniki znaków, komunikaty walidacji, przyciski Zapisz/Anuluj.
 - Obsługiwane interakcje:
-    - Zapis: jeśli walidacja pozytywna, stosuje zmiany, action=edited, was_edited=true, zamyka modal i aktualizuje liczniki.
-    - Anuluj: bez zmian stanu kandydata.
+  - Zapis: jeśli walidacja pozytywna, stosuje zmiany, action=edited, was_edited=true, zamyka modal i aktualizuje liczniki.
+  - Anuluj: bez zmian stanu kandydata.
 - Obsługiwana walidacja:
-    - front: 1–200 znaków, back: 1–500 znaków (lokalna walidacja zsynchronizowana ze schematem API).
+  - front: 1–200 znaków, back: 1–500 znaków (lokalna walidacja zsynchronizowana ze schematem API).
 - Typy:
-    - FlashcardCandidateWithActionDTO (mapowanie przy zapisie), ReviewCandidateVM.
+  - FlashcardCandidateWithActionDTO (mapowanie przy zapisie), ReviewCandidateVM.
 - Propsy:
-    - isOpen, candidate: ReviewCandidateVM, onSave(updated), onClose().
-
+  - isOpen, candidate: ReviewCandidateVM, onSave(updated), onClose().
 
 ### SaveSetTitleModal
 
 - Opis: Modal wymagający tytułu zestawu przed wysyłką do POST /api/flashcard-sets, waliduje 1–200 znaków.
 - Główne elementy: input tytułu, komunikaty walidacji, przyciski Zapisz/Anuluj.
 - Obsługiwane interakcje:
-    - Zapis: tworzy CreateFlashcardSetCommand z zaakceptowanych/zaedytowanych kandydatów i wywołuje API.
-    - Anuluj: zamyka modal bez akcji.
+  - Zapis: tworzy CreateFlashcardSetCommand z zaakceptowanych/zaedytowanych kandydatów i wywołuje API.
+  - Anuluj: zamyka modal bez akcji.
 - Obsługiwana walidacja:
-    - Tytuł: 1–200 znaków (zgodnie z CreateFlashcardSetSchema).
+  - Tytuł: 1–200 znaków (zgodnie z CreateFlashcardSetSchema).
 - Typy:
-    - CreateFlashcardSetCommand, CreateFlashcardSetResponseDTO.
+  - CreateFlashcardSetCommand, CreateFlashcardSetResponseDTO.
 - Propsy:
-    - isOpen, acceptedEdited: ReviewCandidateVM[], onSubmitSuccess(resp), onClose().
-
+  - isOpen, acceptedEdited: ReviewCandidateVM[], onSubmitSuccess(resp), onClose().
 
 ### Toast/Alert
 
 - Opis: Warstwa powiadomień dla sukcesów i błędów, w tym komunikat sukcesu po zapisie i obsługa błędów 400/404/422/500.
 - Główne elementy: kontener toasta, elementy alertów.
 - Obsługiwane interakcje:
-    - Automatyczne zamykanie po czasie lub manualne zamknięcie.
+  - Automatyczne zamykanie po czasie lub manualne zamknięcie.
 - Obsługiwana walidacja:
-    - Brak – prezentacja wyników walidacji i błędów API.
+  - Brak – prezentacja wyników walidacji i błędów API.
 - Typy:
-    - Brak szczególnych poza tekstowymi treściami i kodami błędów.
-
+  - Brak szczególnych poza tekstowymi treściami i kodami błędów.
 
 ## 5. Typy
 
@@ -144,7 +136,6 @@ Nowe ViewModel/DTO dla UI:
 - ReviewState: { sessionId: number; candidates: ReviewCandidateVM[]; counters: { accepted: number; rejected: number; remaining: number }; isSaving: boolean; titleModalOpen: boolean; editModal: { open: boolean; candidateId?: string } }.
 - CreateSetPayloadVM: { title: string; generation_session_id: number; flashcards: FlashcardCandidateWithActionDTO[] } – format pochodny do POST.
 
-
 ## 6. Zarządzanie stanem
 
 Stan lokalny w ReviewViewPage przechowuje ReviewState z inicjalizacją z GenerationSessionDTO, a aktualizacje wynikają z akcji użytkownika (accept/reject/edit/undo) i przeliczają liczniki w O(1) dla wydajności.
@@ -156,7 +147,6 @@ Proponowane custom hooki: useReviewSession(sessionId, initialSession?), useCount
 - Zapis zestawu: POST /api/flashcard-sets z CreateFlashcardSetCommand wymagającym title, generation_session_id i flashcards z akcją accepted/edited; walidacja zod po stronie serwera egzekwuje min. 1 zaakceptowaną/zaedytowaną fiszkę.
 - Obsługa błędów: 400 (walidacja JSON/schemat), 404 (nieistniejąca sesja), 422 (sesja już użyta), 500 (błąd bazy); odpowiadają odpowiednim komunikatom w UI i logice retry tam gdzie ma to sens.
 
-
 ## 8. Interakcje użytkownika
 
 - Akceptuj: karta zmienia status na accepted, ramka zielona, licznik accepted++, remaining--, dostępne Cofnij.
@@ -165,7 +155,6 @@ Proponowane custom hooki: useReviewSession(sessionId, initialSession?), useCount
 - Edytuj: otwiera modal, waliduje front/back 200/500, po Zapisz ustawia edited + wasEdited=true, licznik edited traktowany jako accepted dla warunków zapisu.
 - Zapisz zestaw: dostępne tylko gdy accepted+edited > 0, wymaga tytułu 1–200, po sukcesie toast z liczbą zapisanych i przekierowanie na listę zestawów zgodnie z PRD.
 
-
 ## 9. Warunki i walidacja
 
 - Limity treści: front ≤ 200, back ≤ 500, walidowane w czasie rzeczywistym i spójne z CreateFlashcardSetSchema.
@@ -173,14 +162,12 @@ Proponowane custom hooki: useReviewSession(sessionId, initialSession?), useCount
 - Tytuł zestawu: 1–200 znaków, wymagany przed zapisem.
 - Zachowanie sesji: PRD nie przewiduje powrotu do porzuconej recenzji, więc nie zakłada się persystencji decyzji bez finalnego zapisu.
 
-
 ## 10. Obsługa błędów
 
 - 400 Bad Request: pokaż szczegóły walidacji pól (tytuł, front/back) na bazie zwróconych details z API i podświetl odpowiednie kontrolki.
 - 404 Not Found: „Sesja generowania nie istnieje” – zaproponuj powrót do ekranu generowania.
 - 422 Unprocessable Entity: „Sesja została już użyta” – zaproponuj rozpoczęcie nowej sesji generowania.
 - 500 Internal Server Error: ogólny komunikat o błędzie i opcja ponowienia próby zapisu, logi po stronie serwera są już wykonywane.
-
 
 ## 11. Kroki implementacji
 
@@ -208,7 +195,6 @@ ReviewViewPage
 └─ Toast/AlertLayer
 ```
 
-
 ## 12. Mapowanie user stories
 
 - US-009: Po 201 z POST /api/generations następuje przekierowanie do /review/:generationSessionId i inicjalizacja stanu z GenerationSessionDTO.
@@ -218,12 +204,10 @@ ReviewViewPage
 - US-014: Edycja przez EditCandidateModal z walidacją 200/500, po Zapisz action=edited, komunikat potwierdzenia.
 - US-015: SaveSetTitleModal wymaga tytułu, POST /api/flashcard-sets tworzy zestaw z wyłącznie accepted/edited, pokazuje komunikat sukcesu i przekierowuje na listę zestawów.
 
-
 ## 13. Wymagane wywołania API i akcje frontendowe
 
 - POST /api/generations: utworzenie sesji generowania i przekierowanie z payloadem GenerationSessionDTO do widoku recenzji.
 - POST /api/flashcard-sets: zapis nowego zestawu z CreateFlashcardSetCommand opartym o generation_session_id i filtered flashcards (accepted/edited).
-
 
 ## 14. Wyzwania i zalecenia
 
@@ -232,20 +216,17 @@ ReviewViewPage
 - Obsługa 422 (sesja użyta): należy jasno komunikować i proponować nową sesję, aby uniknąć blokady użytkownika.
 - Bezpieczeństwo i stack: w MVP endpointy bez auth, ale zgodnie z rekomendacjami w Tech Stack przygotować miejsce na tokeny i ewentualne rate limiting w kolejnych iteracjach.
 
-
 ## 15. Tech Stack i wzorce
 
 - Frontend: Astro + React + TypeScript + Tailwind zgodnie z PRD, z prostymi komponentami i stanem lokalnym dla tego widoku.
 - Backend/Infra: Supabase w projekcie, a API serwowane przez Astro API routes (/api/generations, /api/flashcard-sets).
 - Zalecenia skalowalności i bezpieczeństwa: rozważyć ograniczanie kosztów AI i rate limiting w kolejnych wersjach, choć nie jest to wymagane w tym widoku.
 
-
 ## 16. Specyfika walidacji zgodna z API
 
 - Front: 1–200 znaków; Back: 1–500 znaków, z weryfikacją w czasie rzeczywistym i blokadą zapisu w modalu gdy niespełnione.
 - Title: 1–200 znaków, wymagany przed POST /api/flashcard-sets.
 - Zapis: min. jedna fiszka z action in {accepted, edited}, w innym przypadku API odrzuci żądanie (refine).
-
 
 ## 17. Format danych do zapisu
 

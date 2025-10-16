@@ -6,7 +6,7 @@ Implementacja jest osadzona w strukturze Astro 5 + TypeScript 5 + React 19, z ko
 ### Opis konstruktora
 
 Konstruktor klasy OpenRouterService przyjmuje konfigurację domyślną: klucz API z bezpiecznego źródła środowiskowego, bazowy adres końcówki czatów, nazwę domyślnego modelu oraz domyślne parametry próbkowania (np. temperature, top_p, max_tokens), zgodne z parametrami OpenRouter.
-Zalecane umiejscowienie: ./src/lib/openrouter.ts (kod serwisowy), z inicjalizacją konfiguracji w oparciu o pliki .env i mechanizmy serwerowe Astro, przy ekspozycji funkcji HTTP w ./src/pages/api/openrouter/*.ts zgodnie z konwencją katalogową.
+Zalecane umiejscowienie: ./src/lib/openrouter.ts (kod serwisowy), z inicjalizacją konfiguracji w oparciu o pliki .env i mechanizmy serwerowe Astro, przy ekspozycji funkcji HTTP w ./src/pages/api/openrouter/\*.ts zgodnie z konwencją katalogową.
 
 Przykładowa sygnatura konstruktora (TypeScript):
 
@@ -34,7 +34,6 @@ class OpenRouterService {
 }
 ```
 
-
 ### Publiczne metody i pola
 
 - OpenRouterService.chat(options): Wysyła żądanie chat-completion z tablicą messages, opcjonalnym response_format dla JSON i parametrami próbkowania (temperature, top_p, max_tokens itd.), zwracając treść asystenta i metryki użycia.
@@ -55,9 +54,7 @@ type JsonSchemaFormat = {
   };
 };
 
-type ResponseFormat =
-  | { type: "json_object" }
-  | JsonSchemaFormat;
+type ResponseFormat = { type: "json_object" } | JsonSchemaFormat;
 
 type OpenRouterParams = {
   temperature?: number;
@@ -95,7 +92,6 @@ class OpenRouterService {
   }
 }
 ```
-
 
 ### Prywatne metody i pola
 
@@ -140,7 +136,6 @@ async chat(opts: ChatOptions) {
 }
 ```
 
-
 ### Obsługa błędów
 
 - Brak klucza API lub zły format nagłówków autoryzacji: zwracaj 401 z komunikatem diagnostycznym oraz logowaniem serwerowym bez wypisywania tajnych wartości.
@@ -152,7 +147,6 @@ async chat(opts: ChatOptions) {
 - Błędy sieciowe/transportowe: mapowanie do 502/503 z prośbą o ponowienie, log z korelacją request-id jeżeli dostępne.
 - Niezgodność rozmiaru odpowiedzi z oczekiwaniami (max_tokens, stop): wymuszenie limitów i egzekwowanie sekwencji stop w parametrach żądania.
 
-
 ### Kwestie bezpieczeństwa
 
 - Przechowywanie klucza OpenRouter wyłącznie po stronie serwera i nienarażanie go w kliencie, z wdrożonym rate limitingiem i kontrolą kosztów po stronie API, co było wskazane jako krytyczna rekomendacja w kontekście nadużyć kosztowych.
@@ -160,36 +154,34 @@ async chat(opts: ChatOptions) {
 - Stosowanie Supabase RLS oraz mechanizmów auth/verification, a także CAPTCHA i per-user throttling przy akcjach kosztownych, aby zapobiec botom i nadużyciom.
 - Ograniczenie rozmiaru żądań i odpowiedzi, sanityzacja logów oraz regularne aktualizacje i twardnienie konfiguracji jako element powtarzalnych procesów bezpieczeństwa.
 
-
 ### Plan wdrożenia krok po kroku
 
 - Utworzenie typów współdzielonych: w ./src/types.ts dodać definicje Message, OpenRouterParams, ResponseFormat, aby spójnie typować backend i frontend.
 - Implementacja serwisu: w ./src/lib/openrouter.ts zaimplementować klasę OpenRouterService z konstruktorem, metodą chat, oraz prywatnymi pomocnikami buildRequestBody, sanitizeAndMapError, validateStructuredOutputIfNeeded.
 - Endpoint API: w ./src/pages/api/openrouter/chat.ts utworzyć handler POST, który waliduje wejście, instancjuje serwis z kluczem API i zwraca wynik lub kontrolowane błędy, stosując wczesne zwroty i guard clauses.
 - Konfiguracja środowiskowa: OPENROUTER_API_KEY jest dostępny w pliku .env, stamtąd można go odczytywać
-- Wybór modelu: zdefiniować białą listę modeli obsługiwanych przez usługę, przechowywaną po stronie serwera, z walidacją nazwy i ewentualnym fallbackiem, aby uniknąć błędów provider-specific. 
+- Wybór modelu: zdefiniować białą listę modeli obsługiwanych przez usługę, przechowywaną po stronie serwera, z walidacją nazwy i ewentualnym fallbackiem, aby uniknąć błędów provider-specific.
 - Structured outputs: wdrożyć response_format typu json_schema, ustawiając structured_outputs: true oraz schema z nazwą i strict: true, a także dopisać krótką instrukcję w system/user o zwracaniu wyłącznie JSON.
 - Aplikacja domyślnie będzie używać modelu "openai/gpt-4o-mini"
 
-
 ### Elementy OpenRouter i przykłady użycia
 
-1) Komunikat systemowy: Pierwszy element tablicy messages z role: "system" definiujący kontekst i reguły odpowiedzi modelu, co zwiększa przewidywalność zachowania.
-Przykład:
+1. Komunikat systemowy: Pierwszy element tablicy messages z role: "system" definiujący kontekst i reguły odpowiedzi modelu, co zwiększa przewidywalność zachowania.
+   Przykład:
 
 ```ts
 const system: Message = { role: "system", content: "Jesteś asystentem tworzącym zwięzłe JSON-y." };
 ```
 
-2) Komunikat użytkownika: Wiadomość z role: "user", która niesie treść zadania lub pytania, często uzupełniona precyzyjną instrukcją formatowania, zwłaszcza przy JSON mode.
-Przykład:
+2. Komunikat użytkownika: Wiadomość z role: "user", która niesie treść zadania lub pytania, często uzupełniona precyzyjną instrukcją formatowania, zwłaszcza przy JSON mode.
+   Przykład:
 
 ```ts
 const user: Message = { role: "user", content: "Wygeneruj obiekt JSON z polami title (string) i tags (string[])." };
 ```
 
-3) Ustrukturyzowane odpowiedzi via response_format: Włączenie JSON mode lub json_schema, np. { type: 'json_schema', json_schema: { name, strict: true, schema } }, wymusza format i pozwala walidować odpowiedzi.
-Przykład:
+3. Ustrukturyzowane odpowiedzi via response_format: Włączenie JSON mode lub json_schema, np. { type: 'json_schema', json_schema: { name, strict: true, schema } }, wymusza format i pozwala walidować odpowiedzi.
+   Przykład:
 
 ```ts
 const response_format: ResponseFormat = {
@@ -204,31 +196,30 @@ const response_format: ResponseFormat = {
         tags: { type: "array", items: { type: "string" } },
       },
       required: ["title", "tags"],
-      additionalProperties: false
-    }
-  }
+      additionalProperties: false,
+    },
+  },
 };
 ```
 
-4) Nazwa modelu: Wskazanie pola model, np. "openai/gpt-4o-mini" lub innego z listy wspieranych modeli, determinujące możliwości, koszty i wsparcie structured outputs.
-Przykład:
+4. Nazwa modelu: Wskazanie pola model, np. "openai/gpt-4o-mini" lub innego z listy wspieranych modeli, determinujące możliwości, koszty i wsparcie structured outputs.
+   Przykład:
 
 ```ts
 const model = "openai/gpt-4o-mini";
 ```
 
-5) Parametry modelu: Użycie temperature, top_p, top_k, max_tokens, stop i innych pozwala kontrolować styl i długość wypowiedzi, co należy dobierać do profilu zadania.
-Przykład:
+5. Parametry modelu: Użycie temperature, top_p, top_k, max_tokens, stop i innych pozwala kontrolować styl i długość wypowiedzi, co należy dobierać do profilu zadania.
+   Przykład:
 
 ```ts
 const params: OpenRouterParams = {
   temperature: 0.2,
   top_p: 0.9,
   max_tokens: 512,
-  stop: ["\n\nEND"]
+  stop: ["\n\nEND"],
 };
 ```
-
 
 ### Przykładowy endpoint API (Astro)
 
@@ -242,7 +233,7 @@ import type { Message, OpenRouterParams } from "../../types";
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { messages, model, params } = await request.json() as {
+    const { messages, model, params } = (await request.json()) as {
       messages: Message[];
       model?: string;
       params?: OpenRouterParams;
@@ -267,13 +258,11 @@ export const POST: APIRoute = async ({ request }) => {
 };
 ```
 
-
 ### Wskazówki integracyjne z UI
 
 - Logika UI w React powinna komunikować się wyłącznie z endpointem serwerowym, nigdy bezpośrednio z OpenRouter, aby nie ujawniać kluczy i móc centralnie egzekwować limity i schematy.
 - W warstwie UI warto oferować predefiniowane presety parametrów i modeli oraz informację o wymaganym formacie JSON, aby ułatwić użytkownikowi przewidywalność wyników.
 - Elementy shadcn/ui i Tailwind mogą obsługiwać stany ładowania, błędy walidacji oraz prezentację ustrukturyzowanych wyników zgodnie z praktykami UX aplikacji fiszek.
-
 
 ### Uwagi implementacyjne dla response_format
 
@@ -281,20 +270,17 @@ export const POST: APIRoute = async ({ request }) => {
 - JSON schema: Użyj { type: "json_schema", json_schema: { name, strict: true, schema } } i włącz structured_outputs, pamiętając o walidacji po stronie serwera i ewentualnym retry przy niepełnym dopasowaniu.
 - Wsparcie modeli: Nie wszystkie modele jednakowo egzekwują schemat, więc warto przewidzieć fallback do JSON mode lub plain text z parserem i komunikatem diagnostycznym.
 
-
 ### Minimalny przepływ wywołania
 
 - Zbuduj messages: [system, user, opcjonalnie kontekst], dopisz jasne instrukcje formatowania dla JSON, zwłaszcza przy JSON mode.
 - Wyślij żądanie z modelem i parametrami oraz response_format, odbierz choices.message.content i zweryfikuj JSON/schemat jeśli wymagany.
 - W przypadku niezgodności zastosuj retry z doprecyzowaniem promptu i finalnie zwróć 422, jeśli struktura pozostaje niepoprawna po limitach prób.
 
-
 ### Dostosowanie do struktury projektu
 
 - Katalogi: ./src/lib na usługę, ./src/pages/api na endpoint, ./src/types.ts na typy, ./src/components na UI, zgodnie z przyjętym układem repozytorium.
 - Ochrona kosztów i limitowanie: wdrożenie limitów per użytkownik i operację generowania, zgodnie z wcześniejszymi rekomendacjami dot. zapobiegania nadużyciom kosztowym.
 - Rozszerzalność: możliwość dodawania kolejnych modeli lub presetów parametrów bez ingerencji w warstwę UI, dzięki spójnym interfejsom serwisowym i białej liście modeli.
-
 
 ### Załącznik: przykładowe wywołanie serwisu
 
@@ -304,12 +290,12 @@ export const POST: APIRoute = async ({ request }) => {
 const svc = new OpenRouterService({
   apiKey: process.env.OPENROUTER_API_KEY!,
   defaultModel: "openai/gpt-4o-mini",
-  defaultParams: { temperature: 0.2, top_p: 0.9, max_tokens: 512 }
+  defaultParams: { temperature: 0.2, top_p: 0.9, max_tokens: 512 },
 });
 
 const messages: Message[] = [
   { role: "system", content: "Zwracaj wyłącznie poprawny JSON zgodny ze schematem." },
-  { role: "user", content: "Wygeneruj tytuł i listę tagów dla fiszki o algorytmie Dijkstry." }
+  { role: "user", content: "Wygeneruj tytuł i listę tagów dla fiszki o algorytmie Dijkstry." },
 ];
 
 const response_format: ResponseFormat = {
@@ -321,21 +307,20 @@ const response_format: ResponseFormat = {
       type: "object",
       properties: {
         title: { type: "string" },
-        tags: { type: "array", items: { type: "string" } }
+        tags: { type: "array", items: { type: "string" } },
       },
       required: ["title", "tags"],
-      additionalProperties: false
-    }
-  }
+      additionalProperties: false,
+    },
+  },
 };
 
 const { content } = await svc.chat({
   messages,
-  params: { response_format, structured_outputs: true }
+  params: { response_format, structured_outputs: true },
 });
 
 // JSON.parse(content) -> walidacja i użycie
 ```
-
 
 ---

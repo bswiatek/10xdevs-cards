@@ -3,6 +3,7 @@
 **Data utworzenia:** 2025-01-15  
 **Autor:** AI Assistant  
 **Pliki testowe:**
+
 - `src/components/review/CandidateCard.test.tsx`
 - `src/components/review/CandidateList.test.tsx`
 
@@ -11,16 +12,19 @@
 ## 📊 Statystyki pokrycia testami
 
 ### CandidateCard.test.tsx
+
 - **53 testy** - wszystkie ✅ PASSED
 - **Kategorie testów:** 9
 - **Czas wykonania:** ~1.7s
 
 ### CandidateList.test.tsx
+
 - **40 testów** - wszystkie ✅ PASSED
 - **Kategorie testów:** 9
 - **Czas wykonania:** ~2.2s
 
 ### Łącznie
+
 - **93 testy jednostkowe**
 - **100% przejścia**
 - **Całkowity czas:** ~3.9s
@@ -30,7 +34,9 @@
 ## 🎯 Zakres testów - CandidateCard
 
 ### 1. Basic Rendering (8 testów)
+
 **Co testujemy:**
+
 - ✅ Renderowanie tekstu front/back
 - ✅ Renderowanie etykiet "Przód" i "Tył"
 - ✅ Zachowanie białych znaków (whitespace-pre-wrap)
@@ -39,6 +45,7 @@
 - ✅ Obsługa znaków specjalnych i HTML entities
 
 **Dlaczego ważne:**
+
 - Zapewnia poprawne wyświetlanie treści użytkownika
 - Zabezpiecza przed XSS
 - Testuje edge cases (puste wartości, długie teksty)
@@ -48,30 +55,35 @@
 ### 2. State-Based Rendering (19 testów)
 
 #### PENDING State (4 testy)
+
 - ✅ Wyświetlanie 3 przycisków akcji (Akceptuj, Edytuj, Odrzuć)
 - ✅ Brak przycisku Cofnij
 - ✅ Brak wskaźnika statusu
 - ✅ Domyślny border styling
 
 #### ACCEPTED State (4 testy)
+
 - ✅ Wyświetlanie tylko przycisku Cofnij
 - ✅ Wskaźnik "Zaakceptowano" z checkmarkiem
 - ✅ Zielony border i tło (border-green-500, bg-green-50)
 - ✅ Brak wskaźnika "Odrzucono"
 
 #### EDITED State (4 testy)
+
 - ✅ Wyświetlanie tylko przycisku Cofnij
 - ✅ Wskaźnik "Zaakceptowano" (traktowane jak accepted)
 - ✅ Zielony styling
 - ✅ Kalkulacja isAccepted = true dla edited
 
 #### REJECTED State (4 testy)
+
 - ✅ Wyświetlanie tylko przycisku Cofnij
 - ✅ Wskaźnik "Odrzucono" z ikoną X
 - ✅ Czerwony border, tło + opacity-60
 - ✅ Brak wskaźnika "Zaakceptowano"
 
 **Kluczowa logika biznesowa:**
+
 ```typescript
 const isAccepted = candidate.action === "accepted" || candidate.action === "edited";
 const isRejected = candidate.action === "rejected";
@@ -81,6 +93,7 @@ const isPending = candidate.action === "pending";
 ---
 
 ### 3. 'Edytowano' Badge (4 testy)
+
 - ✅ Wyświetlanie badge gdy `wasEdited = true`
 - ✅ Ukrywanie badge gdy `wasEdited = false`
 - ✅ Badge widoczny dla wszystkich stanów akcji
@@ -94,32 +107,38 @@ Badge "Edytowano" sygnalizuje użytkownikowi, że treść fiszki została przez 
 ### 4. Callback Invocations (13 testów)
 
 #### onAccept (3 testy)
+
 - ✅ Wywołanie z poprawnym `id`
 - ✅ Nie wywołuje innych callbacks
 - ✅ Można wywołać wielokrotnie
 
 #### onReject (2 testy)
+
 - ✅ Wywołanie z poprawnym `id`
 - ✅ Izolacja od innych callbacks
 
 #### onEditStart (3 testy)
+
 - ✅ Wywołanie z **pełnym obiektem candidate**
 - ✅ Przekazywanie wszystkich properties (w tym errors)
 - ✅ Izolacja od innych callbacks
 
 #### onUndo (4 testy)
+
 - ✅ Wywołanie dla accepted state
 - ✅ Wywołanie dla rejected state
 - ✅ Wywołanie dla edited state
 - ✅ **NIE** wywoływalne dla pending state
 
 **Krytyczny kontrakt:**
+
 - Accept/Reject/Undo otrzymują tylko `id: string`
 - EditStart otrzymuje **cały obiekt** `candidate: ReviewCandidateVM`
 
 ---
 
 ### 5. Edge Cases (6 testów)
+
 - ✅ Undefined errors field
 - ✅ Candidate z zdefiniowanym errors object
 - ✅ Minimalny candidate object
@@ -129,6 +148,7 @@ Badge "Edytowano" sygnalizuje użytkownikowi, że treść fiszki została przez 
 ---
 
 ### 6. Accessibility (4 testy)
+
 - ✅ Przyciski z poprawnym role="button"
 - ✅ Accessible names dla wszystkich przycisków
 - ✅ Semantyczna struktura HTML
@@ -137,6 +157,7 @@ Badge "Edytowano" sygnalizuje użytkownikowi, że treść fiszki została przez 
 ---
 
 ### 7. Integration Scenarios (4 testy)
+
 - ✅ Pełny workflow akceptacji (pending → accepted)
 - ✅ Pełny workflow odrzucenia (pending → rejected)
 - ✅ Pełny workflow edycji (pending → edited z wasEdited badge)
@@ -150,6 +171,7 @@ Testy integration scenarios weryfikują całe ścieżki użytkownika, sprawdzaj�
 ## 🎯 Zakres testów - CandidateList
 
 ### 1. Empty State (5 testów)
+
 - ✅ Renderowanie komunikatu gdy `candidates.length === 0`
 - ✅ Styling kontenera (min-h-[400px], border-dashed)
 - ✅ Brak grid gdy pusta lista
@@ -157,6 +179,7 @@ Testy integration scenarios weryfikują całe ścieżki użytkownika, sprawdzaj�
 - ✅ Przejście do empty state po usunięciu wszystkich
 
 **Komunikat użytkownikowi:**
+
 ```
 "Brak kandydatów do recenzji"
 "Wszystkie fiszki zostały już przetworzone"
@@ -165,6 +188,7 @@ Testy integration scenarios weryfikują całe ścieżki użytkownika, sprawdzaj�
 ---
 
 ### 2. List Rendering (7 testów)
+
 - ✅ Renderowanie grid container
 - ✅ Responsive grid classes (1/2/3/4 kolumny)
 - ✅ Poprawna liczba CandidateCard
@@ -174,6 +198,7 @@ Testy integration scenarios weryfikują całe ścieżki użytkownika, sprawdzaj�
 - ✅ Brak empty state gdy istnieją candidates
 
 **Responsywność:**
+
 ```css
 grid-cols-1           /* mobile */
 md:grid-cols-2        /* tablet */
@@ -184,6 +209,7 @@ xl:grid-cols-4        /* large desktop */
 ---
 
 ### 3. Props Forwarding (6 testów)
+
 - ✅ Forward onAccept do wszystkich dzieci
 - ✅ Forward onReject do wszystkich dzieci
 - ✅ Forward onEditStart z pełnym obiektem
@@ -196,6 +222,7 @@ CandidateList jest "dumb component" - tylko przekazuje props bez modyfikacji.
 ---
 
 ### 4. Key Prop & List Updates (6 testów)
+
 - ✅ Użycie `candidate.id` jako key
 - ✅ Dodawanie candidates do listy
 - ✅ Usuwanie candidates z listy
@@ -204,15 +231,17 @@ CandidateList jest "dumb component" - tylko przekazuje props bez modyfikacji.
 - ✅ React reconciliation działa poprawnie
 
 **Pattern:**
+
 ```tsx
-{candidates.map((candidate) => (
-  <CandidateCard key={candidate.id} candidate={candidate} {...callbacks} />
-))}
+{
+  candidates.map((candidate) => <CandidateCard key={candidate.id} candidate={candidate} {...callbacks} />);
+}
 ```
 
 ---
 
 ### 5. Callback Isolation (3 testy)
+
 - ✅ Kliknięcie jednej karty nie wpływa na inne
 - ✅ Multiple callbacks na różnych kartach
 - ✅ Prawidłowe przekazywanie candidate objects
@@ -223,6 +252,7 @@ Każda karta ma własną instancję callbacks z closure na swój `candidate.id`.
 ---
 
 ### 6. Edge Cases (7 testów)
+
 - ✅ Przejście z empty do populated list
 - ✅ Duplikaty contentu, unikalne ID
 - ✅ Znaki specjalne w ID
@@ -234,6 +264,7 @@ Każda karta ma własną instancję callbacks z closure na swój `candidate.id`.
 ---
 
 ### 7. Integration Scenarios (4 testy)
+
 - ✅ Symulacja pełnej recenzji (accept/reject wszystkich)
 - ✅ Workflow edycji w kontekście listy
 - ✅ Mieszane stany wielu candidates
@@ -245,6 +276,7 @@ Test "reviewing all candidates to completion" symuluje rzeczywisty przepływ uż
 ---
 
 ### 8. Accessibility (3 testy)
+
 - ✅ Dostępna struktura grid layout
 - ✅ Accessible empty state message
 - ✅ Keyboard navigation (wszystkie przyciski focusable)
@@ -252,6 +284,7 @@ Test "reviewing all candidates to completion" symuluje rzeczywisty przepływ uż
 ---
 
 ### 9. Performance (2 testy)
+
 - ✅ Renderowanie 100 items < 1000ms
 - ✅ Re-render z update < 100ms
 
@@ -260,26 +293,31 @@ Test "reviewing all candidates to completion" symuluje rzeczywisty przepływ uż
 ## 🔍 Kluczowe reguły biznesowe przetestowane
 
 ### 1. Stan akcji (FlashcardActionType)
+
 ```typescript
 type FlashcardActionType = "accepted" | "edited" | "rejected";
 // plus "pending" w UI
 ```
 
 **Logika:**
+
 - `pending` → 3 przyciski akcji (Accept, Edit, Reject)
 - `accepted` | `edited` → przycisk Undo + zielony wskaźnik
 - `rejected` → przycisk Undo + czerwony wskaźnik
 
 ### 2. Flaga wasEdited
+
 ```typescript
-wasEdited: boolean
+wasEdited: boolean;
 ```
 
 **Logika:**
+
 - Wyświetla badge "Edytowano" niezależnie od stanu akcji
 - Informuje o modyfikacji treści przez użytkownika
 
 ### 3. Callbacks contract
+
 ```typescript
 onAccept: (id: string) => void
 onReject: (id: string) => void
@@ -288,6 +326,7 @@ onEditStart: (candidate: ReviewCandidateVM) => void  // ⚠️ cały obiekt!
 ```
 
 ### 4. Empty state boundary
+
 ```typescript
 if (candidates.length === 0) {
   // Pokaż komunikat "Brak kandydatów"
@@ -297,6 +336,7 @@ if (candidates.length === 0) {
 ```
 
 ### 5. Visual feedback
+
 - **Green** (accepted/edited): `border-green-500`, `bg-green-50`
 - **Red** (rejected): `border-red-500`, `bg-red-50`, `opacity-60`
 - **Default** (pending): `border-border`
@@ -306,6 +346,7 @@ if (candidates.length === 0) {
 ## 🛠️ Technologie i narzędzia
 
 ### Testing Stack
+
 ```json
 {
   "vitest": "^3.2.4",
@@ -317,15 +358,17 @@ if (candidates.length === 0) {
 ```
 
 ### Vitest Best Practices użyte
+
 ✅ `vi.fn()` dla function mocks  
 ✅ `vi.clearAllMocks()` w `beforeEach`  
 ✅ `userEvent.setup()` dla user interactions  
 ✅ Descriptive `describe` blocks  
 ✅ Arrange-Act-Assert pattern  
 ✅ Type-safe mocks  
-✅ Performance.now() dla performance tests  
+✅ Performance.now() dla performance tests
 
 ### Testing Library Queries
+
 - `screen.getByText()` - single match
 - `screen.getAllByText()` - multiple matches
 - `screen.getByRole()` - semantic queries
@@ -338,6 +381,7 @@ if (candidates.length === 0) {
 ## 📈 Coverage areas
 
 ### ✅ Przetestowane
+
 - [ ] Renderowanie UI
 - [ ] Logika warunkowa stanów
 - [ ] Wywołania callbacks
@@ -348,6 +392,7 @@ if (candidates.length === 0) {
 - [ ] Performance (basic)
 
 ### ❌ NIE przetestowane (celowo)
+
 - Tailwind CSS styling (visual regression)
 - Shadcn/ui components (external lib)
 - Lucide icons (external lib)
@@ -359,26 +404,31 @@ if (candidates.length === 0) {
 ## 🚀 Uruchamianie testów
 
 ### Wszystkie testy review components
+
 ```bash
 npm run test -- src/components/review/
 ```
 
 ### Pojedynczy plik
+
 ```bash
 npm run test -- src/components/review/CandidateCard.test.tsx
 ```
 
 ### Watch mode (development)
+
 ```bash
 npm run test:watch -- src/components/review/
 ```
 
 ### Coverage report
+
 ```bash
 npm run test:coverage -- src/components/review/
 ```
 
 ### UI mode (debug)
+
 ```bash
 npm run test:ui
 ```
@@ -395,6 +445,7 @@ npm run test:ui
 4. **Nowe edge cases** - odkrycie bugów w produkcji
 
 ### Red flags 🚨
+
 - Test suite > 5s - rozważ optymalizację
 - Flaky tests - sprawdź async operations
 - False positives - zbyt szeroki selector

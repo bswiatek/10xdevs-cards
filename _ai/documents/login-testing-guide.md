@@ -31,11 +31,13 @@ Aplikacja powinna być dostępna pod adresem `http://localhost:4321`
 3. Kliknij "Zarejestruj się"
 
 **Oczekiwany rezultat:**
+
 - ✅ Przekierowanie na `/generate`
 - ✅ Widoczna nawigacja z przyciskiem "Wyloguj"
 - ✅ Użytkownik zalogowany automatycznie
 
 **Weryfikacja w Supabase Dashboard:**
+
 - Sprawdź w Authentication → Users czy użytkownik został utworzony
 - Sprawdź czy w `user_metadata` jest `role: "user"`
 
@@ -48,6 +50,7 @@ Aplikacja powinna być dostępna pod adresem `http://localhost:4321`
 3. Kliknij "Zaloguj się"
 
 **Oczekiwany rezultat:**
+
 - ✅ Przekierowanie na `/generate`
 - ✅ Widoczna nawigacja z przyciskiem "Wyloguj"
 
@@ -60,6 +63,7 @@ Aplikacja powinna być dostępna pod adresem `http://localhost:4321`
 3. Kliknij "Zaloguj się"
 
 **Oczekiwany rezultat:**
+
 - ✅ Pozostanie na stronie `/login`
 - ✅ Komunikat błędu: "Nieprawidłowe dane logowania"
 - ✅ Brak informacji, które pole jest błędne (security)
@@ -98,6 +102,7 @@ Aplikacja powinna być dostępna pod adresem `http://localhost:4321`
 3. Kliknij "Zarejestruj się"
 
 **Oczekiwany rezultat:**
+
 - ✅ Komunikat błędu: "Konto z tym adresem email już istnieje"
 
 ### ✅ Test 6: Wylogowanie
@@ -106,6 +111,7 @@ Aplikacja powinna być dostępna pod adresem `http://localhost:4321`
 2. Obserwuj spinner podczas wylogowania
 
 **Oczekiwany rezultat:**
+
 - ✅ Przekierowanie na `/login`
 - ✅ Brak przycisku "Wyloguj" na stronie logowania
 - ✅ Sesja wyczyszczona (sprawdź cookies w DevTools)
@@ -118,6 +124,7 @@ Aplikacja powinna być dostępna pod adresem `http://localhost:4321`
    - `http://localhost:4321/account/password`
 
 **Oczekiwany rezultat:**
+
 - ✅ Automatyczne przekierowanie na `/login`
 
 ### ✅ Test 8: Redirect zalogowanego użytkownika ze stron auth
@@ -128,6 +135,7 @@ Aplikacja powinna być dostępna pod adresem `http://localhost:4321`
    - `http://localhost:4321/register`
 
 **Oczekiwany rezultat:**
+
 - ✅ Automatyczne przekierowanie na `/generate`
 
 ### ✅ Test 9: Strona główna
@@ -147,6 +155,7 @@ Aplikacja powinna być dostępna pod adresem `http://localhost:4321`
 3. Przejdź na inną chronioną stronę
 
 **Oczekiwany rezultat:**
+
 - ✅ Pozostajesz zalogowany
 - ✅ Brak konieczności ponownego logowania
 - ✅ Sesja utrzymana w cookies
@@ -158,6 +167,7 @@ Aplikacja powinna być dostępna pod adresem `http://localhost:4321`
 3. Kliknij link "Moje zestawy" w nawigacji
 
 **Oczekiwany rezultat:**
+
 - ✅ Nawigacja działa poprawnie
 - ✅ Przycisk "Wyloguj" widoczny na każdej stronie
 
@@ -193,6 +203,7 @@ Aplikacja powinna być dostępna pod adresem `http://localhost:4321`
 ## Test API z curl
 
 ### Login
+
 ```bash
 curl -X POST http://localhost:4321/api/auth/login \
   -H "Content-Type: application/json" \
@@ -203,6 +214,7 @@ curl -X POST http://localhost:4321/api/auth/login \
 ```
 
 **Oczekiwana odpowiedź:**
+
 ```json
 {
   "success": true,
@@ -215,6 +227,7 @@ curl -X POST http://localhost:4321/api/auth/login \
 ```
 
 ### Register
+
 ```bash
 curl -X POST http://localhost:4321/api/auth/register \
   -H "Content-Type: application/json" \
@@ -226,6 +239,7 @@ curl -X POST http://localhost:4321/api/auth/register \
 ```
 
 **Oczekiwana odpowiedź:**
+
 ```json
 {
   "success": true,
@@ -238,6 +252,7 @@ curl -X POST http://localhost:4321/api/auth/register \
 ```
 
 ### Logout
+
 ```bash
 curl -X POST http://localhost:4321/api/auth/logout \
   -H "Content-Type: application/json" \
@@ -246,6 +261,7 @@ curl -X POST http://localhost:4321/api/auth/logout \
 ```
 
 **Oczekiwana odpowiedź:**
+
 ```json
 {
   "success": true
@@ -267,20 +283,25 @@ curl -X POST http://localhost:4321/api/auth/logout \
 ## Troubleshooting
 
 ### Problem: "Nie udało się utworzyć sesji"
+
 **Rozwiązanie:** Sprawdź konfigurację Supabase i poprawność SUPABASE_URL i SUPABASE_KEY
 
 ### Problem: Redirect loop
+
 **Rozwiązanie:** Sprawdź czy middleware działa poprawnie i czy cookies są ustawiane
 
 ### Problem: Sesja nie jest utrzymywana po odświeżeniu
+
 **Rozwiązanie:** Sprawdź czy SSR client jest prawidłowo skonfigurowany i czy cookies są HttpOnly
 
 ### Problem: CORS errors
+
 **Rozwiązanie:** Upewnij się, że używasz tego samego origin (localhost:4321) i że Supabase jest prawidłowo skonfigurowany
 
 ## Dalsze kroki
 
 Po pomyślnym przejściu testów, możesz przejść do implementacji:
+
 1. Endpointu zmiany hasła (`/api/auth/change-password`)
 2. Formularza "Forgot Password"
 3. Panelu administracyjnego (`/admin/users`)

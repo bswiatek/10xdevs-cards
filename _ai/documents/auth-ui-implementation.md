@@ -9,6 +9,7 @@ Zaimplementowano interfejs użytkownika dla systemu logowania, rejestracji i odz
 ### Komponenty React
 
 #### `src/components/auth/LoginForm.tsx`
+
 - Formularz logowania z polami email i hasło
 - Walidacja i obsługa błędów
 - Stany: idle/loading/success/error
@@ -16,6 +17,7 @@ Zaimplementowano interfejs użytkownika dla systemu logowania, rejestracji i odz
 - Props: `onSuccess`, `onError`
 
 #### `src/components/auth/RegisterForm.tsx`
+
 - Formularz rejestracji: email, hasło, potwierdzenie hasła
 - Walidacja RFC 5322 dla email
 - Walidacja minimum 8 znaków dla hasła
@@ -24,12 +26,14 @@ Zaimplementowano interfejs użytkownika dla systemu logowania, rejestracji i odz
 - Props: `onSuccess`, `onError`
 
 #### `src/components/auth/ForgotPasswordRequestForm.tsx`
+
 - Formularz prośby o reset hasła
 - Informacja o ręcznym procesie przez administratora (brak automatycznej wysyłki email w MVP)
 - Po wysłaniu wyświetla komunikat sukcesu z instrukcją
 - Props: `onSuccess`, `onError`
 
 #### `src/components/account/ChangePasswordForm.tsx`
+
 - Formularz zmiany hasła dla zalogowanego użytkownika
 - Pola: stare hasło, nowe hasło, potwierdzenie
 - Walidacja minimum 8 znaków i zgodności haseł
@@ -40,6 +44,7 @@ Zaimplementowano interfejs użytkownika dla systemu logowania, rejestracji i odz
 ### Layouts
 
 #### `src/layouts/AuthLayout.astro`
+
 - Uproszczony layout dla stron auth (login, register, forgot-password)
 - Wycentrowany kontener bez elementów aplikacji
 - Maksymalna szerokość 28rem (md)
@@ -47,21 +52,25 @@ Zaimplementowano interfejs użytkownika dla systemu logowania, rejestracji i odz
 ### Strony Astro
 
 #### `src/pages/login.astro`
+
 - Strona logowania
 - Zawiera LoginForm z linkami do rejestracji i odzyskiwania hasła
 - Route: `/login`
 
 #### `src/pages/register.astro`
+
 - Strona rejestracji
 - Zawiera RegisterForm z linkiem do logowania
 - Route: `/register`
 
 #### `src/pages/forgot-password.astro`
+
 - Strona odzyskiwania hasła
 - Zawiera ForgotPasswordRequestForm z linkiem powrotu do logowania
 - Route: `/forgot-password`
 
 #### `src/pages/account/password.astro`
+
 - Strona zmiany hasła dla zalogowanego użytkownika
 - Używa głównego Layout (nie AuthLayout)
 - Zawiera ChangePasswordForm z linkiem powrotu
@@ -70,6 +79,7 @@ Zaimplementowano interfejs użytkownika dla systemu logowania, rejestracji i odz
 ## Stylistyka
 
 Wszystkie komponenty wykorzystują:
+
 - Shadcn/ui komponenty (Button, Input)
 - Tailwind CSS dla stylizacji
 - Lucide React dla ikon (Loader2, Info)
@@ -79,6 +89,7 @@ Wszystkie komponenty wykorzystują:
 ## Accessibility (ARIA)
 
 Wszystkie formularze zawierają:
+
 - Prawidłowe labelowanie pól
 - `aria-required` dla wymaganych pól
 - `aria-invalid` dla błędnych pól
@@ -90,21 +101,25 @@ Wszystkie formularze zawierają:
 ## Walidacja
 
 ### Email
+
 - RFC 5322 regex: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
 - Komunikat: "Nieprawidłowy format email"
 
 ### Hasło
+
 - Minimum 8 znaków
 - Sprawdzanie zgodności przy potwierdzeniu
 - Komunikaty: "Hasło musi mieć minimum 8 znaków", "Hasła muszą być identyczne"
 
 ### Specjalne przypadki
+
 - Zmiana hasła: sprawdza, czy nowe hasło różni się od starego
 - Formularz odzyskiwania: waliduje format email przed wysłaniem
 
 ## Stany formularzy
 
 Każdy formularz ma 4 stany:
+
 1. **idle** - początkowy stan
 2. **loading** - podczas wysyłania (spinner, disabled inputs)
 3. **success** - po pomyślnym zakończeniu (niektóre formularze pokazują komunikat sukcesu)
@@ -113,6 +128,7 @@ Każdy formularz ma 4 stany:
 ## Integracja z backendem (TODO)
 
 Wszystkie komponenty zawierają zakomentowane sekcje TODO dla wywołań API:
+
 - `POST /api/auth/login` - LoginForm
 - `POST /api/auth/register` - RegisterForm
 - `POST /api/auth/forgot-password` - ForgotPasswordRequestForm
@@ -123,11 +139,13 @@ Obecnie używają placeholder'ów z `setTimeout(1000)` do symulacji wywołań AP
 ## Testowanie lokalne
 
 Projektu można przetestować poprzez:
+
 ```bash
 npm run dev
 ```
 
 Dostępne ścieżki:
+
 - http://localhost:4321/login
 - http://localhost:4321/register
 - http://localhost:4321/forgot-password
@@ -145,6 +163,7 @@ Dostępne ścieżki:
 ## Zgodność ze specyfikacją
 
 Implementacja jest zgodna z:
+
 - `_ai/auth-spec.md` - specyfikacja architektury UI
 - `.cursor/rules/astro.mdc` - zasady dla Astro
 - `.cursor/rules/react.mdc` - zasady dla React

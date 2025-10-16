@@ -1,6 +1,7 @@
 # Przykłady testowania endpointa POST /api/flashcard-sets
 
 ## Wymagania wstępne
+
 1. Uruchom dev server: `npm run dev`
 2. Server powinien działać na `http://localhost:3000` (domyślny port Astro)
 3. Upewnij się, że połączenie z Supabase jest skonfigurowane
@@ -21,6 +22,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
 ```
 
 **Oczekiwana odpowiedź (201):**
+
 ```json
 {
   "id": 1,
@@ -44,6 +46,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -51,9 +54,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
   "details": {
     "_errors": [],
     "title": {
-      "_errors": [
-        "Title is required"
-      ]
+      "_errors": ["Title is required"]
     }
   }
 }
@@ -72,6 +73,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -79,9 +81,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
   "details": {
     "_errors": [],
     "title": {
-      "_errors": [
-        "Title must not exceed 200 characters"
-      ]
+      "_errors": ["Title must not exceed 200 characters"]
     }
   }
 }
@@ -151,6 +151,7 @@ EOF
 ```
 
 **Oczekiwana odpowiedź (201):**
+
 ```json
 {
   "id": 2,
@@ -192,6 +193,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
 ```
 
 **Oczekiwana odpowiedź (404):**
+
 ```json
 {
   "error": "Not Found",
@@ -222,6 +224,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
 ```
 
 **Oczekiwana odpowiedź (422):**
+
 ```json
 {
   "error": "Unprocessable Entity",
@@ -243,6 +246,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -250,9 +254,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
   "details": {
     "_errors": [],
     "flashcards": {
-      "_errors": [
-        "When generation_session_id is provided, flashcards array must contain at least one flashcard"
-      ]
+      "_errors": ["When generation_session_id is provided, flashcards array must contain at least one flashcard"]
     }
   }
 }
@@ -279,6 +281,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -286,9 +289,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
   "details": {
     "_errors": [],
     "generation_session_id": {
-      "_errors": [
-        "When flashcards are provided, generation_session_id must also be provided"
-      ]
+      "_errors": ["When flashcards are provided, generation_session_id must also be provided"]
     }
   }
 }
@@ -322,6 +323,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -329,9 +331,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
   "details": {
     "_errors": [],
     "flashcards": {
-      "_errors": [
-        "At least one flashcard must have action 'accepted' or 'edited'"
-      ]
+      "_errors": ["At least one flashcard must have action 'accepted' or 'edited'"]
     }
   }
 }
@@ -359,6 +359,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -368,9 +369,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
     "flashcards": {
       "0": {
         "front": {
-          "_errors": [
-            "Front must not exceed 200 characters"
-          ]
+          "_errors": ["Front must not exceed 200 characters"]
         }
       }
     }
@@ -400,6 +399,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -409,9 +409,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
     "flashcards": {
       "0": {
         "action": {
-          "_errors": [
-            "Action must be one of: accepted, edited, rejected"
-          ]
+          "_errors": ["Action must be one of: accepted, edited, rejected"]
         }
       }
     }
@@ -430,6 +428,7 @@ curl -X POST http://localhost:3000/api/flashcard-sets \
 ```
 
 **Oczekiwana odpowiedź (400):**
+
 ```json
 {
   "error": "Bad Request",
@@ -494,13 +493,15 @@ echo "Acceptance Rate: $ACCEPTANCE_RATE%"
 Po wykonaniu testów możesz sprawdzić w Supabase:
 
 ### Sprawdź utworzone zestawy fiszek:
+
 ```sql
 SELECT * FROM flashcard_sets ORDER BY created_at DESC LIMIT 5;
 ```
 
 ### Sprawdź fiszki w zestawie:
+
 ```sql
-SELECT 
+SELECT
   fs.title as set_title,
   f.id,
   f.front,
@@ -515,29 +516,32 @@ ORDER BY f.id;
 ```
 
 ### Sprawdź sesje generacji (completed_at powinno być ustawione):
+
 ```sql
-SELECT 
+SELECT
   id,
   generated_count,
   accepted_count,
   completed_at,
   started_at
-FROM generation_sessions 
-ORDER BY started_at DESC 
+FROM generation_sessions
+ORDER BY started_at DESC
 LIMIT 5;
 ```
 
 ### Sprawdź logi systemowe:
+
 ```sql
-SELECT * FROM system_logs 
-WHERE message LIKE '%flashcard%' 
-ORDER BY created_at DESC 
+SELECT * FROM system_logs
+WHERE message LIKE '%flashcard%'
+ORDER BY created_at DESC
 LIMIT 10;
 ```
 
 ### Sprawdź liczbę fiszek w zestawach (trigger powinien aktualizować):
+
 ```sql
-SELECT 
+SELECT
   fs.id,
   fs.title,
   fs.cards_count as cached_count,
@@ -553,26 +557,32 @@ ORDER BY fs.id;
 ## Troubleshooting
 
 ### Błąd połączenia:
+
 - Sprawdź czy dev server jest uruchomiony: `npm run dev`
 - Sprawdź port: domyślnie `4321` dla Astro
 
 ### Błąd 500:
+
 - Sprawdź logi konsoli serwera
 - Sprawdź czy zmienne środowiskowe `SUPABASE_URL` i `SUPABASE_KEY` są ustawione
 - Sprawdź tabele `system_logs` w bazie danych
 
 ### Błąd 404 przy prawidłowym generation_session_id:
+
 - Sprawdź czy sesja istnieje: `SELECT * FROM generation_sessions WHERE id = X;`
 - Sprawdź czy mock user ID jest poprawny w bazie danych
 
 ### Błąd 422 (session already used):
+
 - To jest oczekiwane zachowanie - sesja może być użyta tylko raz
 - Utwórz nową sesję generacji przez `/api/generations`
 
 ### cards_count nie zgadza się:
+
 - Sprawdź czy triggery są aktywne w bazie danych
 - Triggery: `trigger_flashcards_insert_count`, `trigger_flashcards_delete_count`
 
 ### flashcard_progress nie zostały utworzone:
+
 - Sprawdź czy wszystkie fiszki mają odpowiednie rekordy progress
 - Powinno być jedno progress na jedną fiszkę (relacja 1:1)

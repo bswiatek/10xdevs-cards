@@ -9,7 +9,7 @@ state "Niezalogowany" as Niezalogowany {
   PodgladFunkcji --> DecyzjaWejscie: "Rozpocznij" lub próba akcji chronionej
   Landing --> DecyzjaWejscie: Próba użycia funkcji wymagającej konta
 
-  state DecyzjaWejscie <> 
+  state DecyzjaWejscie <>
   DecyzjaWejscie --> DoLogowania: Wybór "Zaloguj"
   DecyzjaWejscie --> DoRejestracji: Wybór "Załóż konto"
 
@@ -28,7 +28,7 @@ state "Niezalogowany" as Niezalogowany {
     WalidacjaLogowania --> ProbaUwierzytelnienia: [format poprawny]
     WalidacjaLogowania --> FormularzLogowania: [format błędny]
 
-    state if_log <> 
+    state if_log <>
     ProbaUwierzytelnienia --> if_log
     if_log --> LogSukces: Dane poprawne
     if_log --> LogBlad: Dane błędne/401
@@ -52,7 +52,7 @@ state "Niezalogowany" as Niezalogowany {
     WalidacjaRejestracji --> ProbaUtworzeniaKonta: [dane poprawne]
     WalidacjaRejestracji --> FormularzRejestracji: [błędy formularza]
 
-    state if_reg <> 
+    state if_reg <>
     ProbaUtworzeniaKonta --> if_reg
     if_reg --> RejSukces: Konto utworzone + auto-sesja
     if_reg --> RejBlad: Email zajęty/błąd
@@ -80,7 +80,7 @@ state "Odzyskiwanie Hasła (MVP)" as Odzysk {
   PotwierdzenieZgloszenia --> OczekiwanieResetu
   OczekiwanieResetu --> LogowanieZTymczasowym: Po otrzymaniu hasła tymczasowego
 
-  state if_temp <> 
+  state if_temp <>
   LogowanieZTymczasowym --> if_temp
   if_temp --> WymusZmianeHasla: Logowanie udane
   if_temp --> BladTempHasla: Nieprawidłowe dane
@@ -100,7 +100,7 @@ AplikacjaGlowna --> GenerowanieFisz: Wejście do generatora
 AplikacjaGlowna --> NaukaFSRS: Wejście do nauki
 
 %% Ochrona tras – wygaśnięcie sesji
-state if_sesja <> 
+state if_sesja <>
 AplikacjaGlowna --> if_sesja: Dostęp do chronionych ekranów
 if_sesja --> AplikacjaGlowna: Sesja ważna
 if_sesja --> Niezalogowany: Sesja wygasła → powrót do Logowania

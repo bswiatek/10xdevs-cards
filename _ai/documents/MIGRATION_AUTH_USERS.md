@@ -17,10 +17,12 @@ Migracja usuwa własną tabelę `users` i wszystkie odniesienia do niej, zastęp
 ## Co robi migracja?
 
 ### 1. Usuwa stare polityki RLS
+
 - Usuwa wszystkie polityki które używały funkcji `is_admin()`
 - Czyści polityki dla nieistniejącej już tabeli `users`
 
 ### 2. Usuwa powiązania z tabelą `users`
+
 - Usuwa foreign key constraints z tabel:
   - `flashcard_sets`
   - `generation_sessions`
@@ -29,11 +31,13 @@ Migracja usuwa własną tabelę `users` i wszystkie odniesienia do niej, zastęp
 - Usuwa indeksy na kolumnach `user_id`
 
 ### 3. Usuwa tabelę `users` i powiązane obiekty
+
 - Usuwa funkcję `is_admin()` (nie jest już potrzebna)
 - Usuwa typ enum `user_role` (bez systemu ról)
 - Usuwa tabelę `users` całkowicie
 
 ### 4. Tworzy nowe powiązania z `auth.users`
+
 - Dodaje foreign key constraints wskazujące na `auth.users`:
   - `flashcard_sets.user_id` → `auth.users(id)` ON DELETE CASCADE
   - `generation_sessions.user_id` → `auth.users(id)` ON DELETE CASCADE
@@ -41,9 +45,11 @@ Migracja usuwa własną tabelę `users` i wszystkie odniesienia do niej, zastęp
   - `system_logs.user_id` → `auth.users(id)` ON DELETE SET NULL
 
 ### 5. Odtwarza indeksy
+
 - Tworzy indeksy na kolumnach `user_id` dla wydajności zapytań
 
 ### 6. Tworzy uproszczone polityki RLS
+
 - Wszystkie polityki używają teraz tylko `auth.uid()`
 - Usunięto całą logikę administratora (można dodać później jeśli potrzebne)
 - Użytkownicy mają dostęp tylko do swoich danych
@@ -74,6 +80,7 @@ supabase db reset
 ### Opcja 3: Automatyczne przez Supabase (po push do repozytorium)
 
 Jeśli masz skonfigurowane GitHub integration:
+
 ```bash
 git add supabase/migrations/20251014000000_migrate_to_auth_users.sql
 git commit -m "Migrate from users table to auth.users"
@@ -157,6 +164,7 @@ Następnie zakomentuj lub usuń plik migracji `20251014000000_migrate_to_auth_us
 ### Dla produkcji:
 
 **WAŻNE:** Przed uruchomieniem migracji na produkcji:
+
 1. **Zrób backup bazy danych**
 2. Przetestuj migrację na środowisku staging/dev
 3. Upewnij się że nie ma aktywnych użytkowników w systemie
@@ -189,6 +197,7 @@ WHERE au.id IS NULL;
 ```
 
 Jeśli są tacy użytkownicy, musisz zdecydować:
+
 1. Ręcznie utworzyć ich w auth.users (przez Supabase Auth)
 2. Zaakceptować utratę ich danych
 3. Zmodyfikować migrację by najpierw przenieść dane
@@ -197,7 +206,8 @@ Jeśli są tacy użytkownicy, musisz zdecydować:
 
 Zamockowany użytkownik (`06f9f64c-fd4a-4466-9954-0e35ce6dfd15`) prawdopodobnie istnieje tylko w `users`, nie w `auth.users`.
 
-**Rozwiązanie:** 
+**Rozwiązanie:**
+
 - Dane tego użytkownika zostaną usunięte podczas migracji
 - To jest oczekiwane zachowanie - chcemy używać tylko prawdziwych użytkowników z auth
 - Możesz utworzyć testowego użytkownika przez normalną rejestrację
