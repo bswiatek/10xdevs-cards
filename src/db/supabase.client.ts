@@ -5,7 +5,7 @@ import type { AstroCookies } from "astro";
 import type { Database } from "../db/database.types.ts";
 
 // Get environment variables with fallback to runtime env (for Cloudflare Pages)
-function getEnvVar(key: string, required: boolean = true): string | undefined {
+function getEnvVar(key: string, required = true): string | undefined {
   // Try import.meta.env first (available during build and in dev)
   const value = import.meta.env[key];
   if (value) return value;
@@ -18,7 +18,7 @@ function getEnvVar(key: string, required: boolean = true): string | undefined {
   if (required) {
     throw new Error(`Environment variable ${key} is not defined`);
   }
-  
+
   return undefined;
 }
 
@@ -29,7 +29,12 @@ export function getSupabaseClient(): ReturnType<typeof createClient<Database>> {
   if (!_supabaseClient) {
     const supabaseUrl = getEnvVar("SUPABASE_URL");
     const supabaseAnonKey = getEnvVar("SUPABASE_KEY");
-    _supabaseClient = createClient<Database>(supabaseUrl!, supabaseAnonKey!);
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error("SUPABASE_URL and SUPABASE_KEY must be defined");
+    }
+
+    _supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey);
   }
   return _supabaseClient;
 }
@@ -38,7 +43,7 @@ export function getSupabaseClient(): ReturnType<typeof createClient<Database>> {
 export const supabaseClient = new Proxy({} as ReturnType<typeof createClient<Database>>, {
   get(target, prop) {
     return getSupabaseClient()[prop as keyof ReturnType<typeof createClient<Database>>];
-  }
+  },
 });
 
 // Server-side Supabase client with cookie handling for SSR
