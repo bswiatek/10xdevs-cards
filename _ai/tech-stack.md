@@ -46,11 +46,13 @@ Dla projektu realizowanego przez jedną osobę to połączenie jest **optymalne*
 ### Integracja z CI/CD
 
 Wszystkie testy (jednostkowe, integracyjne, E2E) będą uruchamiane automatycznie w pipeline'ie CI/CD:
-
-- **Pre-commit hooks**: Testy jednostkowe (Husky + lint-staged)
+- **Pre-commit hooks**: Testy jednostkowe
 - **Pull Request**: Pełny zestaw testów jednostkowych i integracyjnych
 - **Merge do main**: Testy E2E na środowisku stagingowym
 - **Pre-deployment**: Testy wydajnościowe i bezpieczeństwa
+
+Github Actions do tworzenia pipeline CI/CD
+Cloudflare Pages jako hosting aplikacji Astro
 
 ## Skalowalność rozwiązania
 
