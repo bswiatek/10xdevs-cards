@@ -14,9 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
-    env:
-      NODE_ENV: production
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -41,9 +38,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: lint
-
-    env:
-      NODE_ENV: test
 
     steps:
       - name: Checkout code
@@ -102,9 +96,6 @@ jobs:
     timeout-minutes: 10
     needs: build
     environment: production
-
-    env:
-      NODE_ENV: production
 
     steps:
       - name: Checkout code
