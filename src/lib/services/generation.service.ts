@@ -2,7 +2,6 @@ import type { Database } from "../../db/database.types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { GenerationSessionDTO, CandidateFlashcardDTO, Message, JsonSchemaFormat } from "../../types";
 import { logError, logInfo } from "../logging";
-import { randomUUID } from "crypto";
 import { OpenRouterService } from "./openrouter.service";
 
 /**
@@ -115,7 +114,7 @@ function parseFlashcardCandidates(content: string): CandidateFlashcardDTO[] {
     }
 
     result.push({
-      temp_id: randomUUID(),
+      temp_id: crypto.randomUUID(),
       front: candidate.front.trim(),
       back: candidate.back.trim(),
     });
