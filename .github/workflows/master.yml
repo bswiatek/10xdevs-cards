@@ -59,7 +59,7 @@ jobs:
     name: Build Application
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [lint, unit-tests]
+  #  needs: [lint, unit-tests]
 
     env:
       NODE_ENV: production
