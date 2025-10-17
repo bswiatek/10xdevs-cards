@@ -5,7 +5,7 @@ import type { AstroCookies } from "astro";
 import type { Database } from "../db/database.types.ts";
 
 // Get environment variables with fallback to runtime env (for Cloudflare Pages)
-function getEnvVar(key: string): string {
+function getEnvVar(key: string, required: boolean = true): string | undefined {
   // Try import.meta.env first (available during build and in dev)
   const value = import.meta.env[key];
   if (value) return value;
@@ -15,20 +15,41 @@ function getEnvVar(key: string): string {
     return process.env[key];
   }
 
-  throw new Error(`Environment variable ${key} is not defined`);
+  if (required) {
+    throw new Error(`Environment variable ${key} is not defined`);
+  }
+  
+  return undefined;
 }
 
-const supabaseUrl = getEnvVar("SUPABASE_URL");
-const supabaseAnonKey = getEnvVar("SUPABASE_KEY");
+// Lazy initialization for client-side Supabase client
+let _supabaseClient: ReturnType<typeof createClient<Database>> | null = null;
 
-// Client-side Supabase client
-export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey);
+export function getSupabaseClient(): ReturnType<typeof createClient<Database>> {
+  if (!_supabaseClient) {
+    const supabaseUrl = getEnvVar("SUPABASE_URL");
+    const supabaseAnonKey = getEnvVar("SUPABASE_KEY");
+    _supabaseClient = createClient<Database>(supabaseUrl!, supabaseAnonKey!);
+  }
+  return _supabaseClient;
+}
+
+// Backward compatibility - export as const but with getter
+export const supabaseClient = new Proxy({} as ReturnType<typeof createClient<Database>>, {
+  get(target, prop) {
+    return getSupabaseClient()[prop as keyof ReturnType<typeof createClient<Database>>];
+  }
+});
 
 // Server-side Supabase client with cookie handling for SSR
 export function createSupabaseServerClient(cookies: AstroCookies, runtime?: Record<string, string>) {
-  // Allow runtime env override (for Cloudflare Pages)
-  const url = runtime?.SUPABASE_URL || supabaseUrl;
-  const key = runtime?.SUPABASE_KEY || supabaseAnonKey;
+  // Get credentials from runtime env (Cloudflare Pages) or fallback to import.meta.env/process.env
+  const url = runtime?.SUPABASE_URL || getEnvVar("SUPABASE_URL", false);
+  const key = runtime?.SUPABASE_KEY || getEnvVar("SUPABASE_KEY", false);
+
+  if (!url || !key) {
+    throw new Error("SUPABASE_URL and SUPABASE_KEY must be defined in environment variables");
+  }
 
   return createServerClient<Database>(url, key, {
     cookies: {
