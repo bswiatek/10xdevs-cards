@@ -134,27 +134,29 @@ function parseFlashcardCandidates(content: string): CandidateFlashcardDTO[] {
  * @param supabase - Supabase client instance
  * @param userId - ID of the authenticated user
  * @param sourceText - Text to analyze (1000-10000 characters)
+ * @param apiKey - OpenRouter API key (from runtime env)
  * @returns GenerationSessionDTO with candidates
  * @throws Error if database operations or AI generation fail
  */
 export async function generateFlashcardsFromText(
   supabase: SupabaseClient<Database>,
   userId: string,
-  sourceText: string
+  sourceText: string,
+  apiKey?: string
 ): Promise<GenerationSessionDTO> {
   const startTime = Date.now();
 
   try {
     // Step 1: Initialize OpenRouter service
-    const apiKey = import.meta.env.OPENROUTER_API_KEY;
+    const openRouterKey = apiKey || import.meta.env.OPENROUTER_API_KEY;
 
-    if (!apiKey) {
+    if (!openRouterKey) {
       await logError(supabase, "OpenRouter API key not configured", {});
       throw new Error("AI_SERVICE_NOT_CONFIGURED");
     }
 
     const openRouter = new OpenRouterService({
-      apiKey,
+      apiKey: openRouterKey,
       defaultParams: {
         temperature: 0.3, // Lower temperature for more consistent output
         max_tokens: 2000,

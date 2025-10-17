@@ -87,7 +87,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Step 3: Call generation service
     let result: GenerationSessionDTO;
     try {
-      result = await generateFlashcardsFromText(supabase, user.id, command.source_text);
+      // Get API key from runtime env (Cloudflare Pages) or import.meta.env (dev/build)
+      const runtime = locals.runtime?.env as Record<string, string> | undefined;
+      const apiKey = runtime?.OPENROUTER_API_KEY;
+
+      result = await generateFlashcardsFromText(supabase, user.id, command.source_text, apiKey);
     } catch (serviceError) {
       // Handle known service errors
       if (serviceError instanceof Error) {
