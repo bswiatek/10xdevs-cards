@@ -4,7 +4,7 @@
 
 ### 1.1 Nazwa produktu
 
-Generator Fiszek AI
+Generator Fiszek AI (10xDevs Cards)
 
 ### 1.2 Cel produktu
 
@@ -22,10 +22,11 @@ Osoby uczące się, studenci, profesjonaliści i wszyscy, którzy chcą efektywn
 
 ### 1.5 Stack technologiczny
 
-- Frontend: Astro + React + TypeScript + Tailwind CSS
+- Frontend: Astro 5 + React 19 + TypeScript 5 + Tailwind CSS 4 + Shadcn/ui
+- Backend: Astro SSR z adapterem Cloudflare (hostowanie bezserwerowe)
 - Język interfejsu: Polski z przygotowaną architekturą i18n
-- AI: GPT-4o lub Claude 3.5 Sonnet
-- Baza danych: Relacyjna (do przechowywania kont, fiszek, postępów i logów)
+- AI: OpenRouter API (domyślnie model gpt-4o-mini z możliwością przełączenia)
+- Baza danych: Supabase (PostgreSQL) do przechowywania kont, fiszek, postępów i logów
 
 ## 2. Problem użytkownika
 
@@ -62,7 +63,7 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 
 #### 3.1.2 Proces generowania
 
-- Wykorzystanie GPT-4o lub Claude 3.5 Sonnet
+- Wykorzystanie OpenRouter API (domyślnie model gpt-4o-mini)
 - Automatyczne określenie optymalnej liczby fiszek
 - Automatyczna kategoryzacja bez ingerencji użytkownika
 - Uniwersalny prompt dla wszystkich typów treści
@@ -144,9 +145,9 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 
 #### 3.5.1 Algorytm FSRS
 
-- Integracja z Free Spaced Repetition Scheduler
-- Brak możliwości wyboru innego algorytmu przez użytkownika
-- Automatyczne obliczanie następnej daty powtórki
+- Integracja z Free Spaced Repetition Scheduler (FSRS)
+- Algorytm jest domyślnym mechanizmem powtórek (bez opcji wyboru przez użytkownika)
+- Automatyczne obliczanie następnej daty powtórki na podstawie oceny
 - Uwzględnianie jakości odpowiedzi (1-5)
 
 #### 3.5.2 Interfejs nauki
@@ -253,6 +254,17 @@ Generator Fiszek AI automatyzuje proces tworzenia fiszek przy zachowaniu pełnej
 - Brak płatnych planów i limitów
 - Brak modelu freemium
 - Bez systemu subskrypcji
+
+#### 4.1.4 Istotne uwagi dotyczące kosztów
+
+Obecny model "bezpłatny, nieograniczony dostęp" stwarza ryzyko finansowe ze względu na koszty API OpenRouter. Przed wdrożeniem produkcyjnym wymagane jest wdrożenie rate limitingu na użytkownika, aby zapobiec:
+- Potencjalnym tysiącom dolarów w kosztach OpenRouter od pojedynczego złośliwego użytkownika
+- Wyczerpaniu limitów API i przerwaniu usługi dla wszystkich użytkowników
+
+Rekomendacja: Dodać limity takie jak:
+- Maksymalna liczba generowań dziennie na użytkownika (np. 50)
+- Maksymalny rozmiar tekstu wejściowego w bazie danych (już zaimplementowany: 1000-10000 znaków)
+- Rate limiting na poziomie endpointu API
 
 ### 4.2 Założenia
 
@@ -379,7 +391,7 @@ Opis: Jako użytkownik chcę, aby AI wygenerowało kandydatów na fiszki z mojeg
 Kryteria akceptacji:
 
 - Po kliknięciu "Generuj fiszki" system wyświetla loader (spinner)
-- System wysyła tekst do API AI (GPT-4o lub Claude 3.5 Sonnet)
+- System wysyła tekst do OpenRouter API (domyślnie model gpt-4o-mini)
 - System analizuje cały tekst jednocześnie
 - Maksymalny czas oczekiwania to 60 sekund
 - System automatycznie określa liczbę fiszek (bez ingerencji użytkownika)
