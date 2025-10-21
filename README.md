@@ -103,7 +103,7 @@ The application aims to streamline the process of generating educational flashca
 
 ## Project Status
 
-Current version: **0.0.2**
+Current version: **0.0.3**
 
 This project is in the early MVP phase. Core functionalities for flashcard generation and review are implemented, with plans to enhance the backend integration and security features in future updates.
 
